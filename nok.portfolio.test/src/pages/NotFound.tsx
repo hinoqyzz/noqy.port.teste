@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
-import { profile } from '../data/content'
+import { profile, getNotFoundMeta } from '../data/content'
+import { applyDocumentMeta } from '../lib/documentMeta'
 import { Footer } from '../sections/Footer'
 
 export function NotFound() {
   useEffect(() => {
-    document.title = 'Página não encontrada — noqyzz'
+    applyDocumentMeta(getNotFoundMeta())
   }, [])
 
   return (

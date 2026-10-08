@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getProjectBySlug, getNextProject } from '../data/content'
+import { getProjectBySlug, getNextProject, getCaseMeta } from '../data/content'
+import { applyDocumentMeta } from '../lib/documentMeta'
 import { Picture } from '../components/Picture/Picture'
 import { Footer } from '../sections/Footer'
 import { NotFound } from './NotFound'
@@ -11,47 +12,9 @@ export function CaseStudyPage() {
   const nextProject = slug ? getNextProject(slug) : undefined
 
   useEffect(() => {
-    if (!project || !slug) return
-
-    const pageTitle = `${project.name} — noqyzz`
-    const pageUrl = `https://adryanmiguel.vercel.app/trabalhos/${slug}`
-    document.title = pageTitle
-
-    const descriptionMeta = document.querySelector('meta[name="description"]')
-    if (descriptionMeta) {
-      descriptionMeta.setAttribute('content', project.description)
-    }
-
-    const canonicalLink = document.querySelector('link[rel="canonical"]')
-    if (canonicalLink) {
-      canonicalLink.setAttribute('href', pageUrl)
-    }
-
-    const ogTitleMeta = document.querySelector('meta[property="og:title"]')
-    if (ogTitleMeta) {
-      ogTitleMeta.setAttribute('content', pageTitle)
-    }
-
-    const ogDescMeta = document.querySelector('meta[property="og:description"]')
-    if (ogDescMeta) {
-      ogDescMeta.setAttribute('content', project.description)
-    }
-
-    const ogUrlMeta = document.querySelector('meta[property="og:url"]')
-    if (ogUrlMeta) {
-      ogUrlMeta.setAttribute('content', pageUrl)
-    }
-
-    const twitterTitleMeta = document.querySelector('meta[name="twitter:title"]')
-    if (twitterTitleMeta) {
-      twitterTitleMeta.setAttribute('content', pageTitle)
-    }
-
-    const twitterDescMeta = document.querySelector('meta[name="twitter:description"]')
-    if (twitterDescMeta) {
-      twitterDescMeta.setAttribute('content', project.description)
-    }
-  }, [project, slug])
+    if (!project) return
+    applyDocumentMeta(getCaseMeta(project))
+  }, [project])
 
   if (!project) {
     return <NotFound />

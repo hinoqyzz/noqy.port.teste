@@ -395,3 +395,45 @@ export const meta = {
   ogImageAlt: 'noqyzz — sites, landing pages e sistemas',
   baseUrl: 'https://adryanmiguel.vercel.app',
 }
+
+export type PageMeta = {
+  title: string
+  description: string
+  canonical: string
+  ogImage: string
+  ogImageAlt: string
+}
+
+function ogImageUrl() {
+  return `${meta.baseUrl}/assets/images/og-image.jpg`
+}
+
+export function getHomeMeta(): PageMeta {
+  return {
+    title: meta.title,
+    description: meta.description,
+    canonical: meta.baseUrl,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
+}
+
+export function getCaseMeta(project: Project): PageMeta {
+  return {
+    title: `${project.name} — noqyzz`,
+    description: `${project.description} Projeto de ${project.category}.`,
+    canonical: `${meta.baseUrl}/trabalhos/${project.slug}`,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
+}
+
+export function getNotFoundMeta(): PageMeta {
+  return {
+    title: 'Página não encontrada — noqyzz',
+    description: 'O endereço que você tentou acessar não existe ou foi movido.',
+    canonical: meta.baseUrl,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
+}
