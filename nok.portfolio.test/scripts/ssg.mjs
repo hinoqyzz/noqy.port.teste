@@ -49,10 +49,16 @@ const projects = [
 
 const profile = {
   name: 'Adryan Miguel',
-  role: 'Designer e desenvolvedor front-end',
-  bio: 'Designer e desenvolvedor front-end. Crio landing pages e interfaces com movimento, do primeiro rascunho ao código no ar.',
+  role: 'Designer e desenvolvedor',
+  bio: 'Designer e desenvolvedor. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
   location: 'Minas Gerais, Brasil',
   availability: 'Disponível para projetos',
+}
+
+const meta = {
+  title: 'Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais',
+  description: 'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+  ogImageAlt: 'Adryan Miguel — sites, landing pages e sistemas',
 }
 
 function generateHomeContent() {
@@ -93,8 +99,9 @@ function generateHomeContent() {
           <h2 class="services__title">O que faço</h2>
           <div class="services__table">
             <div class="service"><span class="service__index">01</span><h3 class="service__title">Landing pages</h3><p class="service__desc">Uma página, uma história. Do rascunho ao ar, com o ritmo da marca.</p></div>
-            <div class="service"><span class="service__index">02</span><h3 class="service__title">Desenvolvimento front-end</h3><p class="service__desc">A interface vira código: responsivo, preciso e com movimento no lugar certo.</p></div>
+            <div class="service"><span class="service__index">02</span><h3 class="service__title">Sites completos</h3><p class="service__desc">Site institucional com várias páginas, rápido no celular e fácil de achar no Google.</p></div>
             <div class="service"><span class="service__index">03</span><h3 class="service__title">Design digital</h3><p class="service__desc">Direção visual com personalidade, longe do template e perto da marca.</p></div>
+            <div class="service"><span class="service__index">04</span><h3 class="service__title">Sistemas sob medida</h3><p class="service__desc">Agendamentos, cardápios, painéis e o que o seu negócio precisar, feito sob medida.</p></div>
           </div>
         </div>
       </section>
@@ -246,29 +253,100 @@ async function getAssetPaths() {
   return { cssPath, jsPath }
 }
 
-async function generatePage(route, content, assets) {
+const BASE_URL = 'https://adryanmiguel.vercel.app'
+
+function getMeta(route, project = null) {
+  const isHome = route === '/'
+  const title = isHome
+    ? meta.title
+    : `${project.name} — Adryan Miguel`
+  const description = isHome
+    ? meta.description
+    : `${project.description} Projeto de ${project.category.toLowerCase()}.`
+  const canonical = `${BASE_URL}${route === '/' ? '' : route}`
+  const ogImage = `${BASE_URL}/assets/images/og-image.jpg`
+
+  return { title, description, canonical, ogImage }
+}
+
+async function generatePage(route, content, assets, project = null) {
   const { cssPath, jsPath } = assets
+  const pageMeta = getMeta(route, project)
 
   const html = `<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Adryan Miguel — Designer e desenvolvedor front-end</title>
-    <meta name="description" content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end." />
+    <title>${pageMeta.title}</title>
+    <meta name="description" content="${pageMeta.description}" />
     <meta name="theme-color" content="#090A0B" />
+    <meta name="author" content="Adryan Miguel" />
+    <link rel="canonical" href="${pageMeta.canonical}" />
+    <meta property="og:title" content="${pageMeta.title}" />
+    <meta property="og:description" content="${pageMeta.description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="${pageMeta.canonical}" />
+    <meta property="og:image" content="${pageMeta.ogImage}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${meta.ogImageAlt}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${pageMeta.title}" />
+    <meta name="twitter:description" content="${pageMeta.description}" />
+    <meta name="twitter:image" content="${pageMeta.ogImage}" />
+    <meta name="twitter:image:alt" content="${meta.ogImageAlt}" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="preload" as="font" href="/assets/fonts/bricolage-grotesque-latin.woff2" type="font/woff2" crossorigin />
+    <link rel="preload" as="font" href="/assets/fonts/bricolage-grotesque-latin.woff2" type="font/woff2" crossorigin />${route === '/' ? `
+    <link rel="preload" as="image" href="/assets/images/hero-portrait.webp" type="image/webp" />` : ''}
     <link rel="stylesheet" href="${cssPath}" />
-    <style>
-      .hero__portrait { clip-path: inset(0%) !important; }
-      .header { transform: none !important; opacity: 1 !important; }
-      .mask__in { transform: none !important; }
-      .service, .work-index__row, .process__step { opacity: 1 !important; transform: none !important; }
-      img { opacity: 1 !important; }
-    </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Adryan Miguel",
+        "jobTitle": "${profile.role}",
+        "description": "${meta.description}",
+        "knowsAbout": ["Landing pages", "Sites completos", "Design digital", "Sistemas sob medida"],
+        "address": { "@type": "PostalAddress", "addressRegion": "Minas Gerais", "addressCountry": "BR" }
+      }
+    </script>
+    <script>
+      ;(function () {
+        var html = document.documentElement
+        var SAFETY_TIMEOUT = 3500
+        try {
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (reduced) {
+            html.classList.add('reduced-motion')
+          } else {
+            html.classList.add('is-booting')
+          }
+          html.classList.add('js')
+          setTimeout(function () {
+            if (!html.classList.contains('motion-ready')) {
+              html.classList.add('motion-ready')
+              html.classList.remove('is-booting')
+            }
+          }, SAFETY_TIMEOUT)
+        } catch (error) {
+          html.classList.add('motion-ready')
+        }
+      })()
+    </script>
+    <noscript>
+      <style>
+        .veil, .progress, .cursor { display: none !important; }
+        .hero__portrait { clip-path: inset(0% 0% 0% 0%) !important; }
+        .hero__marquee { animation: none !important; }
+        .mask__in { transform: none !important; }
+        .header { transform: none !important; opacity: 1 !important; }
+        .service, .work-index__row, .process__step { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
   </head>
   <body>
     <div id="root">${content}</div>
@@ -301,10 +379,10 @@ async function ssg() {
 
   console.log(`📦 Found assets: CSS=${assets.cssPath}, JS=${assets.jsPath}`)
 
-  await generatePage('/', generateHomeContent(), assets)
+  await generatePage('/', generateHomeContent(), assets, null)
 
   for (const project of projects) {
-    await generatePage(`/trabalhos/${project.slug}`, generateCaseContent(project), assets)
+    await generatePage(`/trabalhos/${project.slug}`, generateCaseContent(project), assets, project)
   }
 
   console.log('\n🎉 SSG complete!')
