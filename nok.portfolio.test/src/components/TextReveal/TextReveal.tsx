@@ -9,9 +9,10 @@ type Props = {
   className?: string
   mode?: 'mask' | 'words' | 'lines'
   id?: string
+  drift?: boolean
 }
 
-export function TextReveal({ as = 'p', text, className, mode = 'mask', id }: Props) {
+export function TextReveal({ as = 'p', text, className, mode = 'mask', id, drift = false }: Props) {
   const ref = useRef<HTMLElement | null>(null)
 
   useLayoutEffect(() => {
@@ -42,34 +43,42 @@ export function TextReveal({ as = 'p', text, className, mode = 'mask', id }: Pro
   }, [mode, text])
 
   const inner = renderInner(text, mode)
+  const body = drift ? (
+    <span className="drift" data-drift>
+      {inner}
+    </span>
+  ) : (
+    inner
+  )
   const setRef = (node: HTMLElement | null) => {
     ref.current = node
   }
+  const driftRoot = drift ? '' : undefined
 
   if (as === 'h2') {
     return (
-      <h2 ref={setRef} id={id} className={className}>
-        {inner}
+      <h2 ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
+        {body}
       </h2>
     )
   }
   if (as === 'h3') {
     return (
-      <h3 ref={setRef} id={id} className={className}>
-        {inner}
+      <h3 ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
+        {body}
       </h3>
     )
   }
   if (as === 'span') {
     return (
-      <span ref={setRef} id={id} className={className}>
-        {inner}
+      <span ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
+        {body}
       </span>
     )
   }
   return (
-    <p ref={setRef} id={id} className={className}>
-      {inner}
+    <p ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
+      {body}
     </p>
   )
 }

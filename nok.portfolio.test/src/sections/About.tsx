@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
 import { portraits, profile, skills } from '../data/content'
+import { Picture } from '../components/Picture/Picture'
 import { SectionLabel } from '../components/SectionLabel/SectionLabel'
 import { TextReveal } from '../components/TextReveal/TextReveal'
 import { useGsapContext } from '../hooks/useGsapContext'
@@ -27,25 +28,6 @@ export function About() {
       )
     }
 
-    const motion = gsap.matchMedia()
-    motion.add('(min-width: 761px) and (prefers-reduced-motion: no-preference)', () => {
-      const parallax = scope.querySelector<HTMLElement>('.about__photo .frame__parallax')
-      if (!parallax) return
-      gsap.fromTo(
-        parallax,
-        { yPercent: 0 },
-        {
-          yPercent: -5,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: frame,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        },
-      )
-    })
   })
 
   return (
@@ -54,15 +36,14 @@ export function About() {
         <div className="about__grid">
           <figure className="about__figure">
             <p className="about__vert mono">AM / Profile / 05</p>
-            <div className="frame about__photo">
-              <div className="frame__parallax">
-                <img
+            <div className="frame about__photo" data-drift-root>
+              <div className="frame__parallax" data-drift>
+                <Picture
                   src={portraits.about.src}
                   width={portraits.about.width}
                   height={portraits.about.height}
                   alt={portraits.about.alt}
-                  loading="lazy"
-                  decoding="async"
+                  sizes="(max-width: 960px) 100vw, 38vw"
                 />
               </div>
             </div>
@@ -70,7 +51,7 @@ export function About() {
           </figure>
           <div className="about__copy">
             <SectionLabel index="05" name="About" />
-            <TextReveal as="h2" id="about-title" text="About" className="section__title" mode="mask" />
+            <TextReveal as="h2" id="about-title" text="About" className="section__title" mode="mask" drift />
             <p className="about__text">{profile.about}</p>
             <p className="about__since mono">Building digital experiences since {profile.since}</p>
             <ul className="skills">

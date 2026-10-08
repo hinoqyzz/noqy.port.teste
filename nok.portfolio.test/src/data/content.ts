@@ -140,6 +140,12 @@ export const projects: Project[] = [
       height: 1200,
       alt: '[PLACEHOLDER — PROJETO 01] Capa temporária. Substituir project-01-cover.webp.',
     },
+    secondary: {
+      src: '/assets/images/project-01-detail.webp',
+      width: 1600,
+      height: 1200,
+      alt: '[PLACEHOLDER — PROJETO 01] Detalhe temporário. Substituir project-01-detail.webp.',
+    },
   },
   {
     id: 'P_02',
@@ -179,6 +185,12 @@ export const projects: Project[] = [
       width: 1920,
       height: 1200,
       alt: '[PLACEHOLDER — PROJETO 03] Capa temporária. Substituir project-03-cover.webp.',
+    },
+    secondary: {
+      src: '/assets/images/project-03-mobile.webp',
+      width: 1000,
+      height: 1600,
+      alt: '[PLACEHOLDER — PROJETO 03] Versão vertical temporária. Substituir project-03-mobile.webp.',
     },
   },
   {

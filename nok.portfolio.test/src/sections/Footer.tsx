@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 import { profile } from '../data/content'
+import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
 
 export function Footer() {
   const { scrollTo } = useSite()
+  const topRef = useRef<HTMLAnchorElement>(null)
   const [time, setTime] = useState('')
+  useMagnetic(topRef, { max: 8, pull: 0.22, radius: 90 })
 
   useEffect(() => {
     const format = () =>
@@ -33,11 +36,13 @@ export function Footer() {
           <p className="footer__name">{profile.name}</p>
           <p className="footer__center mono">Front-end / Design</p>
           <div className="footer__right">
-            <a className="totop" href="#intro" onClick={onTop}>
-              Back to top
-              <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M12 19V5M7 10l5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.25" />
-              </svg>
+            <a ref={topRef} className="totop" href="#intro" onClick={onTop}>
+              <span className="press">
+                Back to top
+                <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 19V5M7 10l5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.25" />
+                </svg>
+              </span>
             </a>
             <p className="mono">© {profile.year}</p>
             <p className="mono">{time ? `Local ${time}` : 'Local'}</p>

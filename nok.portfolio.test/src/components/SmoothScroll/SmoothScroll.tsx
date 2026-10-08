@@ -1,9 +1,11 @@
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SiteContext } from '../../hooks/useSite'
-import type { ReactNode } from 'react'
+import { Veil } from '../Veil/Veil'
+import type { VeilHandle } from '../Veil/Veil'
 
 const SECTION_IDS = ['intro', 'services', 'work', 'process', 'about', 'contact']
 
@@ -11,6 +13,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const [active, setActive] = useState('intro')
   const [menuOpen, setMenuOpen] = useState(false)
   const lenisRef = useRef<Lenis | null>(null)
+  const veilRef = useRef<VeilHandle | null>(null)
+  const activeRef = useRef(active)
+  const transitioning = useRef(false)
+
+  useEffect(() => {
+    activeRef.current = active
+  }, [active])
 
   useLayoutEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -34,7 +43,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const hash = window.location.hash
       if (hash) {
         requestAnimationFrame(() => {
-          instance?.scrollTo(hash, { immediate: true })
+          instance?.scrollTo(hash, { immediate: true, force: true })
         })
       }
     }
@@ -69,23 +78,85 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     document.documentElement.classList.toggle('menu-open', menuOpen)
     const instance = lenisRef.current
     if (menuOpen) instance?.stop()
-    else instance?.start()
+    else if (!transitioning.current) instance?.start()
   }, [menuOpen])
 
-  const scrollTo = useCallback((target: string) => {
-    setMenuOpen(false)
+  const jump = useCallback((target: string) => {
     const instance = lenisRef.current
     if (instance) {
-      instance.scrollTo(target, { offset: 0, duration: 1.05 })
-      return
+      instance.scrollTo(target, { offset: 0, immediate: true, force: true })
+    } else {
+      document.querySelector(target)?.scrollIntoView({ behavior: 'auto', block: 'start' })
     }
-    document.querySelector(target)?.scrollIntoView({ behavior: 'auto', block: 'start' })
+    ScrollTrigger.update()
+    if (window.location.hash !== target) {
+      history.replaceState(null, '', target)
+    }
   }, [])
+
+  const scrollTo = useCallback(
+    (target: string) => {
+      const id = target.replace('#', '')
+      if (activeRef.current === id) {
+        setMenuOpen(false)
+        return
+      }
+
+      const reduced = document.documentElement.classList.contains('reduced-motion')
+      const veil = veilRef.current
+      if (reduced || !veil || transitioning.current) {
+        setMenuOpen(false)
+        jump(target)
+        return
+      }
+
+      transitioning.current = true
+      document.documentElement.classList.add('is-transitioning')
+      setInert(true)
+      lenisRef.current?.stop()
+
+      void veil
+        .cover()
+        .then(() => {
+          setMenuOpen(false)
+          jump(target)
+          return veil.reveal()
+        })
+        .finally(() => {
+          transitioning.current = false
+          document.documentElement.classList.remove('is-transitioning')
+          setInert(false)
+          lenisRef.current?.start()
+          focusSection(target)
+        })
+    },
+    [jump],
+  )
 
   const value = useMemo(
     () => ({ scrollTo, active, menuOpen, setMenuOpen }),
     [scrollTo, active, menuOpen],
   )
 
-  return <SiteContext.Provider value={value}>{children}</SiteContext.Provider>
+  return (
+    <SiteContext.Provider value={value}>
+      <Veil api={veilRef} />
+      {children}
+    </SiteContext.Provider>
+  )
+}
+
+function setInert(blocked: boolean) {
+  document.querySelectorAll('header, main, footer, .overlay').forEach((node) => {
+    if (!(node instanceof HTMLElement)) return
+    if (blocked) node.setAttribute('inert', '')
+    else node.removeAttribute('inert')
+  })
+}
+
+function focusSection(target: string) {
+  const node = document.querySelector(target)
+  if (!(node instanceof HTMLElement)) return
+  if (!node.hasAttribute('tabindex')) node.setAttribute('tabindex', '-1')
+  node.focus({ preventScroll: true })
 }

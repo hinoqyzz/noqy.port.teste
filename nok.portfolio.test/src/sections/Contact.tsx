@@ -3,8 +3,10 @@ import gsap from 'gsap'
 import type { MouseEvent } from 'react'
 import { contact, cta } from '../data/social'
 import { isRealHref } from '../data/content'
+import type { ContactItem } from '../data/content'
 import { Button } from '../components/Button/Button'
 import { SectionLabel } from '../components/SectionLabel/SectionLabel'
+import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
 
 export function Contact() {
@@ -48,16 +50,18 @@ export function Contact() {
       <div className="cta">
         <div className="shell">
           <SectionLabel index="06" name="Contact" />
-          <h2 className="cta__title" id="cta-title">
-            <span className="mask">
-              <span className="mask__in">Have a project</span>
-            </span>
-            <span className="mask">
-              <span className="mask__in">in mind?</span>
-            </span>
-            <span className="mask cta__shift">
-              <span className="mask__in">
-                Let&apos;s <strong>build</strong> it.
+          <h2 className="cta__title" id="cta-title" data-drift-root>
+            <span className="drift" data-drift>
+              <span className="mask">
+                <span className="mask__in">Have a project</span>
+              </span>
+              <span className="mask">
+                <span className="mask__in">in mind?</span>
+              </span>
+              <span className="mask cta__shift">
+                <span className="mask__in">
+                  Let&apos;s <strong>build</strong> it.
+                </span>
               </span>
             </span>
           </h2>
@@ -76,35 +80,49 @@ export function Contact() {
             <p className="draft">[PLACEHOLDER]</p>
           </div>
           <ul className="sheet__list">
-            {contact.map((item) => {
-              const real = isRealHref(item.href)
-              const inner = (
-                <>
-                  <span className="sheet__label">{item.label}</span>
-                  <span className="sheet__value">{item.value}</span>
-                  <span className="sheet__arrow" aria-hidden="true">
-                    <svg className="arrow" viewBox="0 0 24 24" focusable="false">
-                      <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.25" />
-                    </svg>
-                  </span>
-                  <span className="sheet__hoverline" aria-hidden="true" />
-                </>
-              )
-              return (
-                <li key={item.id}>
-                  {real ? (
-                    <a className="sheet__row" href={item.href}>
-                      {inner}
-                    </a>
-                  ) : (
-                    <div className="sheet__row">{inner}</div>
-                  )}
-                </li>
-              )
-            })}
+            {contact.map((item) => (
+              <li key={item.id}>
+                <ContactRow item={item} />
+              </li>
+            ))}
           </ul>
         </div>
       </div>
     </section>
+  )
+}
+
+function ContactRow({ item }: { item: ContactItem }) {
+  const real = isRealHref(item.href)
+  const linkRef = useRef<HTMLAnchorElement>(null)
+  const rowRef = useRef<HTMLDivElement>(null)
+  useMagnetic(linkRef, { enabled: real, max: 6, pull: 0.12, within: true })
+  useMagnetic(rowRef, { enabled: !real, max: 6, pull: 0.12, within: true })
+
+  const inner = (
+    <>
+      <span className="sheet__label">{item.label}</span>
+      <span className="sheet__value press">{item.value}</span>
+      <span className="sheet__arrow" aria-hidden="true">
+        <svg className="arrow" viewBox="0 0 24 24" focusable="false">
+          <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.25" />
+        </svg>
+      </span>
+      <span className="sheet__hoverline" aria-hidden="true" />
+    </>
+  )
+
+  if (real) {
+    return (
+      <a ref={linkRef} className="sheet__row" href={item.href}>
+        {inner}
+      </a>
+    )
+  }
+
+  return (
+    <div ref={rowRef} className="sheet__row">
+      {inner}
+    </div>
   )
 }

@@ -89,6 +89,13 @@ main {
   transform-origin: 72% 30%;
 }
 
+@media (min-width: 901px) {
+  html:not(.reduced-motion) .hero__photo img {
+    height: 112%;
+    max-width: none;
+  }
+}
+
 .hero__shade {
   position: absolute;
   inset: 0;
@@ -301,9 +308,20 @@ main {
   grid-template-columns: 1fr;
 }
 
-.project--full .frame {
-  aspect-ratio: 16 / 9;
-  min-height: 42vh;
+.project--full .project__media {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(150px, 0.42fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.project--full .project__media .frame:first-child {
+  aspect-ratio: 16 / 10;
+  min-height: 0;
+}
+
+.project--full .frame--portrait {
+  aspect-ratio: 10 / 16;
 }
 
 .project--full .project__body {
@@ -426,8 +444,7 @@ main {
   }
 
   .project:hover .frame img {
-    transform: scale(1.03);
-    transition: transform 0.8s var(--ease-out);
+    transform: scale(1.045);
   }
 
   .project:hover .frame__shade {
@@ -440,6 +457,22 @@ main {
     opacity: 1;
     transform: none;
   }
+}
+
+.project .frame {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.project:active .frame {
+  transform: scale(0.98);
+}
+
+.project:active .project__line {
+  transform: scaleX(1);
+}
+
+.frame img {
+  transition: transform 0.7s var(--ease-out);
 }
 
 /* PROCESS */
@@ -710,6 +743,10 @@ html:not(.reduced-motion) .step.is-active {
     transform: translateX(8px);
   }
 
+  .sheet__row:active .sheet__value {
+    transform: translateX(8px) scale(0.96);
+  }
+
   .sheet__row:hover .sheet__hoverline {
     transform: scaleX(1);
   }
@@ -819,9 +856,19 @@ html:not(.reduced-motion) .step.is-active {
   }
 
   .project--right .frame,
-  .project--full .frame {
+  .project--full .project__media .frame:first-child {
     aspect-ratio: 16 / 11;
     min-height: 0;
+  }
+
+  .project--full .project__media {
+    grid-template-columns: 1fr;
+  }
+
+  .project--full .frame--portrait {
+    order: -1;
+    aspect-ratio: 4 / 5;
+    max-width: min(100%, 460px);
   }
 
   .about__vert {
@@ -860,6 +907,13 @@ html:not(.reduced-motion) .step.is-active {
     gap: 0;
   }
 
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 0.78;
+  }
+
   .hero__adryan,
   .hero__miguel,
   .hero__photo {
@@ -873,11 +927,14 @@ html:not(.reduced-motion) .step.is-active {
 
   .hero__adryan,
   .hero__miguel {
+    display: block;
     font-size: clamp(58px, 17vw, 96px);
+    line-height: 0.78;
   }
 
   .hero__miguel {
-    margin-left: 10vw;
+    margin-left: 12vw;
+    margin-top: -0.06em;
   }
 
   .hero__photo {

@@ -44,36 +44,15 @@ export function Projects() {
       })
 
       if (reduced) return
-      const frame = item.querySelector<HTMLElement>('.project__media .frame')
-      if (!frame) return
-      gsap.fromTo(
-        frame,
-        { clipPath: 'inset(10% 0% 10% 0%)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 1,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: frame, start: 'top 84%', toggleActions: 'play none none none' },
-        },
-      )
-    })
-
-    media.add('(min-width: 761px) and (prefers-reduced-motion: no-preference)', () => {
-      items.forEach((item) => {
-        const parallax = item.querySelector<HTMLElement>('.project__media .frame__parallax')
-        if (!parallax) return
+      item.querySelectorAll<HTMLElement>('.frame').forEach((frame) => {
         gsap.fromTo(
-          parallax,
-          { yPercent: 0 },
+          frame,
+          { clipPath: 'inset(10% 0% 10% 0%)' },
           {
-            yPercent: -6,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: item,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 1,
+            ease: 'power4.out',
+            scrollTrigger: { trigger: frame, start: 'top 84%', toggleActions: 'play none none none' },
           },
         )
       })
@@ -92,7 +71,7 @@ export function Projects() {
         <div className="work__layout">
           <div className="work__intro-col">
             <div className="work__intro">
-              <SectionLabel index="03" name="Work" />
+              <SectionLabel index="03" name="Work" drift={false} />
               <p className="work__code mono">INDEX_03</p>
               <TextReveal
                 as="h2"

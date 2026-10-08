@@ -17,7 +17,6 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    <!-- PLACEHOLDER: trocar og:image quando o retrato final existir -->
     <meta property="og:image" content="/assets/images/hero-adryan.webp" />
     <meta property="og:image:width" content="2000" />
     <meta property="og:image:height" content="1200" />
@@ -29,7 +28,14 @@
     />
     <meta name="twitter:image" content="/assets/images/hero-adryan.webp" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" as="image" href="/assets/images/hero-adryan.webp" />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/images/opt/hero-adryan-1280.avif"
+      type="image/avif"
+      imagesrcset="/assets/images/opt/hero-adryan-640.avif 640w, /assets/images/opt/hero-adryan-960.avif 960w, /assets/images/opt/hero-adryan-1280.avif 1280w, /assets/images/opt/hero-adryan-1600.avif 1600w, /assets/images/opt/hero-adryan-2000.avif 2000w"
+      imagesizes="(max-width: 760px) 100vw, 68vw"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -61,6 +67,8 @@
         try {
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.documentElement.classList.add('reduced-motion')
+          } else {
+            document.documentElement.classList.add('is-booting')
           }
         } catch (error) {
           /* motion preference unavailable */

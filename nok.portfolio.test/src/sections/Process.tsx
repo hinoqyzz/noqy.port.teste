@@ -53,7 +53,14 @@ export function Process() {
           <SectionLabel index="04" name="Process" />
           <p className="process__label mono">STEP_{step}</p>
         </div>
-        <TextReveal as="h2" id="process-title" text={'How I\nwork'} className="section__title" mode="lines" />
+        <TextReveal
+          as="h2"
+          id="process-title"
+          text={'How I\nwork'}
+          className="section__title"
+          mode="lines"
+          drift
+        />
         <p className="draft">[PLACEHOLDER]</p>
         <div className="process__list">
           <div className="process__line" aria-hidden="true">
@@ -63,7 +70,11 @@ export function Process() {
             {processSteps.map((item) => (
               <li className="step" key={item.index} data-step={item.index}>
                 <span className="step__no">{item.index}</span>
-                <h3 className="step__title">{item.title}</h3>
+                <h3 className="step__title" data-drift-root>
+                  <span className="drift" data-drift>
+                    {item.title}
+                  </span>
+                </h3>
                 <p className="step__desc">{item.description}</p>
               </li>
             ))}

@@ -75,11 +75,11 @@ São placas gráficas marcadas `REPLACE`. Troque pelo screenshot ou apresentaç�
 | Arquivo | Tamanho | Uso |
 | --- | --- | --- |
 | `project-01-cover.webp` | 1920×1200 | Capa do projeto 01 (imagem à esquerda) |
-| `project-01-detail.webp` | 1600×1200 | Reservado para detalhe do projeto 01. Ainda não entra no layout. |
+| `project-01-detail.webp` | 1600×1200 | Detalhe do projeto 01, ao lado do texto |
 | `project-02-cover.webp` | 1920×1200 | Capa do projeto 02 |
 | `project-02-detail.webp` | 1600×1200 | Detalhe complementar do projeto 02 |
 | `project-03-cover.webp` | 1920×1200 | Capa do projeto 03 (quase full-width) |
-| `project-03-mobile.webp` | 1000×1600 | Versão vertical do projeto 03. Ainda não entra no layout. |
+| `project-03-mobile.webp` | 1000×1600 | Placa vertical do projeto 03, ao lado da capa no desktop e acima dela no mobile |
 | `project-04-cover.webp` | 1920×1200 | Capa do projeto 04 |
 | `project-04-detail.webp` | 1600×1200 | Segunda imagem do projeto 04 (layout dividido). Arquivo extra em relação à lista original, necessário para o par de imagens. |
 
@@ -100,6 +100,8 @@ Direção das capas: a interface é a protagonista, fundo carvão / creme / terr
 **Projetos.** Screenshot ou recorte editorial da interface real. Cada projeto com enquadramento diferente.
 
 **Open Graph.** `index.html` usa `hero-adryan.webp` como `og:image`. Troque o meta quando existir uma imagem de compartilhamento própria.
+
+**Srcset e AVIF.** `npm run images` gera `public/assets/images/opt/` (WebP + AVIF nas larguras de exibição) e reescreve `src/data/imageSets.ts`. O componente `Picture` usa `<picture>` com `srcset` e `sizes`. Rode o script de novo depois de trocar uma fotografia ou capa. O `src` original continua sendo o fallback.
 
 ## Design Direction
 
@@ -123,11 +125,11 @@ O accent não leva glow. Não há preto puro como fundo.
 
 ## Performance Notes
 
-- GSAP + ScrollTrigger para timelines, pin da coluna “Selected work”, scrub do processo e parallax curto (cerca de 3–8%).
-- Lenis só quando `prefers-reduced-motion` não está ativo. Com movimento reduzido, a rolagem é nativa, o cursor customizado some e os reveals pesados não rodam.
-- Animações usam `transform` e `opacity`. O cursor e o hover de imagem também.
-- Hero sem lazy-load, com `preload`. Demais imagens usam `loading="lazy"` e `width`/`height`.
-- Não há loader separado: a entrada do hero dura cerca de 1,6s e já é a abertura.
-- Não há páginas internas ainda. A navegação é por âncoras. As seções estão isoladas para uma transição futura sem refazer o layout.
+- GSAP + ScrollTrigger para timelines, pin da coluna “Selected work”, scrub do processo e parallax. O deslocamento é de 8% do elemento (`yPercent` / `xPercent`), no teto do intervalo de 3–8% do briefing, só no desktop e só com `transform`.
+- Lenis só quando `prefers-reduced-motion` não está ativo. Com movimento reduzido, a rolagem é nativa, o cursor customizado some, o véu de entrada não aparece e os reveals pesados não rodam.
+- Animações usam `transform` e `opacity`. O cursor, o hover de imagem e o parallax também.
+- Hero sem lazy-load, com `preload` do AVIF em `srcset`. Demais imagens usam `loading="lazy"`, `width`/`height` e `<picture>` (AVIF + WebP).
+- Abertura: um véu carvão com fio terracota, cerca de 1s (`0.4s` de traço + `0.62s` de wipe), dentro do teto de 1,5s. A tipografia do hero entra junto com o wipe.
+- Navegação por âncoras (header e menu INDEX) cobre a tela com o mesmo wipe, troca a seção por baixo e revela. Sem rotas internas. `prefers-reduced-motion` pula o wipe e salta direto.
 - Horário do rodapé é o relógio local do navegador, sem API.
 - JSON-LD traz só o que é conhecido: nome, função e Minas Gerais / BR. Sem telefone, cidade, empresa ou redes inventadas.

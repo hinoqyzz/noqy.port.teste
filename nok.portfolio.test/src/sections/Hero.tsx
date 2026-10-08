@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { Picture } from '../components/Picture/Picture'
 import { portraits, profile } from '../data/content'
+import { DESKTOP_MOTION, INTRO_HOLD, PARALLAX } from '../motion/timing'
 
 export function Hero() {
   const root = useRef<HTMLElement>(null)
@@ -11,50 +13,41 @@ export function Hero() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const context = gsap.context(() => {
+      gsap.set('.hero__rule', { scaleX: 0, transformOrigin: 'left center' })
+      gsap.set('.hero__kicker span', { y: 12, opacity: 0 })
+      gsap.set('.hero__adryan .mask__in', { yPercent: 112 })
+      gsap.set('.hero__miguel .mask__in', { yPercent: 112 })
+      gsap.set('.hero__photo', { clipPath: 'inset(100% 0% 0% 0%)' })
+      gsap.set('.hero__meta > *', { y: 16, opacity: 0 })
+
       const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } })
       timeline
-        .fromTo(
-          '.hero__rule',
-          { scaleX: 0 },
-          { scaleX: 1, duration: 0.55, transformOrigin: 'left center' },
-          0.05,
-        )
-        .fromTo(
-          '.hero__kicker span',
-          { y: 12, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.4, stagger: 0.05 },
-          0.12,
-        )
-        .fromTo('.hero__adryan .mask__in', { yPercent: 112 }, { yPercent: 0, duration: 0.85 }, 0.22)
-        .fromTo('.hero__miguel .mask__in', { yPercent: 112 }, { yPercent: 0, duration: 0.85 }, 0.4)
-        .fromTo(
+        .to('.hero__rule', { scaleX: 1, duration: 0.55 }, INTRO_HOLD + 0.05)
+        .to('.hero__kicker span', { y: 0, opacity: 1, duration: 0.4, stagger: 0.05 }, INTRO_HOLD + 0.12)
+        .to('.hero__adryan .mask__in', { yPercent: 0, duration: 0.85 }, INTRO_HOLD + 0.22)
+        .to('.hero__miguel .mask__in', { yPercent: 0, duration: 0.85 }, INTRO_HOLD + 0.4)
+        .to(
           '.hero__photo',
-          { clipPath: 'inset(100% 0% 0% 0%)' },
           { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.95, ease: 'power3.inOut' },
-          0.48,
+          INTRO_HOLD + 0.48,
         )
-        .fromTo(
-          '.hero__meta > *',
-          { y: 16, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.45, stagger: 0.06 },
-          0.86,
-        )
+        .to('.hero__meta > *', { y: 0, opacity: 1, duration: 0.45, stagger: 0.06 }, INTRO_HOLD + 0.86)
 
       const motion = gsap.matchMedia()
-      motion.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', () => {
+      motion.add(DESKTOP_MOTION, () => {
         const drift = () => ({
           trigger: hero,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 0.65,
         })
-        gsap.to('.hero__adryan', { xPercent: -6, ease: 'none', scrollTrigger: drift() })
-        gsap.to('.hero__miguel', { xPercent: 7, ease: 'none', scrollTrigger: drift() })
-        gsap.to('.hero__photo img', {
-          scale: 1.03,
-          ease: 'none',
-          scrollTrigger: drift(),
-        })
+        gsap.to('.hero__adryan', { xPercent: -PARALLAX, ease: 'none', force3D: true, scrollTrigger: drift() })
+        gsap.to('.hero__miguel', { xPercent: PARALLAX, ease: 'none', force3D: true, scrollTrigger: drift() })
+        gsap.fromTo(
+          '.hero__photo img',
+          { yPercent: 0 },
+          { yPercent: -PARALLAX, ease: 'none', force3D: true, scrollTrigger: drift() },
+        )
         gsap.to('.hero__kicker', {
           opacity: 0,
           y: -10,
@@ -93,13 +86,13 @@ export function Hero() {
           </span>
         </h1>
         <figure className="hero__photo">
-          <img
+          <Picture
             src={portraits.hero.src}
             width={portraits.hero.width}
             height={portraits.hero.height}
             alt={portraits.hero.alt}
-            fetchPriority="high"
-            decoding="async"
+            sizes="(max-width: 760px) 100vw, 68vw"
+            priority
           />
           <span className="hero__shade" aria-hidden="true" />
           <figcaption className="hero__caption mono">Portrait / 01</figcaption>

@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
-import type { MouseEvent } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import gsap from 'gsap'
 import { navigation, profile, sectionIndex } from '../../data/content'
+import { useMagnetic } from '../../hooks/useMagnetic'
 import { useSite } from '../../hooks/useSite'
+import { INTRO_HOLD } from '../../motion/timing'
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null)
@@ -29,7 +31,7 @@ export function Header() {
     const tween = gsap.fromTo(
       header,
       { yPercent: -110 },
-      { yPercent: 0, duration: 0.55, delay: 1.05, ease: 'power4.out' },
+      { yPercent: 0, duration: 0.55, delay: INTRO_HOLD, ease: 'power4.out', immediateRender: true },
     )
     return () => {
       tween.kill()
@@ -91,28 +93,21 @@ export function Header() {
       <header className="header" ref={headerRef}>
         <div className="header__inner">
           <div className="brand">
-            <a
-              className="brand__name"
-              href="#intro"
-              onClick={(event) => onNavigate(event, '#intro')}
-            >
-              {profile.name}
-            </a>
+            <BrandLink onClick={(event) => onNavigate(event, '#intro')}>{profile.name}</BrandLink>
             <span className="brand__index">
               {index}/06
             </span>
           </div>
           <nav className="header__nav" aria-label="Seções">
             {navigation.map((item) => (
-              <a
+              <NavLink
                 key={item.id}
-                className={active === item.id ? 'header__link is-active' : 'header__link'}
                 href={`#${item.id}`}
-                aria-current={active === item.id ? 'true' : undefined}
+                active={active === item.id}
                 onClick={(event) => onNavigate(event, `#${item.id}`)}
               >
                 {item.label}
-              </a>
+              </NavLink>
             ))}
           </nav>
           <div className="header__end">
@@ -150,7 +145,7 @@ export function Header() {
                 href={`#${item.id}`}
                 onClick={(event) => onNavigate(event, `#${item.id}`)}
               >
-                <span>{item.label}</span>
+                <span className="press">{item.label}</span>
                 <span className="overlay__index">{item.index}</span>
               </a>
             ))}
@@ -159,5 +154,47 @@ export function Header() {
         </div>
       ) : null}
     </>
+  )
+}
+
+function BrandLink({
+  children,
+  onClick,
+}: {
+  children: ReactNode
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void
+}) {
+  const ref = useRef<HTMLAnchorElement>(null)
+  useMagnetic(ref, { max: 6, pull: 0.22, radius: 80 })
+  return (
+    <a ref={ref} className="brand__name" href="#intro" onClick={onClick}>
+      <span className="press">{children}</span>
+    </a>
+  )
+}
+
+function NavLink({
+  href,
+  active,
+  children,
+  onClick,
+}: {
+  href: string
+  active: boolean
+  children: ReactNode
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void
+}) {
+  const ref = useRef<HTMLAnchorElement>(null)
+  useMagnetic(ref, { max: 6, pull: 0.28, radius: 72 })
+  return (
+    <a
+      ref={ref}
+      className={active ? 'header__link is-active' : 'header__link'}
+      href={href}
+      aria-current={active ? 'true' : undefined}
+      onClick={onClick}
+    >
+      <span className="press">{children}</span>
+    </a>
   )
 }

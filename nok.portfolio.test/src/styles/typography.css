@@ -33,6 +33,16 @@ p {
   color: var(--text-secondary);
 }
 
+.drift {
+  display: block;
+}
+
+.drift--row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .slabel__sep {
   color: var(--accent);
 }

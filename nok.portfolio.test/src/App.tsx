@@ -10,6 +10,7 @@ import { Process } from './sections/Process'
 import { About } from './sections/About'
 import { Contact } from './sections/Contact'
 import { Footer } from './sections/Footer'
+import { Drift } from './components/Drift/Drift'
 
 export default function App() {
   const bar = useRef<HTMLDivElement>(null)
@@ -46,6 +47,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <Drift />
     </SmoothScroll>
   )
 }
