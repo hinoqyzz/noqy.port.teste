@@ -99,6 +99,11 @@ html.motion-ready:not(.reduced-motion) .hero__photo {
   .hero__photo {
     clip-path: inset(0% 0% 0% 0%) !important;
   }
+
+  .header__menu,
+  .menu-float {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ───────────────────────────────────────────────────────────────────────────

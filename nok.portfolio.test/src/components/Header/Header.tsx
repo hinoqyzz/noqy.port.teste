@@ -96,14 +96,16 @@ export function Header() {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMenuOpen(false)
-        buttonRef.current?.focus()
+        const activeButton = showFloatBtn ? floatBtnRef.current : buttonRef.current
+        activeButton?.focus()
         return
       }
       if (event.key !== 'Tab') return
       const links = overlayRef.current
         ? Array.from(overlayRef.current.querySelectorAll<HTMLElement>('a'))
         : []
-      const nodes = [buttonRef.current, ...links].filter(
+      const closeBtn = floatBtnRef.current
+      const nodes = [closeBtn, ...links].filter(
         (node): node is HTMLElement => Boolean(node),
       )
       if (nodes.length === 0) return
@@ -119,7 +121,7 @@ export function Header() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [menuOpen])
+  }, [menuOpen, showFloatBtn])
 
   useEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)
@@ -165,10 +167,11 @@ export function Header() {
             <CtaButton href={cta.href}>{cta.label}</CtaButton>
             <button
               ref={buttonRef}
-              className="header__menu"
+              className={`header__menu ${showFloatBtn ? 'is-hidden' : ''}`}
               type="button"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
+              tabIndex={showFloatBtn ? -1 : 0}
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? 'Fechar' : 'Menu'}
@@ -179,14 +182,15 @@ export function Header() {
 
       <button
         ref={floatBtnRef}
-        className={`menu-float ${showFloatBtn && !menuOpen ? 'is-visible' : ''}`}
+        className={`menu-float ${showFloatBtn || menuOpen ? 'is-visible' : ''}`}
         type="button"
         aria-expanded={menuOpen}
         aria-controls="mobile-menu"
-        aria-label="Abrir menu"
+        aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+        tabIndex={showFloatBtn || menuOpen ? 0 : -1}
         onClick={() => setMenuOpen(!menuOpen)}
       >
-        Menu
+        {menuOpen ? 'Fechar' : 'Menu'}
       </button>
 
       {menuOpen && (
