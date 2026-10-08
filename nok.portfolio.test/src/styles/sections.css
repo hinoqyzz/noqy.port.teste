@@ -186,7 +186,7 @@ html.reduced-motion .hero__portrait {
   }
 
   .service:hover .service__index {
-    color: var(--accent);
+    color: var(--text-primary);
   }
 
   .service:hover .service__desc {
@@ -309,8 +309,8 @@ html.reduced-motion .hero__portrait {
 }
 
 .project__index {
-  font-family: var(--font-mono);
   font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   color: var(--text-muted);
   margin-bottom: 10px;
@@ -350,8 +350,8 @@ html.reduced-motion .hero__portrait {
 }
 
 .project__url {
-  font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -379,7 +379,7 @@ html.reduced-motion .hero__portrait {
   }
 
   .project:hover .project__index {
-    color: var(--accent);
+    color: var(--text-primary);
   }
 
   .project:hover .project__line {
@@ -490,7 +490,7 @@ html.reduced-motion .process__progress {
 }
 
 .process__index {
-  color: var(--accent);
+  color: var(--text-muted);
 }
 
 .process__name {
@@ -589,8 +589,8 @@ html.reduced-motion .process__progress {
   position: fixed;
   top: 0;
   left: 0;
-  width: clamp(280px, 28vw, 420px);
-  aspect-ratio: 16 / 10;
+  width: 480px;
+  height: 300px;
   pointer-events: none;
   z-index: 100;
   opacity: 0;
@@ -736,7 +736,7 @@ html.reduced-motion .process__progress {
 }
 
 .marquee__dot {
-  color: var(--accent);
+  color: var(--text-muted);
   font-size: clamp(24px, 4vw, 48px);
 }
 
@@ -784,21 +784,6 @@ html.reduced-motion .process__progress {
   letter-spacing: 0.04em;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .cta:hover {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  .cta:hover .cta__note,
-  .cta:hover .slabel {
-    color: var(--bg);
-  }
-
-  .cta:hover .elink__line {
-    background: var(--bg);
-  }
-}
 
 .sheet {
   padding-bottom: clamp(48px, 8vw, 96px);
@@ -826,8 +811,8 @@ html.reduced-motion .process__progress {
 }
 
 .sheet__label {
-  font-family: var(--font-mono);
   font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -859,7 +844,7 @@ html.reduced-motion .process__progress {
 
 @media (hover: hover) and (pointer: fine) {
   .sheet__row:hover .sheet__value {
-    color: var(--accent);
+    color: var(--text-primary);
     transform: translateX(8px);
   }
 
@@ -893,7 +878,7 @@ html.reduced-motion .process__progress {
 .footer__logo {
   height: 120px;
   width: auto;
-  color: var(--text-muted);
+  color: var(--text-primary);
 }
 
 .footer__brand-label {
@@ -939,8 +924,8 @@ html.reduced-motion .process__progress {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-primary);
@@ -1166,8 +1151,8 @@ html.reduced-motion .process__progress {
 }
 
 .case-study__meta dt {
-  font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1181,11 +1166,13 @@ html.reduced-motion .process__progress {
 .case-study__badge {
   margin-top: 24px;
   padding: 6px 12px;
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--line);
+  color: var(--text-secondary);
   width: fit-content;
   font-size: 11px;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .case-study__section {
@@ -1194,8 +1181,8 @@ html.reduced-motion .process__progress {
 }
 
 .case-study__h2 {
-  font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1289,5 +1276,82 @@ html.reduced-motion .process__progress {
 
   .case-study__direction {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLET/TOUCH - No hover preview, show card images instead
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (hover: none), (pointer: coarse) {
+  .work-index__preview {
+    display: none !important;
+  }
+
+  .work-index__thumb {
+    display: block;
+  }
+
+  .work-index__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .work-index__cta {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HERO - Portrait tablets (orientation: portrait) up to 1199px
+   Uses mobile-like layout: portrait spanning width, marquee over it
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1199px) and (orientation: portrait) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .hero__content {
+    grid-column: 1;
+    padding-bottom: 24px;
+    order: 2;
+  }
+
+  .hero__portrait-wrap {
+    grid-column: 1;
+    grid-row: auto;
+    order: 1;
+    max-width: 100%;
+  }
+
+  .hero__name {
+    grid-column: 1;
+    order: 3;
+    flex-wrap: wrap;
+    margin-top: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROCESS - 2-3 columns below 1200px with adapted progress line
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1199px) and (min-width: 761px) {
+  .process__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 24px;
+  }
+
+  .process__desc {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 960px) and (min-width: 761px) {
+  .process__grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

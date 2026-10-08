@@ -85,6 +85,26 @@ h1, h2, h3, p {
   color: var(--text-muted);
 }
 
+/* slabel: Section labels (slightly smaller, uppercase) */
+.slabel {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* mono: Metadata labels - uses Bricolage (no monospace) */
+.mono {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    Emphasis - Lighter grey, not italic
    Used for 1 highlight word per heading
