@@ -108,8 +108,8 @@ export function Contact() {
             </span>
           </h2>
           <div className="cta__actions">
-            <Button href={destination} magnetic onClick={onCta}>
-              {cta.label}
+            <Button href={destination} variant="round" magnetic onClick={onCta}>
+              Vamos conversar
             </Button>
             <p className="cta__note mono">{cta.note}</p>
           </div>
