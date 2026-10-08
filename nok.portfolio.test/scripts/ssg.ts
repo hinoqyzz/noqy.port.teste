@@ -42,6 +42,9 @@ function generateHomeContent() {
           <a class="header__link" href="/#sobre">Sobre</a>
           <a class="header__link" href="/#contato">Contato</a>
         </nav>
+        <div class="header__end">
+          <a class="header__cta" href="${cta.href}">${cta.label}</a>
+        </div>
       </div>
     </header>
     <main id="main" tabindex="-1">
@@ -69,7 +72,7 @@ function generateHomeContent() {
             <span class="hero__name display-xl">${profile.name} —&nbsp;</span>
           </div>
         </div>
-        <h1 class="sr-only">${profile.name}</h1>
+        <h1 id="hero-title" class="sr-only">${profile.name}</h1>
       </section>
       <section class="section services" id="servicos">
         <div class="shell">
@@ -153,7 +156,7 @@ function generateHomeContent() {
           <div class="shell">
             <h2 class="cta__title">Tem um projeto? Vamos tirar do papel.</h2>
             <div class="cta__actions">
-              <a href="${cta.href}" class="btn-round">${cta.label === 'Começar um projeto' ? 'Vamos conversar' : cta.label}</a>
+              <a href="${cta.href}" class="btn-round-cta"><span class="btn-round-cta__text">Vamos conversar</span></a>
             </div>
           </div>
         </div>

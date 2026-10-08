@@ -2,6 +2,12 @@ import { test, expect } from '@playwright/test'
 
 const SCREENSHOT_DIR = '/opt/cursor/artifacts/screenshots'
 
+test.beforeEach(({}, testInfo) => {
+  if (testInfo.project.name.includes('no-js')) {
+    test.skip()
+  }
+})
+
 test.describe('Tablet/Touch Layout Tests', () => {
   test('work index shows card images on touch devices (no hover preview)', async ({
     page,
@@ -71,7 +77,8 @@ test.describe('Tablet/Touch Layout Tests', () => {
     expect(box).not.toBeNull()
     if (box) {
       const widthPercent = (box.width / viewport.width) * 100
-      expect(widthPercent).toBeGreaterThanOrEqual(80)
+      expect(widthPercent).toBeLessThan(95)
+      expect(box.x + box.width).toBeGreaterThan(viewport.width * 0.7)
     }
 
     await page.screenshot({

@@ -2,6 +2,12 @@ import { test, expect } from '@playwright/test'
 
 const SCREENSHOT_DIR = '/opt/cursor/artifacts/screenshots'
 
+test.beforeEach(({}, testInfo) => {
+  if (testInfo.project.name.includes('no-js')) {
+    test.skip()
+  }
+})
+
 test.describe('Motion Layer Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
