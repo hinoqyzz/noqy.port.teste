@@ -105,16 +105,8 @@ export function TextReveal<T extends ElementType = 'p'>({
 
   const driftRoot = drift ? '' : undefined
 
-  return createElement(
-    Component,
-    {
-      ref,
-      id,
-      className,
-      'data-drift-root': driftRoot,
-    },
-    body,
-  )
+  // oxlint-disable-next-line react/refs
+  return createElement(Component, { ref, id, className, 'data-drift-root': driftRoot }, body)
 }
 
 function renderInner(text: string, mode: 'mask' | 'words' | 'lines'): ReactNode {

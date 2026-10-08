@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -8,7 +9,7 @@ import { Veil } from '../Veil/Veil'
 import type { VeilHandle } from '../Veil/Veil'
 import { useMotion, initRefreshStrategy, SCROLL } from '../../motion'
 
-const SECTION_IDS = ['intro', 'services', 'work', 'process', 'about', 'contact']
+const SECTION_IDS = ['intro', 'servicos', 'trabalhos', 'processo', 'sobre', 'contato']
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const [active, setActive] = useState('intro')
@@ -18,6 +19,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const activeRef = useRef(active)
   const transitioning = useRef(false)
   const { isReduced } = useMotion()
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     activeRef.current = active
@@ -49,16 +52,24 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       }
     }
 
-    const triggers = SECTION_IDS.map((id) =>
-      ScrollTrigger.create({
-        trigger: `#${id}`,
-        start: 'top 50%',
-        end: 'bottom 50%',
-        onToggle: (self) => {
-          if (self.isActive) setActive(id)
-        },
-      }),
-    )
+    const triggers: ScrollTrigger[] = []
+    if (isHome) {
+      SECTION_IDS.forEach((id) => {
+        const element = document.getElementById(id)
+        if (element) {
+          triggers.push(
+            ScrollTrigger.create({
+              trigger: element,
+              start: 'top 50%',
+              end: 'bottom 50%',
+              onToggle: (self) => {
+                if (self.isActive) setActive(id)
+              },
+            }),
+          )
+        }
+      })
+    }
 
     initRefreshStrategy()
 
@@ -70,7 +81,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       }
       lenisRef.current = null
     }
-  }, [isReduced])
+  }, [isReduced, isHome])
 
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)

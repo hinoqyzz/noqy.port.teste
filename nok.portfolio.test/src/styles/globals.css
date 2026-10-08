@@ -80,11 +80,9 @@ ol {
   z-index: var(--z-skip);
   padding: 10px 14px;
   background: var(--accent);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .skip:focus {
@@ -129,7 +127,7 @@ html.is-booting::before {
   position: fixed;
   inset: 0;
   z-index: 210;
-  background: #171411;
+  background: var(--bg);
 }
 
 .veil {
@@ -150,7 +148,7 @@ html.is-booting::before {
   display: flex;
   align-items: flex-end;
   padding: 28px var(--gutter) 32px;
-  background: #171411;
+  background: var(--bg);
 }
 
 .veil__sheet::before {
@@ -203,7 +201,7 @@ html.reduced-motion .veil {
 }
 
 .header.is-scrolled {
-  background: #171411;
+  background: var(--bg-secondary);
   border-bottom-color: var(--line);
 }
 
@@ -216,14 +214,11 @@ html.reduced-motion .veil {
   gap: 16px;
 }
 
-.brand {
+.header__brand {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
   justify-self: start;
-}
-
-.brand__name {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -231,11 +226,10 @@ html.reduced-motion .veil {
   white-space: nowrap;
 }
 
-.brand__index {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--accent);
+.header__logo {
+  height: 28px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .header__nav {
@@ -245,12 +239,11 @@ html.reduced-motion .veil {
 
 .header__link {
   position: relative;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 400;
   color: var(--text-secondary);
   padding: 8px 0;
+  transition: color 0.3s var(--ease-out);
 }
 
 .header__link::after {
@@ -298,11 +291,11 @@ html.reduced-motion .veil {
 }
 
 .status__label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
@@ -312,10 +305,8 @@ html.reduced-motion .veil {
   min-height: 44px;
   align-items: center;
   justify-content: flex-end;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
   transition: transform 0.16s var(--ease-out);
 }
 
@@ -349,10 +340,11 @@ html.reduced-motion .veil {
 }
 
 .overlay__index {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .overlay__note {
@@ -405,9 +397,10 @@ html.has-cursor.cursor-on .cursor {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--text-primary);
   opacity: 0;
   white-space: nowrap;
@@ -585,5 +578,9 @@ html:not(.reduced-motion) .frame:not(.frame--plate) .frame__parallax {
 
   body {
     font-size: 16px;
+  }
+
+  .header__logo {
+    height: 24px;
   }
 }

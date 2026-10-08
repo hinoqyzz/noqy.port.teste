@@ -8,7 +8,7 @@
       name="description"
       content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar."
     />
-    <meta name="theme-color" content="#171411" />
+    <meta name="theme-color" content="#090A0B" />
     <meta name="author" content="Adryan Miguel" />
     <meta property="og:title" content="Adryan Miguel — Designer e desenvolvedor front-end" />
     <meta
@@ -17,30 +17,31 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:image" content="/assets/images/hero-adryan.webp" />
-    <meta property="og:image:width" content="2000" />
-    <meta property="og:image:height" content="1200" />
+    <meta property="og:image" content="/assets/images/hero-portrait.webp" />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="2000" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Adryan Miguel — Designer e desenvolvedor front-end" />
     <meta
       name="twitter:description"
       content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar."
     />
-    <meta name="twitter:image" content="/assets/images/hero-adryan.webp" />
+    <meta name="twitter:image" content="/assets/images/hero-portrait.webp" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link
+      rel="preload"
+      as="font"
+      href="/assets/fonts/bricolage-grotesque-latin.woff2"
+      type="font/woff2"
+      crossorigin
+    />
     <link
       rel="preload"
       as="image"
-      href="/assets/images/opt/hero-adryan-1280.avif"
-      type="image/avif"
-      imagesrcset="/assets/images/opt/hero-adryan-640.avif 640w, /assets/images/opt/hero-adryan-960.avif 960w, /assets/images/opt/hero-adryan-1280.avif 1280w, /assets/images/opt/hero-adryan-1600.avif 1600w, /assets/images/opt/hero-adryan-2000.avif 2000w"
-      imagesizes="(max-width: 760px) 100vw, 68vw"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Familjen+Grotesk:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
-      rel="stylesheet"
+      href="/assets/images/hero-portrait.webp"
+      type="image/webp"
     />
     <script type="application/ld+json">
       {
@@ -95,8 +96,11 @@
         .cursor {
           display: none !important;
         }
-        .hero__photo {
+        .hero__portrait {
           clip-path: inset(0% 0% 0% 0%) !important;
+        }
+        .hero__marquee {
+          animation: none !important;
         }
         .mask__in {
           transform: none !important;

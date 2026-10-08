@@ -1,5 +1,4 @@
 import { imageSets } from '../../data/imageSets'
-import { imageMapping } from '../../data/content'
 
 type Props = {
   src: string
@@ -12,15 +11,6 @@ type Props = {
   duotone?: boolean
 }
 
-function getActualSrc(src: string): string {
-  const filename = src.split('/').pop() || ''
-  const mappedFilename = imageMapping[filename]
-  if (mappedFilename) {
-    return `/assets/images/${mappedFilename}`
-  }
-  return src
-}
-
 export function Picture({
   src,
   width,
@@ -31,15 +21,14 @@ export function Picture({
   className,
   duotone = false,
 }: Props) {
-  const actualSrc = getActualSrc(src)
-  const set = imageSets[actualSrc]
+  const set = imageSets[src]
 
   return (
     <picture className={className}>
       {set ? <source type="image/avif" srcSet={set.avif} sizes={sizes} /> : null}
       {set ? <source type="image/webp" srcSet={set.webp} sizes={sizes} /> : null}
       <img
-        src={actualSrc}
+        src={src}
         srcSet={set?.webp}
         sizes={set ? sizes : undefined}
         width={width}

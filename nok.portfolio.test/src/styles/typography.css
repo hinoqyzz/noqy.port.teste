@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   TYPOGRAPHY - Oxide Editorial
-   Familjen Grotesk (400/500) · Instrument Serif Italic · DM Mono (400)
+   TYPOGRAPHY - Grafite A2
+   Bricolage Grotesque (variable: 200-800 weight, 75-100 width, 12-96 optical)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 body {
@@ -9,7 +9,10 @@ body {
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: 0;
+  font-optical-sizing: auto;
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, p {
@@ -18,59 +21,52 @@ h1, h2, h3, p {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Type Scale
+   Type Scale - Sentence case (not uppercase)
    ─────────────────────────────────────────────────────────────────────────── */
 
-/* display-xl: Hero name */
+/* display-xl: Hero marquee name */
 .display-xl {
-  font-family: var(--font-sans);
-  font-size: clamp(4.5rem, 14vw, 13rem);
+  font-size: clamp(5rem, 15vw, 14rem);
   font-weight: 500;
-  line-height: 0.85;
+  font-stretch: 100%;
+  line-height: 0.9;
   letter-spacing: -0.04em;
-  text-transform: uppercase;
 }
 
 /* display-l: Section H2 */
 .display-l,
 .section__title {
-  font-family: var(--font-sans);
   font-size: clamp(3rem, 7vw, 6.5rem);
   font-weight: 500;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  font-stretch: 100%;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
 }
 
 /* index: Project names in work index */
 .index-title {
-  font-family: var(--font-sans);
   font-size: clamp(2.5rem, 6vw, 5.5rem);
   font-weight: 500;
+  font-stretch: 100%;
   line-height: 1.0;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
 }
 
 /* h3: Service/process titles */
-.h3,
-.service__title,
-.step__title {
-  font-family: var(--font-sans);
+.h3 {
   font-size: clamp(1.5rem, 2.4vw, 2.25rem);
   font-weight: 500;
+  font-stretch: 100%;
   line-height: 1.1;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  letter-spacing: -0.015em;
 }
 
 /* body-l: Value proposition, intro */
 .body-l {
-  font-family: var(--font-sans);
   font-size: clamp(1.25rem, 1.8vw, 1.625rem);
   font-weight: 400;
   line-height: 1.35;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
 }
 
 /* body: Default */
@@ -79,65 +75,49 @@ h1, h2, h3, p {
   line-height: 1.6;
 }
 
-/* label: Mono labels (max 6 on site) */
-.label,
-.mono {
-  font-family: var(--font-mono);
-  font-weight: 400;
+/* label: Small labels (keep minimal per A2 spec) */
+.label {
   font-size: 0.8125rem;
+  font-weight: 500;
   line-height: 1.4;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Emphasis - Lighter grey, not italic
+   Used for 1 highlight word per heading
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.text-emphasis {
   color: var(--text-secondary);
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Serif Italic Accent
-   Used for 1-2 highlight words per heading
+   Link Styles
    ─────────────────────────────────────────────────────────────────────────── */
 
-.serif-accent {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0;
+.link-accent {
+  color: var(--accent-text);
+  text-decoration: none;
+  transition: opacity 0.2s var(--ease-out);
 }
 
-/* Accent colors for serif */
-.serif-accent--primary {
-  color: var(--text-primary);
-}
-
-.serif-accent--accent {
-  color: var(--accent);
+.link-accent:hover {
+  opacity: 0.8;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Legacy Classes (compatibility)
+   Utility Classes
    ─────────────────────────────────────────────────────────────────────────── */
 
-.slabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.text-secondary {
   color: var(--text-secondary);
 }
 
-.slabel__sep {
-  color: var(--accent);
-}
-
-.draft {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent);
+.text-muted {
+  color: var(--text-muted);
 }
 
 /* Drift helpers */

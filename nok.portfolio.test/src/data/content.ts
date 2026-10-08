@@ -1,5 +1,5 @@
 /**
- * Conteúdo central - Oxide Editorial
+ * Conteúdo central - Grafite A2
  * Todos os textos, projetos, serviços e metadados.
  */
 
@@ -80,20 +80,10 @@ export const profile = {
 export const projectSeal = 'Estudo conceitual'
 
 export const navigation = [
-  { id: 'work', label: 'Trabalhos', href: '/#trabalhos' },
-  { id: 'services', label: 'Serviços', href: '/#servicos' },
-  { id: 'about', label: 'Sobre', href: '/#sobre' },
-  { id: 'contact', label: 'Contato', href: '/#contato' },
+  { id: 'trabalhos', label: 'Trabalhos', href: '/#trabalhos' },
+  { id: 'sobre', label: 'Sobre', href: '/#sobre' },
+  { id: 'contato', label: 'Contato', href: '/#contato' },
 ] as const
-
-export const sectionIndex: Record<string, string> = {
-  intro: '01',
-  services: '02',
-  work: '03',
-  process: '04',
-  about: '05',
-  contact: '06',
-}
 
 export const services: Service[] = [
   {
@@ -365,44 +355,14 @@ export const portraits = {
     src: '/assets/images/hero-portrait.webp',
     width: 1600,
     height: 2000,
-    alt: 'Adryan Miguel, retrato editorial vertical.',
+    alt: 'Adryan Miguel, retrato P&B frio no setup.',
   } satisfies Media,
   about: {
-    src: '/assets/images/about-adryan.webp',
+    src: '/assets/images/caldo-cafe-brand.webp',
     width: 1600,
     height: 2000,
-    alt: 'Adryan Miguel trabalhando no setup, retrato editorial vertical.',
+    alt: 'Peça de branding do projeto Caldo Café.',
   } satisfies Media,
-}
-
-// Provisional: mapeamento das imagens atuais para os nomes finais
-// Quando as imagens finais chegarem, basta trocar os arquivos
-export const imageMapping: Record<string, string> = {
-  'hero-portrait.webp': 'about-adryan.webp',
-  'caldo-cafe-cover.webp': 'project-01-cover.webp',
-  'caldo-cafe-thumb.webp': 'project-01-cover.webp',
-  'caldo-cafe-detail.webp': 'project-01-detail.webp',
-  'caldo-cafe-brand.webp': 'project-01-detail.webp',
-  'serra-bikes-cover.webp': 'project-02-cover.webp',
-  'serra-bikes-thumb.webp': 'project-02-cover.webp',
-  'serra-bikes-detail.webp': 'project-02-cover.webp',
-  'serra-bikes-brand.webp': 'project-02-cover.webp',
-  'atlas-arquitetura-cover.webp': 'project-03-cover.webp',
-  'atlas-arquitetura-thumb.webp': 'project-03-cover.webp',
-  'atlas-arquitetura-detail.webp': 'project-03-cover.webp',
-  'atlas-arquitetura-brand.webp': 'project-03-mobile.webp',
-  'pulso-cover.webp': 'project-04-cover.webp',
-  'pulso-thumb.webp': 'project-04-cover.webp',
-  'pulso-detail.webp': 'project-04-detail.webp',
-  'pulso-brand.webp': 'project-04-detail.webp',
-}
-
-export function getImagePath(filename: string): string {
-  const mapped = imageMapping[filename]
-  if (mapped) {
-    return `/assets/images/${mapped}`
-  }
-  return `/assets/images/${filename}`
 }
 
 export function isRealHref(href: string) {

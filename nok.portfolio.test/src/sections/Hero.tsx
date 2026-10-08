@@ -1,14 +1,17 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { Picture } from '../components/Picture/Picture'
 import { portraits, profile } from '../data/content'
-import { DURATION, EASE, PROFILE } from '../motion/config'
+import { EASE, PROFILE } from '../motion/config'
 
-gsap.registerPlugin(useGSAP)
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export function Hero() {
   const root = useRef<HTMLElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const marqueeSpeed = useRef(1)
 
   useGSAP(
     () => {
@@ -18,52 +21,104 @@ export function Hero() {
       const mm = gsap.matchMedia()
 
       mm.add(PROFILE.reduced, () => {
-        gsap.set('.hero__name .mask__in', { yPercent: 0 })
         gsap.set('.hero__portrait', { clipPath: 'inset(0% 0% 0% 0%)', scale: 1 })
-        gsap.set('.hero__value, .hero__status, .header', { opacity: 1, y: 0 })
-
-        gsap.fromTo(
-          '.hero__name .mask__in, .hero__portrait, .hero__value, .hero__status',
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: DURATION.reduced.fade,
-            ease: EASE.reduced,
-            stagger: 0.05,
-          },
-        )
+        gsap.set('.hero__value, .hero__status', { opacity: 1, y: 0 })
+        gsap.set('.hero__marquee-track', { x: 0 })
       })
 
       mm.add(PROFILE.mobile, () => {
-        gsap.set('.hero__name .mask__in', { yPercent: 110 })
         gsap.set('.hero__portrait', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.05 })
         gsap.set('.hero__value, .hero__status', { opacity: 0, y: 16 })
 
         const tl = gsap.timeline({ defaults: { ease: EASE.out } })
-        tl.to('.hero__name .mask__in', { yPercent: 0, duration: 0.75, stagger: 0.06 }, 0.1)
-          .to(
-            '.hero__portrait',
-            { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.85, ease: EASE.inOut },
-            0.2,
-          )
-          .to('.hero__value', { opacity: 1, y: 0, duration: 0.5 }, 0.5)
+        tl.to('.hero__portrait', {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          scale: 1,
+          duration: 1.0,
+          ease: EASE.inOut,
+        }, 0.1)
+          .to('.hero__value', { opacity: 1, y: 0, duration: 0.6 }, 0.5)
           .to('.hero__status', { opacity: 1, y: 0, duration: 0.4 }, 0.6)
+
+        gsap.to('.hero__marquee-track', {
+          xPercent: -50,
+          duration: 20,
+          ease: 'none',
+          repeat: -1,
+        })
+
+        gsap.to('.hero__portrait img', {
+          yPercent: 5,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.5,
+          },
+        })
       })
 
       mm.add(PROFILE.desktop, () => {
-        gsap.set('.hero__name .mask__in', { yPercent: 110 })
         gsap.set('.hero__portrait', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.08 })
         gsap.set('.hero__value, .hero__status', { opacity: 0, y: 16 })
+        gsap.set('.hero__marquee-track', { yPercent: 100 })
 
         const tl = gsap.timeline({ defaults: { ease: EASE.out } })
-        tl.to('.hero__name .mask__in', { yPercent: 0, duration: 0.9, stagger: 0.08 }, 0.1)
-          .to(
-            '.hero__portrait',
-            { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.0, ease: EASE.inOut },
-            0.15,
-          )
-          .to('.hero__value', { opacity: 1, y: 0, duration: 0.6 }, 0.4)
-          .to('.hero__status', { opacity: 1, y: 0, duration: 0.5 }, 0.5)
+        tl.to('.hero__portrait', {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          scale: 1,
+          duration: 1.0,
+          ease: EASE.inOut,
+        }, 0.1)
+          .to('.hero__marquee-track', {
+            yPercent: 0,
+            duration: 0.9,
+            ease: EASE.out,
+          }, 0.3)
+          .to('.hero__value', { opacity: 1, y: 0, duration: 0.6 }, 0.5)
+          .to('.hero__status', { opacity: 1, y: 0, duration: 0.5 }, 0.6)
+
+        const marqueeTrack = hero.querySelector('.hero__marquee-track') as HTMLElement
+        if (marqueeTrack) {
+          const baseSpeed = 50
+          let xPos = 0
+          let direction = -1
+
+          ScrollTrigger.create({
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              const velocity = self.getVelocity()
+              marqueeSpeed.current = 1 + Math.abs(velocity) / 1000
+              if (velocity > 0) direction = 1
+              else if (velocity < 0) direction = -1
+            },
+          })
+
+          const animate = () => {
+            xPos += direction * baseSpeed * marqueeSpeed.current * 0.016
+            const trackWidth = marqueeTrack.scrollWidth / 2
+            if (Math.abs(xPos) >= trackWidth) {
+              xPos = 0
+            }
+            marqueeTrack.style.transform = `translateX(${xPos}px)`
+            requestAnimationFrame(animate)
+          }
+          animate()
+        }
+
+        gsap.to('.hero__portrait img', {
+          yPercent: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.7,
+          },
+        })
       })
     },
     { scope: root },
@@ -72,19 +127,19 @@ export function Hero() {
   return (
     <section className="hero" id="intro" ref={root} aria-labelledby="hero-title">
       <div className="hero__grid shell">
-        {/* Value proposition - columns 1-6 */}
         <div className="hero__content">
+          <span className="hero__arrow" aria-hidden="true">↘</span>
           <p className="hero__value body-l">
-            Designer e desenvolvedor front-end. Crio landing pages e interfaces{' '}
-            <em className="serif-accent">com movimento</em>, do primeiro rascunho ao código no ar.
+            <span className="text-secondary">Designer e desenvolvedor front-end. Crio landing pages e interfaces </span>
+            <span>com movimento</span>
+            <span className="text-secondary">, do primeiro rascunho ao código no ar.</span>
           </p>
-          <p className="hero__status mono">
-            <span className="status-dot" aria-hidden="true" />
+          <p className="hero__status label">
+            <span className="hero__dot" aria-hidden="true" />
             {profile.availability} · {profile.location}
           </p>
         </div>
 
-        {/* Portrait - columns 8-12 */}
         <figure className="hero__portrait-wrap">
           <div className="hero__portrait">
             <Picture
@@ -94,30 +149,19 @@ export function Hero() {
               alt={portraits.hero.alt}
               sizes="(max-width: 760px) 100vw, 42vw"
               priority
-              duotone
             />
           </div>
+          <div className="hero__marquee" aria-hidden="true" ref={marqueeRef}>
+            <div className="hero__marquee-track">
+              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
+              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
+              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
+              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
+            </div>
+          </div>
         </figure>
-
-        {/* Name - full width at bottom */}
-        <h1 className="hero__name display-xl" id="hero-title">
-          <span className="hero__name-line">
-            <span className="mask">
-              <span className="mask__in">{profile.given}</span>
-            </span>
-          </span>
-          <span className="hero__name-line hero__name-line--slash">
-            <span className="mask">
-              <span className="mask__in">/</span>
-            </span>
-          </span>
-          <span className="hero__name-line">
-            <span className="mask">
-              <span className="mask__in">{profile.family}</span>
-            </span>
-          </span>
-        </h1>
       </div>
+      <h1 id="hero-title" className="sr-only">{profile.name}</h1>
     </section>
   )
 }
