@@ -57,5 +57,45 @@ export default defineConfig({
         reducedMotion: 'reduce',
       },
     },
+    {
+      name: 'tablet-landscape',
+      use: {
+        viewport: { width: 1024, height: 768 },
+        hasTouch: true,
+        isMobile: true,
+      },
+    },
+    {
+      name: 'tablet-portrait',
+      use: {
+        viewport: { width: 1024, height: 1366 },
+        hasTouch: true,
+        isMobile: true,
+      },
+    },
+    {
+      name: 'tablet-portrait-medium',
+      use: {
+        viewport: { width: 768, height: 1024 },
+        hasTouch: true,
+        isMobile: true,
+      },
+    },
+    {
+      name: 'no-js',
+      use: {
+        viewport: { width: 1440, height: 900 },
+        javaScriptEnabled: false,
+      },
+    },
+    {
+      name: 'no-js-mobile',
+      use: {
+        viewport: { width: 390, height: 844 },
+        javaScriptEnabled: false,
+        hasTouch: true,
+        isMobile: true,
+      },
+    },
   ],
 })

@@ -89,7 +89,7 @@ test.describe('Motion Layer Tests', () => {
 })
 
 test.describe('Reduced Motion Behavior', () => {
-  test.beforeAll(async ({ }, testInfo) => {
+  test.beforeAll(async ({ browser: _browser }, testInfo) => {
     if (!testInfo.project.name.includes('reduced')) {
       test.skip()
     }
@@ -204,7 +204,7 @@ test.describe('SPA Routing', () => {
     })
   })
 
-  test('next project link works', async ({ page }, testInfo) => {
+  test('next project link works', async ({ page }) => {
     await page.goto('/trabalhos/caldo-cafe')
     await page.waitForLoadState('networkidle')
 
@@ -264,17 +264,17 @@ test.describe('New Sections', () => {
     })
   })
 
-  test('marquee is present in contact section', async ({ page }, testInfo) => {
+  test('contact section has round CTA button', async ({ page }, testInfo) => {
     await page.evaluate(() => {
       document.querySelector('#contato')?.scrollIntoView()
     })
     await page.waitForTimeout(1000)
 
-    const marquee = page.locator('.marquee')
-    await expect(marquee).toBeVisible()
+    const ctaBtn = page.locator('.btn-round-cta')
+    await expect(ctaBtn).toBeVisible()
 
     await page.screenshot({
-      path: `${SCREENSHOT_DIR}/contact-marquee-${testInfo.project.name}.png`,
+      path: `${SCREENSHOT_DIR}/contact-cta-${testInfo.project.name}.png`,
       fullPage: false,
     })
   })
