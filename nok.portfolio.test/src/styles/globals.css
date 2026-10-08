@@ -533,7 +533,7 @@ button:active > .press,
   height: 100%;
 }
 
-html:not(.reduced-motion) .frame__parallax {
+html:not(.reduced-motion) .frame:not(.frame--plate) .frame__parallax {
   height: 112%;
 }
 
@@ -542,6 +542,15 @@ html:not(.reduced-motion) .frame__parallax {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.frame--plate {
+  background: transparent;
+}
+
+.frame--plate img {
+  object-fit: contain;
+  object-position: center;
 }
 
 .frame__shade {

@@ -291,7 +291,7 @@ main {
 
 .project--left {
   grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.75fr);
-  align-items: end;
+  align-items: start;
 }
 
 .project--right {
@@ -308,20 +308,17 @@ main {
   grid-template-columns: 1fr;
 }
 
-.project--full .project__media {
+.project__media {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(150px, 0.42fr);
-  gap: 16px;
-  align-items: end;
+  gap: 18px;
+  align-content: start;
+  min-width: 0;
 }
 
-.project--full .project__media .frame:first-child {
-  aspect-ratio: 16 / 10;
-  min-height: 0;
-}
-
-.project--full .frame--portrait {
-  aspect-ratio: 10 / 16;
+.project--full .project__media {
+  grid-template-columns: minmax(0, 1.6fr) minmax(200px, 0.34fr);
+  gap: 16px 20px;
+  align-items: start;
 }
 
 .project--full .project__body {
@@ -337,24 +334,31 @@ main {
   align-items: start;
 }
 
-.project--split .frame:last-child {
-  margin-top: 56px;
+.project--split .plate--secondary {
+  width: 100%;
+  margin-top: clamp(28px, 4vw, 48px);
 }
 
-.project--left .frame {
-  aspect-ratio: 16 / 11;
+.plate {
+  width: 100%;
+  min-width: 0;
 }
 
-.project--right .frame {
-  aspect-ratio: 4 / 5;
+.plate--secondary {
+  width: min(100%, 440px);
 }
 
-.project--split .frame:first-child {
-  aspect-ratio: 16 / 11;
+.project--left .plate--secondary {
+  justify-self: end;
 }
 
-.project--split .frame:last-child {
-  aspect-ratio: 1 / 1;
+.project--right .plate--secondary {
+  justify-self: start;
+}
+
+.project--full .plate--portrait,
+.project--split .plate--secondary {
+  width: 100%;
 }
 
 .project__index {
@@ -390,15 +394,6 @@ main {
   font-size: 16px;
   line-height: 1.55;
   max-width: 36ch;
-}
-
-.project__aside {
-  margin-top: 22px;
-  max-width: 320px;
-}
-
-.project__aside .frame {
-  aspect-ratio: 4 / 3;
 }
 
 .project__url {
@@ -441,10 +436,6 @@ main {
   .project:hover .project__extra {
     opacity: 1;
     transform: none;
-  }
-
-  .project:hover .frame img {
-    transform: scale(1.045);
   }
 
   .project:hover .frame__shade {
@@ -855,24 +846,17 @@ html:not(.reduced-motion) .step.is-active {
     order: 2;
   }
 
-  .project--split .frame:last-child {
+  .project--split .plate--secondary {
     margin-top: 0;
-  }
-
-  .project--right .frame,
-  .project--full .project__media .frame:first-child {
-    aspect-ratio: 16 / 11;
-    min-height: 0;
   }
 
   .project--full .project__media {
     grid-template-columns: 1fr;
   }
 
-  .project--full .frame--portrait {
+  .project--full .plate--portrait {
     order: -1;
-    aspect-ratio: 4 / 5;
-    max-width: min(100%, 460px);
+    width: min(68vw, 240px);
   }
 
   .about__vert {

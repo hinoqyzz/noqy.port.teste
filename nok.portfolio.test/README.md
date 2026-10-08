@@ -75,7 +75,7 @@ São placas gráficas marcadas `REPLACE`. Troque pelo screenshot ou apresentaç�
 | Arquivo | Tamanho | Uso |
 | --- | --- | --- |
 | `project-01-cover.webp` | 1920×1200 | Capa do projeto 01 (imagem à esquerda) |
-| `project-01-detail.webp` | 1600×1200 | Detalhe do projeto 01, ao lado do texto |
+| `project-01-detail.webp` | 1600×1200 | Detalhe do projeto 01, abaixo da capa |
 | `project-02-cover.webp` | 1920×1200 | Capa do projeto 02 |
 | `project-02-detail.webp` | 1600×1200 | Detalhe complementar do projeto 02 |
 | `project-03-cover.webp` | 1920×1200 | Capa do projeto 03 (quase full-width) |
