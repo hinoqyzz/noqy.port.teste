@@ -1,20 +1,17 @@
 import { useEffect } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { getProjectBySlug, getNextProject } from '../data/content'
 import { Picture } from '../components/Picture/Picture'
 import { Footer } from '../sections/Footer'
+import { NotFound } from './NotFound'
 
 export function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
   const project = slug ? getProjectBySlug(slug) : undefined
   const nextProject = slug ? getNextProject(slug) : undefined
 
   useEffect(() => {
-    if (!project) {
-      navigate('/', { replace: true })
-      return
-    }
+    if (!project) return
 
     document.title = `${project.name} — Adryan Miguel`
 
@@ -22,10 +19,10 @@ export function CaseStudyPage() {
     if (meta) {
       meta.setAttribute('content', project.description)
     }
-  }, [project, navigate])
+  }, [project])
 
   if (!project) {
-    return null
+    return <NotFound />
   }
 
   return (

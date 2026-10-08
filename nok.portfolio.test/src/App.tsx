@@ -8,6 +8,7 @@ import { Header } from './components/Header/Header'
 import { Cursor } from './components/Cursor/Cursor'
 import { HomePage } from './pages/HomePage'
 import { CaseStudyPage } from './pages/CaseStudyPage'
+import { NotFound } from './pages/NotFound'
 import { Drift } from './components/Drift/Drift'
 import { PROFILE, TRIGGER } from './motion'
 
@@ -65,6 +66,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/trabalhos/:slug" element={<CaseStudyPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Drift />
