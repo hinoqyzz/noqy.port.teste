@@ -44,9 +44,9 @@ test.describe('No-JS Static Content Verification', () => {
     await expect(services).toBeVisible()
 
     const serviceItems = page.locator('.service')
-    await expect(serviceItems).toHaveCount(3)
+    await expect(serviceItems).toHaveCount(4)
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const service = serviceItems.nth(i)
       await expect(service).toBeVisible()
     }
