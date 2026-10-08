@@ -177,7 +177,7 @@ html.reduced-motion .hero__portrait {
   .hero__grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
     gap: 12px var(--grid-gap, 16px);
     min-height: calc(100svh - var(--header-h) - 12px - 16svh);
     align-content: start;
@@ -205,15 +205,16 @@ html.reduced-motion .hero__portrait {
     grid-column: 2 / 9;
     grid-row: 2;
     position: relative;
-    max-height: calc(100svh - var(--header-h) - 240px);
+    max-height: calc(100svh - var(--header-h) - 20svh - 220px);
     margin: 0;
     justify-self: end;
+    align-self: start;
   }
 
   .hero__portrait {
-    height: 100%;
+    height: auto;
     aspect-ratio: 4 / 5;
-    max-height: 100%;
+    max-height: inherit;
     overflow: hidden;
   }
 
