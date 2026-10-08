@@ -4,11 +4,11 @@
  */
 
 import { chromium } from 'playwright'
-import { readFile, writeFile, mkdir, rm } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { createServer, preview } from 'vite'
+import { preview } from 'vite'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const distDir = join(__dirname, '..', 'dist')
