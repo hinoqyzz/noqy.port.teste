@@ -43,13 +43,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       gsap.ticker.add(onTick)
       gsap.ticker.lagSmoothing(0)
       lenisRef.current = instance
-
-      const hash = window.location.hash
-      if (hash) {
-        requestAnimationFrame(() => {
-          instance?.scrollTo(hash, { immediate: true, force: true })
-        })
-      }
     }
 
     const triggers: ScrollTrigger[] = []
@@ -82,6 +75,20 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lenisRef.current = null
     }
   }, [isReduced, isHome])
+
+  useEffect(() => {
+    const hash = location.hash
+    if (hash && isHome) {
+      requestAnimationFrame(() => {
+        const instance = lenisRef.current
+        if (instance) {
+          instance.scrollTo(hash, { immediate: true, force: true })
+        } else {
+          document.querySelector(hash)?.scrollIntoView({ behavior: 'auto', block: 'start' })
+        }
+      })
+    }
+  }, [location.hash, isHome])
 
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)

@@ -596,6 +596,35 @@ html.reduced-motion .process__progress {
 
 /* ABOUT */
 
+.about--inverse {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}
+
+.about--inverse .mono {
+  color: var(--text-inverse);
+  opacity: 0.55;
+}
+
+.about--inverse .about__text {
+  color: var(--text-inverse);
+  opacity: 0.85;
+}
+
+.about--inverse .about__since {
+  color: var(--text-inverse);
+  opacity: 0.6;
+}
+
+.about--inverse .skills li {
+  border-color: rgba(9, 10, 11, 0.15);
+  color: var(--text-inverse);
+}
+
+.about--inverse .frame {
+  background: var(--bg);
+}
+
 .about__grid {
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.05fr);

@@ -78,7 +78,7 @@ export function About() {
   )
 
   return (
-    <section className="section about" id="about" ref={root} aria-labelledby="about-title">
+    <section className="section about about--inverse" id="sobre" ref={root} aria-labelledby="about-title">
       <div className="shell">
         <div className="about__grid">
           <figure className="about__figure">

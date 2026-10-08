@@ -37,6 +37,7 @@ export function WorkIndex() {
               duration: DURATION.reveal.mask,
               ease: EASE.out,
               delay: i * 0.06,
+              clearProps: 'opacity',
               scrollTrigger: {
                 trigger: row,
                 start: TRIGGER.reveal.start,

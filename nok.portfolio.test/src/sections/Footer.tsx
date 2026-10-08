@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { profile } from '../data/content'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
 
 export function Footer() {
   const { scrollTo } = useSite()
+  const location = useLocation()
+  const isHome = location.pathname === '/'
   const topRef = useRef<HTMLAnchorElement>(null)
   const [time, setTime] = useState('')
   useMagnetic(topRef, { max: 8, pull: 0.22, radius: 90 })
@@ -25,7 +28,11 @@ export function Footer() {
 
   const onTop = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
-    scrollTo('#intro')
+    if (isHome) {
+      scrollTo('#intro')
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   return (
