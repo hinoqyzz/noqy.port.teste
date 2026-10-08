@@ -544,22 +544,19 @@ html:not(.reduced-motion) .frame:not(.frame--plate) .frame__parallax {
   display: block;
 }
 
-.frame--plate {
-  background: transparent;
+.frame--plate,
+.frame--plate picture,
+.frame--plate img,
+.plate,
+.plate__shift {
+  background: var(--bg);
+  box-shadow: none;
+  outline: none;
 }
 
 .frame--plate img {
   object-fit: contain;
   object-position: center;
-}
-
-.frame__shade {
-  position: absolute;
-  inset: 0;
-  background: #171411;
-  opacity: 0;
-  transition: opacity 0.5s var(--ease-out);
-  pointer-events: none;
 }
 
 @media (max-width: 980px) {

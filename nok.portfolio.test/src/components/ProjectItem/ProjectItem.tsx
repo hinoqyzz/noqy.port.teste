@@ -89,7 +89,6 @@ function Frame({
             alt={media.alt}
             sizes={sizes}
           />
-          <div className="frame__shade" aria-hidden="true" />
         </div>
       </div>
     </div>

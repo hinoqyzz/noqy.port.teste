@@ -192,9 +192,9 @@ main {
   left: 48%;
   top: 46%;
   width: min(260px, 24vw);
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1920 / 1200;
   overflow: hidden;
-  background: var(--bg-secondary);
+  background: var(--bg);
   opacity: 0;
   clip-path: inset(0 0 100% 0);
   transform: translate(-20%, -50%);
@@ -203,10 +203,18 @@ main {
   z-index: 2;
 }
 
+.service__visual picture,
+.service__visual img {
+  background: var(--bg);
+  box-shadow: none;
+  outline: none;
+}
+
 .service__visual img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 
@@ -442,10 +450,6 @@ main {
   .project:hover .project__extra {
     opacity: 1;
     transform: none;
-  }
-
-  .project:hover .frame__shade {
-    opacity: 0.16;
   }
 }
 
