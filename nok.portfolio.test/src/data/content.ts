@@ -61,12 +61,12 @@ export const profile = {
   name: 'Adryan Miguel',
   given: 'Adryan',
   family: 'Miguel',
-  role: 'Designer e desenvolvedor front-end',
+  role: 'Designer e desenvolvedor',
   location: 'Minas Gerais, Brasil',
   availability: 'Disponível para projetos',
   year: '2026',
   shortBio:
-    'Designer e desenvolvedor front-end. Crio landing pages e interfaces com movimento, do primeiro rascunho ao código no ar.',
+    'Designer e desenvolvedor. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
   about:
     'Sou o Adryan, de Minas Gerais. Trabalho onde o design encontra o código: desenho a interface, escrevo o front-end e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
   quote: 'Design, código e movimento.',
@@ -93,13 +93,18 @@ export const services: Service[] = [
   },
   {
     index: '02',
-    title: 'Desenvolvimento front-end',
-    description: 'A interface vira código: responsivo, preciso e com movimento no lugar certo.',
+    title: 'Sites completos',
+    description: 'Site institucional com várias páginas, rápido no celular e fácil de achar no Google.',
   },
   {
     index: '03',
     title: 'Design digital',
     description: 'Direção visual com personalidade, longe do template e perto da marca.',
+  },
+  {
+    index: '04',
+    title: 'Sistemas sob medida',
+    description: 'Agendamentos, cardápios, painéis e o que o seu negócio precisar, feito sob medida.',
   },
 ]
 
@@ -358,10 +363,10 @@ export const portraits = {
     alt: 'Adryan Miguel, retrato P&B frio no setup.',
   } satisfies Media,
   about: {
-    src: '/assets/images/caldo-cafe-brand.webp',
+    src: '/assets/images/about-portrait.webp',
     width: 1600,
     height: 2000,
-    alt: 'Peça de branding do projeto Caldo Café.',
+    alt: 'Adryan Miguel, de moletom preto, faz um enquadramento de câmera com as mãos. Foto em preto e branco.',
   } satisfies Media,
 }
 
@@ -381,4 +386,12 @@ export function getNextProject(currentSlug: string): Project {
   const index = projects.findIndex((p) => p.slug === currentSlug)
   const nextIndex = (index + 1) % projects.length
   return projects[nextIndex]
+}
+
+export const meta = {
+  title: 'Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais',
+  description:
+    'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+  ogImageAlt: 'Adryan Miguel — sites, landing pages e sistemas',
+  baseUrl: 'https://adryanmiguel.vercel.app',
 }

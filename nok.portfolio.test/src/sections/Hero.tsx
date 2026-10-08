@@ -130,9 +130,7 @@ export function Hero() {
         <div className="hero__content">
           <span className="hero__arrow" aria-hidden="true">↘</span>
           <p className="hero__value body-l">
-            <span className="text-secondary">Designer e desenvolvedor front-end. Crio landing pages e interfaces </span>
-            <span>com movimento</span>
-            <span className="text-secondary">, do primeiro rascunho ao código no ar.</span>
+            <span className="text-secondary">{profile.shortBio}</span>
           </p>
           <p className="hero__status label">
             <span className="hero__dot" aria-hidden="true" />
