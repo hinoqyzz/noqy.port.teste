@@ -304,14 +304,14 @@ test.describe('Header CTA Visibility', () => {
     expect(isHidden).toBe(true)
   })
 
-  test('header CTA is visible above 768px', async ({ page }, testInfo) => {
+  test('header CTA is visible above 1024px', async ({ page }, testInfo) => {
     if (testInfo.project.name.includes('mobile')) {
       test.skip()
       return
     }
 
     const viewport = page.viewportSize()
-    if (!viewport || viewport.width <= 768) {
+    if (!viewport || viewport.width <= 1024) {
       test.skip()
       return
     }

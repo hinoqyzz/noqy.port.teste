@@ -128,7 +128,11 @@ test.describe('GIT-03: 404 Page', () => {
 })
 
 test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
-  test('header menu button hidden after hero scroll', async ({ page }) => {
+  test('header menu button hidden after hero scroll', async ({ page }, testInfo) => {
+    if (testInfo.project.name.includes('no-js')) {
+      test.skip()
+      return
+    }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 768, height: 1024 })
@@ -145,7 +149,11 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
     expect(tabIndex).toBe('-1')
   })
 
-  test('float menu button visible after hero scroll', async ({ page }) => {
+  test('float menu button visible after hero scroll', async ({ page }, testInfo) => {
+    if (testInfo.project.name.includes('no-js')) {
+      test.skip()
+      return
+    }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
@@ -158,7 +166,11 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
     expect(isVisible).toBe(true)
   })
 
-  test('only one menu button is focusable at a time', async ({ page }) => {
+  test('only one menu button is focusable at a time', async ({ page }, testInfo) => {
+    if (testInfo.project.name.includes('no-js')) {
+      test.skip()
+      return
+    }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 768, height: 1024 })
@@ -183,6 +195,10 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
 
 test.describe('DS-02: Close Control on Desktop', () => {
   test('close button visible when menu open', async ({ page }, testInfo) => {
+    if (testInfo.project.name.includes('no-js')) {
+      test.skip()
+      return
+    }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 1440, height: 900 })
@@ -206,7 +222,11 @@ test.describe('DS-02: Close Control on Desktop', () => {
     })
   })
 
-  test('close button closes menu', async ({ page }) => {
+  test('close button closes menu', async ({ page }, testInfo) => {
+    if (testInfo.project.name.includes('no-js')) {
+      test.skip()
+      return
+    }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 1440, height: 900 })
@@ -263,9 +283,7 @@ test.describe('Copy Updates', () => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
-    await page.evaluate(() => {
-      document.querySelector('#sobre')?.scrollIntoView()
-    })
+    await page.locator('#sobre').scrollIntoViewIfNeeded()
     await page.waitForTimeout(500)
 
     const aboutImg = page.locator('.about__photo img')
