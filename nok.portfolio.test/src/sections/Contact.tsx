@@ -60,7 +60,7 @@ export function Contact() {
               </span>
               <span className="mask cta__shift">
                 <span className="mask__in">
-                  Vamos <strong>fazer</strong>.
+                  Vamos <strong>tirar do papel</strong>.
                 </span>
               </span>
             </span>

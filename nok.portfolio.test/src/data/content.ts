@@ -54,7 +54,7 @@ export const profile = {
   family: 'Miguel',
   role: 'Designer e desenvolvedor front-end',
   location: 'Minas Gerais, Brasil',
-  availability: 'Disponível para projetos selecionados',
+  availability: 'Aberto a novos projetos',
   year: '2026',
   disciplines: 'Design / Código / Movimento',
   shortBio:
