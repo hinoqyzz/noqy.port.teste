@@ -1,53 +1,71 @@
 import { useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import { processSteps } from '../data/services'
 import { SectionLabel } from '../components/SectionLabel/SectionLabel'
 import { TextReveal } from '../components/TextReveal/TextReveal'
-import { useGsapContext } from '../hooks/useGsapContext'
+import { PROFILE, SCROLL } from '../motion'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export function Process() {
   const root = useRef<HTMLElement>(null)
   const [step, setStep] = useState(processSteps[0]?.index ?? '01')
 
-  useGsapContext(root, () => {
-    const scope = root.current
-    if (!scope) return
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const bar = scope.querySelector<HTMLElement>('.process__line-bar')
+  useGSAP(
+    () => {
+      const scope = root.current
+      if (!scope) return
 
-    if (bar && !reduced) {
-      gsap.fromTo(
-        bar,
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.process__list',
-            start: 'top 70%',
-            end: 'bottom 65%',
-            scrub: 0.45,
-          },
-        },
-      )
-    }
+      const bar = scope.querySelector<HTMLElement>('.process__line-bar')
+      const mm = gsap.matchMedia()
 
-    scope.querySelectorAll<HTMLElement>('.step').forEach((item) => {
-      ScrollTrigger.create({
-        trigger: item,
-        start: 'top 62%',
-        end: 'bottom 38%',
-        onToggle: (self) => {
-          item.classList.toggle('is-active', self.isActive)
-          if (self.isActive && item.dataset.step) setStep(item.dataset.step)
-        },
+      mm.add(PROFILE.reduced, () => {
+        if (bar) gsap.set(bar, { scaleY: 1 })
       })
-    })
-  })
+
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        if (bar) {
+          gsap.fromTo(
+            bar,
+            { scaleY: 0 },
+            {
+              scaleY: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '.process__list',
+                start: 'top 70%',
+                end: 'bottom 65%',
+                scrub: SCROLL.scrub,
+              },
+            },
+          )
+        }
+      })
+
+      scope.querySelectorAll<HTMLElement>('.step').forEach((item) => {
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 62%',
+          end: 'bottom 38%',
+          onToggle: (self) => {
+            item.classList.toggle('is-active', self.isActive)
+            if (self.isActive && item.dataset.step) setStep(item.dataset.step)
+          },
+        })
+      })
+    },
+    { scope: root },
+  )
 
   return (
-    <section className="section process" id="process" ref={root} aria-labelledby="process-title">
+    <section
+      className="section process"
+      id="process"
+      ref={root}
+      aria-labelledby="process-title"
+    >
       <div className="shell">
         <div className="section__head">
           <SectionLabel index="04" name="Processo" />

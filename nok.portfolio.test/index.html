@@ -64,17 +64,48 @@
     </script>
     <script>
       ;(function () {
+        var html = document.documentElement
+        var SAFETY_TIMEOUT = 3500
+
         try {
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.classList.add('reduced-motion')
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (reduced) {
+            html.classList.add('reduced-motion')
           } else {
-            document.documentElement.classList.add('is-booting')
+            html.classList.add('is-booting')
           }
+
+          html.classList.add('js')
+
+          setTimeout(function () {
+            if (!html.classList.contains('motion-ready')) {
+              html.classList.add('motion-ready')
+              html.classList.remove('is-booting')
+            }
+          }, SAFETY_TIMEOUT)
         } catch (error) {
-          /* motion preference unavailable */
+          html.classList.add('motion-ready')
         }
       })()
     </script>
+    <noscript>
+      <style>
+        .veil,
+        .progress,
+        .cursor {
+          display: none !important;
+        }
+        .hero__photo {
+          clip-path: inset(0% 0% 0% 0%) !important;
+        }
+        .mask__in {
+          transform: none !important;
+        }
+        .header {
+          transform: none !important;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SiteContext } from '../../hooks/useSite'
 import { Veil } from '../Veil/Veil'
 import type { VeilHandle } from '../Veil/Veil'
+import { useMotion, initRefreshStrategy, SCROLL } from '../../motion'
 
 const SECTION_IDS = ['intro', 'services', 'work', 'process', 'about', 'contact']
 
@@ -16,23 +17,23 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const veilRef = useRef<VeilHandle | null>(null)
   const activeRef = useRef(active)
   const transitioning = useRef(false)
+  const { isReduced } = useMotion()
 
   useEffect(() => {
     activeRef.current = active
   }, [active])
 
   useLayoutEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let instance: Lenis | null = null
     const onTick = (time: number) => {
       instance?.raf(time * 1000)
     }
 
-    if (!reduced) {
+    if (!isReduced) {
       instance = new Lenis({
-        lerp: 0.11,
+        lerp: SCROLL.lenis.lerp,
         smoothWheel: true,
-        wheelMultiplier: 0.9,
+        wheelMultiplier: SCROLL.lenis.wheelMultiplier,
         syncTouch: false,
       })
       instance.on('scroll', ScrollTrigger.update)
@@ -59,20 +60,17 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       }),
     )
 
-    const refresh = () => ScrollTrigger.refresh()
-    window.addEventListener('load', refresh)
-    document.fonts.ready.then(refresh).catch(() => undefined)
+    initRefreshStrategy()
 
     return () => {
       triggers.forEach((trigger) => trigger.kill())
-      window.removeEventListener('load', refresh)
       if (instance) {
         gsap.ticker.remove(onTick)
         instance.destroy()
       }
       lenisRef.current = null
     }
-  }, [])
+  }, [isReduced])
 
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)
@@ -102,9 +100,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         return
       }
 
-      const reduced = document.documentElement.classList.contains('reduced-motion')
       const veil = veilRef.current
-      if (reduced || !veil || transitioning.current) {
+      if (isReduced || !veil || transitioning.current) {
         setMenuOpen(false)
         jump(target)
         return
@@ -130,7 +127,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
           focusSection(target)
         })
     },
-    [jump],
+    [jump, isReduced],
   )
 
   const value = useMemo(

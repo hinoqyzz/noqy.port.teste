@@ -1,69 +1,125 @@
 import { useRef, useState } from 'react'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import { projects } from '../data/projects'
 import { ProjectItem } from '../components/ProjectItem/ProjectItem'
 import { SectionLabel } from '../components/SectionLabel/SectionLabel'
 import { TextReveal } from '../components/TextReveal/TextReveal'
-import { useGsapContext } from '../hooks/useGsapContext'
+import { PROFILE, DURATION, EASE, DISTANCE, TRIGGER, scheduleRefresh } from '../motion'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export function Projects() {
   const root = useRef<HTMLElement>(null)
   const [current, setCurrent] = useState(projects[0]?.index ?? '01')
 
-  useGsapContext(root, () => {
-    const scope = root.current
-    if (!scope) return
+  useGSAP(
+    () => {
+      const scope = root.current
+      if (!scope) return
 
-    const media = gsap.matchMedia()
-    media.add('(min-width: 961px)', () => {
-      ScrollTrigger.create({
-        trigger: '.work__intro',
-        start: 'top 108',
-        endTrigger: '.work__list',
-        end: 'bottom bottom',
-        pin: true,
-        pinSpacing: false,
-        anticipatePin: 1,
-      })
-    })
+      const mm = gsap.matchMedia()
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const items = Array.from(scope.querySelectorAll<HTMLElement>('.project'))
-
-    items.forEach((item) => {
-      ScrollTrigger.create({
-        trigger: item,
-        start: 'top 58%',
-        end: 'bottom 42%',
-        onToggle: (self) => {
-          if (!self.isActive) return
-          const index = item.dataset.index
-          if (index) setCurrent(index)
-        },
+      mm.add('(min-width: 961px)', () => {
+        ScrollTrigger.create({
+          trigger: '.work__intro',
+          start: 'top 108',
+          endTrigger: '.work__list',
+          end: 'bottom bottom',
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+        })
       })
 
-      if (reduced) return
-      item.querySelectorAll<HTMLElement>('.frame').forEach((frame) => {
-        gsap.fromTo(
-          frame,
-          { clipPath: 'inset(10% 0% 10% 0%)' },
-          {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 1,
-            ease: 'power4.out',
-            scrollTrigger: { trigger: frame, start: 'top 84%', toggleActions: 'play none none none' },
+      const items = Array.from(scope.querySelectorAll<HTMLElement>('.project'))
+
+      items.forEach((item) => {
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 58%',
+          end: 'bottom 42%',
+          onToggle: (self) => {
+            if (!self.isActive) return
+            const index = item.dataset.index
+            if (index) setCurrent(index)
           },
-        )
+        })
       })
-    })
 
-    scope.querySelectorAll('img').forEach((image) => {
-      if (!image.complete) {
-        image.addEventListener('load', () => ScrollTrigger.refresh(), { once: true })
-      }
-    })
-  })
+      mm.add(PROFILE.reduced, () => {
+        items.forEach((item) => {
+          item.querySelectorAll<HTMLElement>('.frame').forEach((frame) => {
+            gsap.set(frame, { clipPath: 'inset(0% 0% 0% 0%)' })
+            gsap.fromTo(
+              frame,
+              { opacity: 0 },
+              {
+                opacity: 1,
+                duration: DURATION.reduced.fade,
+                ease: EASE.reduced,
+                scrollTrigger: {
+                  trigger: frame,
+                  start: TRIGGER.reveal.start,
+                  toggleActions: TRIGGER.reveal.toggleActions,
+                },
+              },
+            )
+          })
+        })
+      })
+
+      mm.add(PROFILE.mobile, () => {
+        items.forEach((item) => {
+          item.querySelectorAll<HTMLElement>('.frame').forEach((frame) => {
+            gsap.fromTo(
+              frame,
+              { clipPath: `inset(${DISTANCE.imageReveal.mobile}% 0% ${DISTANCE.imageReveal.mobile}% 0%)` },
+              {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: DURATION.reveal.image * 0.9,
+                ease: EASE.out,
+                scrollTrigger: {
+                  trigger: frame,
+                  start: TRIGGER.reveal.start,
+                  toggleActions: TRIGGER.reveal.toggleActions,
+                },
+              },
+            )
+          })
+        })
+      })
+
+      mm.add(PROFILE.desktop, () => {
+        items.forEach((item) => {
+          item.querySelectorAll<HTMLElement>('.frame').forEach((frame) => {
+            gsap.fromTo(
+              frame,
+              { clipPath: `inset(${DISTANCE.imageReveal.desktop}% 0% ${DISTANCE.imageReveal.desktop}% 0%)` },
+              {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: DURATION.reveal.image,
+                ease: EASE.out,
+                scrollTrigger: {
+                  trigger: frame,
+                  start: TRIGGER.reveal.start,
+                  toggleActions: TRIGGER.reveal.toggleActions,
+                },
+              },
+            )
+          })
+        })
+      })
+
+      scope.querySelectorAll('img').forEach((image) => {
+        if (!image.complete) {
+          image.addEventListener('load', () => scheduleRefresh(), { once: true })
+        }
+      })
+    },
+    { scope: root },
+  )
 
   return (
     <section className="section work" id="work" ref={root} aria-labelledby="work-title">

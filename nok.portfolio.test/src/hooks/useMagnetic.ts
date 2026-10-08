@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import type { RefObject } from 'react'
 import gsap from 'gsap'
-import { useIsMobile } from './useIsMobile'
-import { useReducedMotion } from './useReducedMotion'
+import { useMotion, BREAKPOINT } from '../motion'
 
 type Options = {
   enabled?: boolean
@@ -16,12 +15,14 @@ export function useMagnetic<T extends HTMLElement>(
   ref: RefObject<T | null>,
   { enabled = true, max = 8, pull = 0.2, radius = 110, within = false }: Options = {},
 ) {
-  const reduced = useReducedMotion()
-  const coarse = useIsMobile(980)
+  const { isReduced, isMobile } = useMotion()
+  const coarse =
+    typeof window !== 'undefined' &&
+    window.matchMedia(`(max-width: ${BREAKPOINT.desktop - 1}px)`).matches
 
   useEffect(() => {
     const node = ref.current
-    if (!node || !enabled || reduced || coarse) return
+    if (!node || !enabled || isReduced || isMobile || coarse) return
 
     const xTo = gsap.quickTo(node, 'x', { duration: 0.4, ease: 'power3.out' })
     const yTo = gsap.quickTo(node, 'y', { duration: 0.4, ease: 'power3.out' })
@@ -54,7 +55,7 @@ export function useMagnetic<T extends HTMLElement>(
       gsap.killTweensOf(node)
       gsap.set(node, { clearProps: 'x,y' })
     }
-  }, [coarse, enabled, max, pull, radius, reduced, ref, within])
+  }, [coarse, enabled, isReduced, isMobile, max, pull, radius, ref, within])
 }
 
 function clamp(value: number, min: number, max: number) {

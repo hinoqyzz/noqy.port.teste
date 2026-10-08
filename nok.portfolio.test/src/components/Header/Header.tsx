@@ -1,10 +1,13 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import { navigation, profile, sectionIndex } from '../../data/content'
 import { useMagnetic } from '../../hooks/useMagnetic'
 import { useSite } from '../../hooks/useSite'
-import { INTRO_HOLD } from '../../motion/timing'
+import { DURATION, EASE, DISTANCE, STAGGER, PROFILE, HERO_OFFSET } from '../../motion'
+
+gsap.registerPlugin(useGSAP)
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null)
@@ -13,47 +16,77 @@ export function Header() {
   const { scrollTo, active, menuOpen, setMenuOpen } = useSite()
   const index = sectionIndex[active] ?? '01'
 
-  useLayoutEffect(() => {
-    const header = headerRef.current
-    if (!header) return
-    const onScroll = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 20)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  useGSAP(
+    () => {
+      const header = headerRef.current
+      if (!header) return
 
-  useLayoutEffect(() => {
-    const header = headerRef.current
-    if (!header) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const tween = gsap.fromTo(
-      header,
-      { yPercent: -110 },
-      { yPercent: 0, duration: 0.55, delay: INTRO_HOLD, ease: 'power4.out', immediateRender: true },
-    )
-    return () => {
-      tween.kill()
-    }
-  }, [])
+      const onScroll = () => {
+        header.classList.toggle('is-scrolled', window.scrollY > 20)
+      }
+      onScroll()
+      window.addEventListener('scroll', onScroll, { passive: true })
 
-  useLayoutEffect(() => {
-    if (!menuOpen || !overlayRef.current) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      overlayRef.current.querySelector('a')?.focus()
-      return
-    }
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        '.overlay__link',
-        { yPercent: 36, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.45, stagger: 0.05, ease: 'power4.out' },
-      )
-    }, overlayRef)
-    overlayRef.current.querySelector('a')?.focus()
-    return () => context.revert()
-  }, [menuOpen])
+      const mm = gsap.matchMedia()
+
+      mm.add(PROFILE.reduced, () => {
+        gsap.set(header, { yPercent: 0 })
+        gsap.fromTo(
+          header,
+          { opacity: 0 },
+          { opacity: 1, duration: DURATION.reduced.fade, ease: EASE.reduced, delay: 0.15 },
+        )
+      })
+
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        gsap.fromTo(
+          header,
+          { yPercent: -DISTANCE.headerSlide },
+          {
+            yPercent: 0,
+            duration: DURATION.header,
+            delay: HERO_OFFSET.rule,
+            ease: EASE.out,
+            immediateRender: true,
+          },
+        )
+      })
+
+      return () => {
+        window.removeEventListener('scroll', onScroll)
+      }
+    },
+    { scope: headerRef },
+  )
+
+  useGSAP(
+    () => {
+      if (!menuOpen || !overlayRef.current) return
+
+      const mm = gsap.matchMedia()
+
+      mm.add(PROFILE.reduced, () => {
+        gsap.set('.overlay__link', { yPercent: 0, opacity: 1 })
+        overlayRef.current?.querySelector('a')?.focus()
+      })
+
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        gsap.fromTo(
+          '.overlay__link',
+          { yPercent: DISTANCE.overlaySlide, opacity: 0 },
+          {
+            yPercent: 0,
+            opacity: 1,
+            duration: DURATION.overlay,
+            stagger: STAGGER.overlay,
+            ease: EASE.out,
+          },
+        )
+        overlayRef.current?.querySelector('a')?.focus()
+      })
+    },
+    { scope: overlayRef, dependencies: [menuOpen] },
+  )
 
   useEffect(() => {
     if (!menuOpen) return
@@ -67,7 +100,9 @@ export function Header() {
       const links = overlayRef.current
         ? Array.from(overlayRef.current.querySelectorAll<HTMLElement>('a'))
         : []
-      const nodes = [buttonRef.current, ...links].filter((node): node is HTMLElement => Boolean(node))
+      const nodes = [buttonRef.current, ...links].filter(
+        (node): node is HTMLElement => Boolean(node),
+      )
       if (nodes.length === 0) return
       const first = nodes[0]
       const last = nodes[nodes.length - 1]
@@ -93,10 +128,10 @@ export function Header() {
       <header className="header" ref={headerRef}>
         <div className="header__inner">
           <div className="brand">
-            <BrandLink onClick={(event) => onNavigate(event, '#intro')}>{profile.name}</BrandLink>
-            <span className="brand__index">
-              {index}/06
-            </span>
+            <BrandLink onClick={(event) => onNavigate(event, '#intro')}>
+              {profile.name}
+            </BrandLink>
+            <span className="brand__index">{index}/06</span>
           </div>
           <nav className="header__nav" aria-label="Seções">
             {navigation.map((item) => (

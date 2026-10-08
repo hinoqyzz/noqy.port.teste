@@ -1,33 +1,54 @@
-import { useLayoutEffect } from 'react'
+import { useRef } from 'react'
 import gsap from 'gsap'
-import { DESKTOP_MOTION, PARALLAX } from '../../motion/timing'
+import { useGSAP } from '@gsap/react'
+import { DISTANCE, EASE, PROFILE, TRIGGER } from '../../motion'
+
+gsap.registerPlugin(useGSAP)
 
 export function Drift() {
-  useLayoutEffect(() => {
-    const media = gsap.matchMedia()
-    media.add(DESKTOP_MOTION, () => {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia()
+
+    mm.add(PROFILE.mobile, () => {
       gsap.utils.toArray<HTMLElement>('[data-drift]').forEach((node) => {
         const root = node.closest<HTMLElement>('[data-drift-root]') ?? node
         gsap.fromTo(
           node,
           { yPercent: 0 },
           {
-            yPercent: -PARALLAX,
-            ease: 'none',
+            yPercent: -DISTANCE.parallax.mobile,
+            ease: EASE.parallax,
             force3D: true,
             scrollTrigger: {
               trigger: root,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 0.65,
-              invalidateOnRefresh: true,
+              ...TRIGGER.parallax,
             },
           },
         )
       })
     })
-    return () => media.revert()
-  }, [])
 
-  return null
+    mm.add(PROFILE.desktop, () => {
+      gsap.utils.toArray<HTMLElement>('[data-drift]').forEach((node) => {
+        const root = node.closest<HTMLElement>('[data-drift-root]') ?? node
+        gsap.fromTo(
+          node,
+          { yPercent: 0 },
+          {
+            yPercent: -DISTANCE.parallax.desktop,
+            ease: EASE.parallax,
+            force3D: true,
+            scrollTrigger: {
+              trigger: root,
+              ...TRIGGER.parallax,
+            },
+          },
+        )
+      })
+    })
+  }, { scope: ref })
+
+  return <div ref={ref} style={{ display: 'contents' }} aria-hidden="true" />
 }

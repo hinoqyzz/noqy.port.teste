@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATION UTILITIES
+   Progressive enhancement: content visible by default, animations added by JS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @keyframes status-pulse {
   0%,
   100% {
@@ -7,6 +12,19 @@
     opacity: 0.35;
   }
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Mask Reveals
+   ─────────────────────────────────────────────────────────────────────────── */
 
 .mask {
   display: block;
@@ -24,25 +42,49 @@
   display: block;
 }
 
-html:not(.reduced-motion) .hero__photo {
-  clip-path: inset(100% 0 0 0);
+/* ───────────────────────────────────────────────────────────────────────────
+   Hero Photo: Progressive Enhancement
+   - Visible by default (no JS)
+   - Hidden initial state only when motion-ready class is present
+   - GSAP animates to visible state
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.hero__photo {
+  clip-path: inset(0% 0% 0% 0%);
 }
+
+html.motion-ready:not(.reduced-motion) .hero__photo {
+  clip-path: inset(100% 0% 0% 0%);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Status Indicator
+   ─────────────────────────────────────────────────────────────────────────── */
 
 .status__dot {
   animation: status-pulse 2.8s var(--ease-out) infinite;
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Reduced Motion Preferences
+   - Gentle opacity transitions instead of nothing
+   - No sudden jumps or movements
+   - Respect user's motion sensitivity
+   ─────────────────────────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
+  .status__dot {
+    animation: none;
+    opacity: 0.75;
+  }
+
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 
@@ -53,4 +95,68 @@ html:not(.reduced-motion) .hero__photo {
     transform: none !important;
     opacity: 1 !important;
   }
+
+  .hero__photo {
+    clip-path: inset(0% 0% 0% 0%) !important;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Reduced Motion Class (set by JS)
+   - Applied via useMotion hook
+   - Allows gentle CSS transitions
+   ─────────────────────────────────────────────────────────────────────────── */
+
+html.reduced-motion {
+  scroll-behavior: auto;
+}
+
+html.reduced-motion .progress {
+  display: none;
+}
+
+html.reduced-motion .veil {
+  display: none;
+}
+
+html.reduced-motion .mask__in,
+html.reduced-motion .hero__rule,
+html.reduced-motion .hero__meta > * {
+  transform: none;
+}
+
+html.reduced-motion .hero__photo {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   No-JS Fallback
+   - All content visible without JavaScript
+   - Progressive enhancement: JS adds motion, not hides content
+   ─────────────────────────────────────────────────────────────────────────── */
+
+html:not(.motion-ready) .mask__in {
+  transform: none;
+}
+
+html:not(.motion-ready) .hero__photo {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+html:not(.motion-ready) .hero__rule {
+  transform: scaleX(1);
+}
+
+html:not(.motion-ready) .hero__meta > * {
+  transform: none;
+  opacity: 1;
+}
+
+html:not(.motion-ready) .header {
+  transform: none;
+}
+
+/* Safety: if motion-ready takes too long, ensure visibility */
+html.is-booting .hero__photo {
+  clip-path: inset(0% 0% 0% 0%);
 }
