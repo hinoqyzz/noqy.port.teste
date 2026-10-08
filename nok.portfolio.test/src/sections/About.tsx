@@ -82,7 +82,7 @@ export function About() {
       <div className="shell">
         <div className="about__grid">
           <figure className="about__figure">
-            <p className="about__vert mono">Adryan Miguel · Minas Gerais</p>
+            <p className="about__vert mono">{profile.given}</p>
             <div className="frame about__photo" data-drift-root>
               <div className="frame__parallax" data-drift>
                 <Picture
@@ -94,7 +94,7 @@ export function About() {
                 />
               </div>
             </div>
-            <figcaption className="about__caption mono">Adryan Miguel · Minas Gerais</figcaption>
+            <figcaption className="about__caption mono">{profile.given}</figcaption>
           </figure>
           <div className="about__copy">
             <SectionLabel index="05" name="Sobre" />

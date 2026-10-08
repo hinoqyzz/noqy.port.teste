@@ -12,7 +12,7 @@ test.describe('Motion Layer Tests', () => {
 
   test('hero section is visible and animates', async ({ page }, testInfo) => {
     const heroTitle = page.locator('#hero-title')
-    await expect(heroTitle).toContainText('Adryan')
+    await expect(heroTitle).toContainText('noqyzz')
 
     const heroPortrait = page.locator('.hero__portrait img')
     await expect(heroPortrait).toHaveAttribute('src')
@@ -163,7 +163,7 @@ test.describe('Reduced Motion Behavior', () => {
     await page.waitForTimeout(1000)
 
     const heroTitle = page.locator('#hero-title')
-    await expect(heroTitle).toContainText('Adryan')
+    await expect(heroTitle).toContainText('noqyzz')
   })
 })
 

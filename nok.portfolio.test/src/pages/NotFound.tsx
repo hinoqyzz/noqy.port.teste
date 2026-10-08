@@ -5,7 +5,7 @@ import { Footer } from '../sections/Footer'
 
 export function NotFound() {
   useEffect(() => {
-    document.title = 'Página não encontrada — Adryan Miguel'
+    document.title = 'Página não encontrada — noqyzz'
   }, [])
 
   return (

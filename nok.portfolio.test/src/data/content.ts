@@ -58,17 +58,17 @@ export type ContactItem = {
 }
 
 export const profile = {
-  name: 'Adryan Miguel',
+  name: 'noqyzz',
   given: 'Adryan',
-  family: 'Miguel',
+  family: '',
   role: 'Designer e desenvolvedor',
-  location: 'Minas Gerais, Brasil',
+  location: '',
   availability: 'Disponível para projetos',
   year: '2026',
   shortBio:
     'Designer e desenvolvedor. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
   about:
-    'Sou o Adryan, de Minas Gerais. Trabalho onde o design encontra o código: desenho a interface, escrevo o front-end e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
+    'Sou o Adryan. Trabalho onde o design encontra o código: desenho a interface, escrevo o código e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
   quote: 'Design, código e movimento.',
   since: 'Desde 2021',
   marks: {
@@ -324,7 +324,7 @@ export const skills = [
 export const whatsappNumber = '37998684391'
 export const instagramHandle = 'hinoqyzz'
 
-const whatsappText = 'Oi Adryan, vi seu portfólio e queria conversar sobre um projeto'
+const whatsappText = 'Oi! Vi seu portfólio e queria conversar sobre um projeto.'
 
 export const contact: ContactItem[] = [
   {
@@ -360,13 +360,13 @@ export const portraits = {
     src: '/assets/images/hero-portrait.webp',
     width: 1600,
     height: 2000,
-    alt: 'Adryan Miguel, retrato P&B frio no setup.',
+    alt: 'Retrato em preto e branco no setup de trabalho, com monitores e microfone.',
   } satisfies Media,
   about: {
     src: '/assets/images/about-portrait.webp',
     width: 1600,
     height: 2000,
-    alt: 'Adryan Miguel, de moletom preto, faz um enquadramento de câmera com as mãos. Foto em preto e branco.',
+    alt: 'Adryan, de moletom preto, faz um enquadramento de câmera com as mãos. Foto em preto e branco.',
   } satisfies Media,
 }
 
@@ -389,9 +389,9 @@ export function getNextProject(currentSlug: string): Project {
 }
 
 export const meta = {
-  title: 'Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais',
+  title: 'noqyzz — Sites, landing pages e sistemas',
   description:
-    'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
-  ogImageAlt: 'Adryan Miguel — sites, landing pages e sistemas',
+    'noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+  ogImageAlt: 'noqyzz — sites, landing pages e sistemas',
   baseUrl: 'https://adryanmiguel.vercel.app',
 }

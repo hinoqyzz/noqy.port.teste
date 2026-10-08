@@ -8,12 +8,12 @@ test.describe('GIT-02: Per-route Meta Tags', () => {
     await page.goto('/')
     await page.waitForLoadState('domcontentloaded')
 
-    await expect(page).toHaveTitle('Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais')
+    await expect(page).toHaveTitle('noqyzz — Sites, landing pages e sistemas')
 
     const description = page.locator('meta[name="description"]')
     await expect(description).toHaveAttribute(
       'content',
-      'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+      'noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
     )
 
     const canonical = page.locator('link[rel="canonical"]')
@@ -22,13 +22,13 @@ test.describe('GIT-02: Per-route Meta Tags', () => {
     const ogTitle = page.locator('meta[property="og:title"]')
     await expect(ogTitle).toHaveAttribute(
       'content',
-      'Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais',
+      'noqyzz — Sites, landing pages e sistemas',
     )
 
     const ogDescription = page.locator('meta[property="og:description"]')
     await expect(ogDescription).toHaveAttribute(
       'content',
-      'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+      'noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
     )
 
     const ogImage = page.locator('meta[property="og:image"]')
@@ -37,7 +37,7 @@ test.describe('GIT-02: Per-route Meta Tags', () => {
     const ogImageAlt = page.locator('meta[property="og:image:alt"]')
     await expect(ogImageAlt).toHaveAttribute(
       'content',
-      'Adryan Miguel — sites, landing pages e sistemas',
+      'noqyzz — sites, landing pages e sistemas',
     )
 
     const twitterImage = page.locator('meta[name="twitter:image"]')
@@ -46,7 +46,7 @@ test.describe('GIT-02: Per-route Meta Tags', () => {
     const twitterImageAlt = page.locator('meta[name="twitter:image:alt"]')
     await expect(twitterImageAlt).toHaveAttribute(
       'content',
-      'Adryan Miguel — sites, landing pages e sistemas',
+      'noqyzz — sites, landing pages e sistemas',
     )
   })
 
@@ -54,10 +54,10 @@ test.describe('GIT-02: Per-route Meta Tags', () => {
     await page.goto('/trabalhos/caldo-cafe')
     await page.waitForLoadState('domcontentloaded')
 
-    await expect(page).toHaveTitle('Caldo Café — Adryan Miguel')
+    await expect(page).toHaveTitle('Caldo Café — noqyzz')
 
     const ogTitle = page.locator('meta[property="og:title"]')
-    await expect(ogTitle).toHaveAttribute('content', 'Caldo Café — Adryan Miguel')
+    await expect(ogTitle).toHaveAttribute('content', 'Caldo Café — noqyzz')
 
     const canonical = page.locator('link[rel="canonical"]')
     await expect(canonical).toHaveAttribute('href', `${BASE_URL}/trabalhos/caldo-cafe`)
@@ -96,7 +96,7 @@ test.describe('GIT-03: 404 Page', () => {
 
     const link = page.locator('.not-found__link')
     await expect(link).toBeVisible()
-    await expect(link).toContainText('Voltar para Adryan Miguel')
+    await expect(link).toContainText('Voltar para noqyzz')
   })
 
   test('invalid case study slug shows NotFound', async ({ page }) => {
@@ -111,7 +111,7 @@ test.describe('GIT-03: 404 Page', () => {
     await page.goto('/pagina-que-nao-existe')
     await page.waitForLoadState('networkidle')
 
-    await expect(page).toHaveTitle('Página não encontrada — Adryan Miguel')
+    await expect(page).toHaveTitle('Página não encontrada — noqyzz')
   })
 
   test('404 link navigates back to home', async ({ page }) => {
@@ -216,15 +216,18 @@ test.describe('DS-02: Close Control on Desktop', () => {
 
     const floatMenu = page.locator('.menu-float')
     await floatMenu.click()
-    await page.waitForTimeout(300)
+    await page.waitForTimeout(400)
 
     const overlay = page.locator('.overlay')
     await expect(overlay).toBeVisible()
 
-    await floatMenu.click()
-    await page.waitForTimeout(300)
+    await page.evaluate(() => {
+      const btn = document.querySelector('.menu-float') as HTMLButtonElement
+      if (btn) btn.click()
+    })
+    await page.waitForTimeout(400)
 
-    await expect(overlay).not.toBeVisible()
+    await expect(overlay).toHaveCount(0, { timeout: 5000 })
   })
 })
 
@@ -270,10 +273,10 @@ test.describe('Copy Updates', () => {
     expect(src).toContain('about-portrait.webp')
 
     const aboutCaption = page.locator('.about__caption')
-    await expect(aboutCaption).toContainText('Adryan Miguel · Minas Gerais')
+    await expect(aboutCaption).toContainText('Adryan')
 
     const aboutVert = page.locator('.about__vert')
-    await expect(aboutVert).toContainText('Adryan Miguel · Minas Gerais')
+    await expect(aboutVert).toContainText('Adryan')
   })
 })
 

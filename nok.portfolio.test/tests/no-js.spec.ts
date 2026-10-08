@@ -182,7 +182,7 @@ test.describe('No-JS Static Content Verification', () => {
     })
 
     expect(visibleText.length).toBeGreaterThan(100)
-    expect(visibleText).toContain('Adryan')
+    expect(visibleText).toContain('noqyzz')
   })
 
   test('hero portrait is visible (not hidden by clip-path)', async ({

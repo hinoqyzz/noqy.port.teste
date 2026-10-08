@@ -221,8 +221,6 @@ html.reduced-motion .veil {
   justify-self: start;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -356,6 +354,25 @@ html.reduced-motion .veil {
 .overlay__note {
   margin-top: 28px;
   color: var(--text-secondary);
+}
+
+.overlay__cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 32px;
+  padding: 14px 24px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+}
+
+.overlay__cta:hover {
+  background: var(--bg-secondary);
+  border-color: var(--text-muted);
 }
 
 .cursor {
@@ -546,7 +563,7 @@ html.menu-open .menu-float.is-visible {
   border-color: var(--text-muted);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .header__cta {
     display: none;
   }
@@ -741,7 +758,7 @@ html:not(.reduced-motion) .frame:not(.frame--plate) .frame__parallax {
   object-position: center;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1024px) {
   .header__inner {
     grid-template-columns: 1fr auto;
   }

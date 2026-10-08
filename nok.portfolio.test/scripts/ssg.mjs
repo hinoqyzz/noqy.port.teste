@@ -48,17 +48,17 @@ const projects = [
 ]
 
 const profile = {
-  name: 'Adryan Miguel',
+  name: 'noqyzz',
   role: 'Designer e desenvolvedor',
   bio: 'Designer e desenvolvedor. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
-  location: 'Minas Gerais, Brasil',
+  location: '',
   availability: 'Disponível para projetos',
 }
 
 const meta = {
-  title: 'Adryan Miguel — Sites, landing pages e sistemas | Minas Gerais',
-  description: 'Designer e desenvolvedor em Minas Gerais. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
-  ogImageAlt: 'Adryan Miguel — sites, landing pages e sistemas',
+  title: 'noqyzz — Sites, landing pages e sistemas',
+  description: 'noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+  ogImageAlt: 'noqyzz — sites, landing pages e sistemas',
 }
 
 function generateHomeContent() {
@@ -84,12 +84,13 @@ function generateHomeContent() {
             <p class="hero__value body-l">${profile.bio}</p>
             <p class="hero__status label">
               <span class="hero__dot" aria-hidden="true"></span>
-              ${profile.availability} · ${profile.location}
+              ${profile.availability}${profile.location ? ` · ${profile.location}` : ''}
             </p>
+            <a href="#contato" class="hero__contact-link">Começar um projeto <span aria-hidden="true">↗</span></a>
           </div>
           <figure class="hero__portrait-wrap">
             <div class="hero__portrait">
-              <img src="/assets/images/hero-portrait.webp" alt="${profile.name}" width="1600" height="2000" loading="eager">
+              <img src="/assets/images/hero-portrait.webp" alt="Retrato em preto e branco no setup de trabalho, com monitores e microfone." width="1600" height="2000" loading="eager">
             </div>
           </figure>
         </div>
@@ -142,7 +143,7 @@ function generateHomeContent() {
             </figure>
             <div class="about__copy">
               <h2 class="section__title">Sobre</h2>
-              <p class="about__text">Sou o Adryan, de Minas Gerais. Trabalho onde o design encontra o código: desenho a interface, escrevo o front-end e cuido de cada transição, hover e rolagem até o site parecer vivo.</p>
+              <p class="about__text">Sou o Adryan. Trabalho onde o design encontra o código: desenho a interface, escrevo o código e cuido de cada transição, hover e rolagem até o site parecer vivo.</p>
             </div>
           </div>
         </div>
@@ -259,7 +260,7 @@ function getMeta(route, project = null) {
   const isHome = route === '/'
   const title = isHome
     ? meta.title
-    : `${project.name} — Adryan Miguel`
+    : `${project.name} — noqyzz`
   const description = isHome
     ? meta.description
     : `${project.description} Projeto de ${project.category.toLowerCase()}.`
@@ -281,7 +282,7 @@ async function generatePage(route, content, assets, project = null) {
     <title>${pageMeta.title}</title>
     <meta name="description" content="${pageMeta.description}" />
     <meta name="theme-color" content="#090A0B" />
-    <meta name="author" content="Adryan Miguel" />
+    <meta name="author" content="noqyzz" />
     <link rel="canonical" href="${pageMeta.canonical}" />
     <meta property="og:title" content="${pageMeta.title}" />
     <meta property="og:description" content="${pageMeta.description}" />
@@ -307,11 +308,10 @@ async function generatePage(route, content, assets, project = null) {
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Adryan Miguel",
+        "name": "noqyzz",
         "jobTitle": "${profile.role}",
         "description": "${meta.description}",
-        "knowsAbout": ["Landing pages", "Sites completos", "Design digital", "Sistemas sob medida"],
-        "address": { "@type": "PostalAddress", "addressRegion": "Minas Gerais", "addressCountry": "BR" }
+        "knowsAbout": ["Landing pages", "Sites completos", "Design digital", "Sistemas sob medida"]
       }
     </script>
     <script>

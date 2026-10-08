@@ -134,8 +134,11 @@ export function Hero() {
           </p>
           <p className="hero__status label">
             <span className="hero__dot" aria-hidden="true" />
-            {profile.availability} · {profile.location}
+            {profile.availability}{profile.location ? ` · ${profile.location}` : ''}
           </p>
+          <a href="#contato" className="hero__contact-link">
+            Começar um projeto <span aria-hidden="true">↗</span>
+          </a>
         </div>
 
         <figure className="hero__portrait-wrap">
@@ -151,10 +154,12 @@ export function Hero() {
           </div>
           <div className="hero__marquee" aria-hidden="true" ref={marqueeRef}>
             <div className="hero__marquee-track">
-              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
-              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
-              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
-              <span className="hero__name display-xl">Adryan Miguel —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
             </div>
           </div>
         </figure>
