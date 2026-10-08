@@ -152,17 +152,17 @@ export function Hero() {
               priority
             />
           </div>
-          <div className="hero__marquee" aria-hidden="true" ref={marqueeRef}>
-            <div className="hero__marquee-track">
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-              <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
-            </div>
-          </div>
         </figure>
+      </div>
+      <div className="hero__marquee" aria-hidden="true" ref={marqueeRef}>
+        <div className="hero__marquee-track">
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+          <span className="hero__name display-xl">{profile.name} —&nbsp;</span>
+        </div>
       </div>
       <h1 id="hero-title" className="sr-only">{profile.name}</h1>
     </section>
