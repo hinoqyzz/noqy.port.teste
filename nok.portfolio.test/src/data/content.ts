@@ -1,7 +1,7 @@
 /**
  * Único arquivo de conteúdo.
  * Edite bio, contato, projetos, serviços e textos aqui.
- * Imagens de projeto ainda são placas temporárias; os textos já são os finais.
+ * Textos e mockups dos projetos são os finais.
  */
 
 export type Media = {
@@ -98,7 +98,7 @@ export const services: Service[] = [
       src: '/assets/images/project-01-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Referência de landing page a partir do projeto conceitual Caldo Café.',
+      alt: 'Mockup de navegador da landing Caldo Café, com a xícara de café especial e o botão Ver cardápio.',
     },
   },
   {
@@ -109,7 +109,7 @@ export const services: Service[] = [
       src: '/assets/images/project-02-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Referência de front-end a partir do projeto conceitual Serra Bikes.',
+      alt: 'Mockup de navegador da Serra Bikes, com a bike elétrica e as anotações de motor e autonomia.',
     },
   },
   {
@@ -120,7 +120,7 @@ export const services: Service[] = [
       src: '/assets/images/project-03-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Referência de design digital a partir do projeto conceitual Atlas Arquitetura.',
+      alt: 'Mockup de navegador do site Atlas Arquitetura, com a casa na serra e a planta da Casa das Serras.',
     },
   },
 ]
@@ -141,13 +141,13 @@ export const projects: Project[] = [
       src: '/assets/images/project-01-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Capa conceitual do site Caldo Café, cafeteria de especialidade em Belo Horizonte.',
+      alt: 'Mockup de navegador do site Caldo Café: xícara sobre a mesa de madeira, título e botão Ver cardápio.',
     },
     secondary: {
       src: '/assets/images/project-01-detail.webp',
       width: 1600,
       height: 1200,
-      alt: 'Detalhe conceitual do Caldo Café, com o cardápio se montando na rolagem.',
+      alt: 'Mockup do cardápio do Caldo Café, com espresso, coado V60 e pão de queijo.',
     },
   },
   {
@@ -165,13 +165,13 @@ export const projects: Project[] = [
       src: '/assets/images/project-02-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Capa conceitual do lançamento Serra Bikes, bike elétrica para as ladeiras mineiras.',
+      alt: 'Mockup de navegador da Serra Bikes: bike elétrica preta com anotações de motor 250W e 80 km de autonomia.',
     },
     secondary: {
       src: '/assets/images/project-02-detail.webp',
       width: 1600,
       height: 1200,
-      alt: 'Detalhe conceitual da Serra Bikes, com a bike se desmontando peça por peça.',
+      alt: 'Mockup da visão técnica da Serra Bikes, com a bike desmontada em quadro, bateria, motor e freios.',
     },
   },
   {
@@ -189,13 +189,13 @@ export const projects: Project[] = [
       src: '/assets/images/project-03-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Capa conceitual do portfólio Atlas Arquitetura, com grid editorial de obras.',
+      alt: 'Mockup de navegador do portfólio Atlas Arquitetura, com a casa na serra e a planta sobreposta.',
     },
     secondary: {
       src: '/assets/images/project-03-mobile.webp',
       width: 1000,
       height: 1600,
-      alt: 'Versão vertical conceitual do portfólio Atlas Arquitetura.',
+      alt: 'Mockup de celular da obra Casa Serra, no site Atlas Arquitetura.',
     },
   },
   {
@@ -213,13 +213,13 @@ export const projects: Project[] = [
       src: '/assets/images/project-04-cover.webp',
       width: 1920,
       height: 1200,
-      alt: 'Capa conceitual da landing Pulso, pré-lançamento de um app de treino.',
+      alt: 'Mockup da landing Pulso: o site no navegador e o app no celular, com o pulso em 128 bpm.',
     },
     secondary: {
       src: '/assets/images/project-04-detail.webp',
       width: 1600,
       height: 1200,
-      alt: 'Detalhe conceitual da landing Pulso, com microinterações no ritmo cardíaco.',
+      alt: 'Três cartões do app Pulso: ritmo cardíaco, progresso semanal e treinos guiados.',
     },
   },
 ]

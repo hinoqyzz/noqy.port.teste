@@ -53,7 +53,7 @@ Edite somente `src/data/content.ts`.
 
 Enquanto `href` estiver vazio, for só `https://wa.me/55` ou `https://instagram.com/` sem usuário, ou contiver `PLACEHOLDER`, o item não vira link. WhatsApp e Instagram reais abrem em nova aba. O botão principal usa o mailto de `cta.href`.
 
-Os quatro projetos são conceituais e não têm URL. As capas ainda são placas temporárias, com os nomes `project-0N-cover.webp`, `project-0N-detail.webp` e `project-03-mobile.webp`.
+Os quatro projetos são conceituais e não têm URL. As imagens são os mockups finais, nos mesmos nomes: `project-0N-cover.webp`, `project-0N-detail.webp` e `project-03-mobile.webp`.
 
 ## Asset Generation Guide
 
@@ -68,9 +68,9 @@ Estes dois arquivos já são as fotografias de Adryan. Só substitua se houver u
 | `hero-adryan.webp` | 2000×1200 (5:3) | Hero. O rosto fica à direita; os monitores claros ficam à esquerda. |
 | `about-adryan.webp` | 1600×2000 (4:5) | Seção About. |
 
-### Capas de projeto — ainda temporárias
+### Mockups de projeto — arquivos finais
 
-São placas gráficas marcadas `REPLACE`. Troque pelo screenshot ou apresentação do case, sem mockup 3D genérico.
+Navegador ou celular sobre fundo carvão `#171411`, o mesmo do site. Sem borda, sem legenda de placa e sem texto `REPLACE`.
 
 | Arquivo | Tamanho | Uso |
 | --- | --- | --- |
@@ -79,11 +79,11 @@ São placas gráficas marcadas `REPLACE`. Troque pelo screenshot ou apresentaç�
 | `project-02-cover.webp` | 1920×1200 | Capa do projeto 02 |
 | `project-02-detail.webp` | 1600×1200 | Detalhe complementar do projeto 02 |
 | `project-03-cover.webp` | 1920×1200 | Capa do projeto 03 (quase full-width) |
-| `project-03-mobile.webp` | 1000×1600 | Placa vertical do projeto 03, ao lado da capa no desktop e acima dela no mobile |
+| `project-03-mobile.webp` | 1000×1600 | Mockup vertical do projeto 03, ao lado da capa no desktop e acima dela no mobile |
 | `project-04-cover.webp` | 1920×1200 | Capa do projeto 04 |
 | `project-04-detail.webp` | 1600×1200 | Segunda imagem do projeto 04 (layout dividido). Arquivo extra em relação à lista original, necessário para o par de imagens. |
 
-Direção das capas: a interface é a protagonista, fundo carvão / creme / terracota, enquadramento nítido, sem mockup de notebook.
+Direção das capas: a interface é a protagonista. O carvão da imagem encontra o fundo da página, então o mockup fica sem moldura.
 
 ### Textura
 
