@@ -311,6 +311,7 @@ html.reduced-motion .veil {
 
 .header__menu.is-hidden {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -513,7 +514,7 @@ html.has-cursor * {
   position: fixed;
   top: 20px;
   right: var(--gutter);
-  z-index: var(--z-header);
+  z-index: calc(var(--z-header) + 10);
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -527,21 +528,26 @@ html.has-cursor * {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s var(--ease-out), transform 0.25s var(--ease-out);
+  transition: opacity 0.2s var(--ease-out), transform 0.25s var(--ease-out),
+    visibility 0s linear 0.2s;
 }
 
 .menu-float.is-visible {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition: opacity 0.2s var(--ease-out), transform 0.25s var(--ease-out),
+    visibility 0s;
 }
 
 .menu-float:active {
   transform: scale(0.94);
 }
 
-html.menu-open .menu-float.is-visible {
-  z-index: calc(var(--z-menu) + 1);
+html.menu-open .header__inner {
+  pointer-events: none;
 }
 
 /* Header CTA hidden on mobile */

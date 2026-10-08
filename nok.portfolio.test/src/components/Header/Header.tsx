@@ -167,14 +167,17 @@ export function Header() {
             <CtaButton href={cta.href}>{cta.label}</CtaButton>
             <button
               ref={buttonRef}
-              className={`header__menu ${showFloatBtn ? 'is-hidden' : ''}`}
+              className={`header__menu ${showFloatBtn || menuOpen ? 'is-hidden' : ''}`}
               type="button"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              tabIndex={showFloatBtn ? -1 : 0}
+              tabIndex={showFloatBtn || menuOpen ? -1 : 0}
               onClick={() => setMenuOpen(!menuOpen)}
+              {...(showFloatBtn || menuOpen
+                ? { inert: true as const, 'aria-hidden': true as const }
+                : {})}
             >
-              {menuOpen ? 'Fechar' : 'Menu'}
+              Menu
             </button>
           </div>
         </div>
@@ -189,6 +192,9 @@ export function Header() {
         aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
         tabIndex={showFloatBtn || menuOpen ? 0 : -1}
         onClick={() => setMenuOpen(!menuOpen)}
+        {...(!showFloatBtn && !menuOpen
+          ? { inert: true as const, 'aria-hidden': true as const }
+          : {})}
       >
         {menuOpen ? 'Fechar' : 'Menu'}
       </button>
