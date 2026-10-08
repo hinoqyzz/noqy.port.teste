@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { processSteps } from '../data/content'
-import { PROFILE, SCROLL, DURATION, EASE, TRIGGER } from '../motion'
+import { PROFILE, SCROLL } from '../motion'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -22,7 +22,7 @@ export function Process() {
         gsap.set('.process__step', { opacity: 1, y: 0 })
       })
 
-      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+      mm.add(PROFILE.desktop, () => {
         const progressLine = scope.querySelector<HTMLElement>('.process__progress')
         if (progressLine) {
           gsap.fromTo(
@@ -40,26 +40,26 @@ export function Process() {
             },
           )
         }
+      })
 
-        const steps = scope.querySelectorAll<HTMLElement>('.process__step')
-        steps.forEach((step, i) => {
+      mm.add(PROFILE.mobile, () => {
+        const progressLine = scope.querySelector<HTMLElement>('.process__progress')
+        if (progressLine) {
           gsap.fromTo(
-            step,
-            { opacity: 0, y: 20 },
+            progressLine,
+            { scaleY: 0 },
             {
-              opacity: 1,
-              y: 0,
-              duration: DURATION.reveal.mask * 0.7,
-              ease: EASE.out,
-              delay: i * 0.06,
+              scaleY: 1,
+              ease: 'none',
               scrollTrigger: {
-                trigger: step,
-                start: TRIGGER.reveal.start,
-                toggleActions: TRIGGER.reveal.toggleActions,
+                trigger: '.process__grid',
+                start: 'top 80%',
+                end: 'bottom 40%',
+                scrub: SCROLL.scrub,
               },
             },
           )
-        })
+        }
       })
     },
     { scope: root },

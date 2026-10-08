@@ -453,6 +453,27 @@ html.reduced-motion .process__progress {
   transform: none;
 }
 
+@media (max-width: 960px) {
+  .process__track {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .process__progress {
+    transform: scaleY(0);
+    transform-origin: top center;
+  }
+
+  .process__grid {
+    position: relative;
+    padding-left: 24px;
+  }
+}
+
 .process__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
