@@ -12,173 +12,135 @@ async function loadHome(page: import('@playwright/test').Page) {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
   await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
-  await page.waitForTimeout(600)
+  await page.waitForTimeout(700)
 }
 
-const HANDS_LINE = 0.88
+async function photoToNameGap(page: import('@playwright/test').Page) {
+  return page.evaluate(() => {
+    const photo = document.querySelector('.hero__portrait')
+    const name = document.querySelector('.hero__name')
+    if (!photo || !name || !name.firstChild) return null
+    const photoBottom = photo.getBoundingClientRect().bottom
+    const range = document.createRange()
+    range.setStart(name.firstChild, 0)
+    range.setEnd(name.firstChild, 1)
+    const nTop = range.getBoundingClientRect().top
+    return nTop - photoBottom
+  })
+}
 
-test.describe('Hero Responsive Layout - RED-06', () => {
-  test.describe('Tablet Portrait (768x1024)', () => {
-    test.use({ viewport: { width: 768, height: 1024 } })
+const VIEWPORTS = [
+  { width: 390, height: 844 },
+  { width: 768, height: 1024 },
+  { width: 820, height: 1180 },
+  { width: 1024, height: 768 },
+  { width: 1280, height: 800 },
+  { width: 1440, height: 900 },
+]
 
-    test('vertical order is phrase, status, link, then photo', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
+test.describe('Hero geometry — RED-06 §12', () => {
+  for (const vp of VIEWPORTS) {
+    test.describe(`${vp.width}x${vp.height}`, () => {
+      test.use({ viewport: vp })
 
-      const valueBox = await page.locator('.hero__value').boundingBox()
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const linkBox = await page.locator('.hero__contact-link').boundingBox()
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
+      test(`photo to n gap is 24–32px`, async ({ page }, testInfo) => {
+        skipNoJs(testInfo)
+        await loadHome(page)
 
-      expect(valueBox).not.toBeNull()
-      expect(statusBox).not.toBeNull()
-      expect(linkBox).not.toBeNull()
-      expect(photoBox).not.toBeNull()
+        const gap = await photoToNameGap(page)
+        expect(gap, `gap at ${vp.width}`).not.toBeNull()
+        expect(gap!).toBeGreaterThanOrEqual(24)
+        expect(gap!).toBeLessThanOrEqual(32)
 
-      expect(valueBox!.y).toBeLessThan(statusBox!.y)
-      expect(statusBox!.y).toBeLessThan(linkBox!.y)
-      expect(linkBox!.y + linkBox!.height).toBeLessThan(photoBox!.y)
-    })
+        await page.screenshot({
+          path: `${SCREENSHOT_DIR}/hero-${vp.width}x${vp.height}-${testInfo.project.name}.png`,
+          fullPage: false,
+        })
+      })
 
-    test('link and marquee stay inside the first viewport', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
+      test(`hero fits in 100svh and marquee stays below the photo`, async ({ page }, testInfo) => {
+        skipNoJs(testInfo)
+        await loadHome(page)
 
-      const linkBox = await page.locator('.hero__contact-link').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
+        const metrics = await page.evaluate(() => {
+          const hero = document.querySelector('.hero') as HTMLElement
+          const photo = document.querySelector('.hero__portrait') as HTMLElement
+          const marquee = document.querySelector('.hero__marquee') as HTMLElement
+          const name = document.querySelector('.hero__name') as HTMLElement
+          const heroBox = hero.getBoundingClientRect()
+          const photoBox = photo.getBoundingClientRect()
+          const marqueeBox = marquee.getBoundingClientRect()
+          return {
+            heroHeight: heroBox.height,
+            photoBottom: photoBox.bottom,
+            marqueeTop: marqueeBox.top,
+            marqueeBottom: marqueeBox.bottom,
+            marqueeHeight: marqueeBox.height,
+            nameTop: name.getBoundingClientRect().top,
+          }
+        })
 
-      expect(linkBox).not.toBeNull()
-      expect(marqueeBox).not.toBeNull()
-      expect(linkBox!.y + linkBox!.height).toBeLessThanOrEqual(1024)
-      expect(marqueeBox!.y + marqueeBox!.height).toBeLessThanOrEqual(1024 + 8)
-      expect(marqueeBox!.height).toBeLessThanOrEqual(1024 * 0.18 + 12)
-    })
-
-    test('marquee sits below the hands line of the photo', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
-
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
-      expect(photoBox).not.toBeNull()
-      expect(marqueeBox).not.toBeNull()
-
-      const handsLine = photoBox!.y + photoBox!.height * HANDS_LINE
-      expect(marqueeBox!.y).toBeGreaterThanOrEqual(handsLine - 4)
-    })
-
-    test('status to marquee gap is at least 32px', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
-
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
-      expect(statusBox).not.toBeNull()
-      expect(marqueeBox).not.toBeNull()
-      expect(marqueeBox!.y - (statusBox!.y + statusBox!.height)).toBeGreaterThanOrEqual(32)
-
-      await page.screenshot({
-        path: `${SCREENSHOT_DIR}/hero-768x1024-${testInfo.project.name}.png`,
-        fullPage: false,
+        expect(metrics.heroHeight).toBeLessThanOrEqual(vp.height + 1)
+        expect(metrics.marqueeTop).toBeGreaterThanOrEqual(metrics.photoBottom + 20)
+        expect(metrics.marqueeBottom).toBeLessThanOrEqual(vp.height + 2)
+        expect(metrics.marqueeHeight).toBeLessThanOrEqual(vp.height * 0.18 + 4)
       })
     })
-  })
+  }
 
-  test.describe('Tablet Portrait (820x1180)', () => {
-    test.use({ viewport: { width: 820, height: 1180 } })
+  test.describe('Tablet portrait stack and right align', () => {
+    for (const vp of [
+      { width: 768, height: 1024 },
+      { width: 820, height: 1180 },
+    ]) {
+      test(`${vp.width}: copy then photo, photo in columns 2–8 right-aligned`, async ({
+        page,
+      }, testInfo) => {
+        skipNoJs(testInfo)
+        await page.setViewportSize(vp)
+        await loadHome(page)
 
-    test('vertical order and first-viewport fit', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
+        const valueBox = await page.locator('.hero__value').boundingBox()
+        const statusBox = await page.locator('.hero__status').boundingBox()
+        const linkBox = await page.locator('.hero__contact-link').boundingBox()
+        const photoBox = await page.locator('.hero__portrait').boundingBox()
+        const wrapBox = await page.locator('.hero__portrait-wrap').boundingBox()
+        const gridBox = await page.locator('.hero__grid').boundingBox()
 
-      const valueBox = await page.locator('.hero__value').boundingBox()
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const linkBox = await page.locator('.hero__contact-link').boundingBox()
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
+        expect(valueBox!.y).toBeLessThan(statusBox!.y)
+        expect(statusBox!.y).toBeLessThan(linkBox!.y)
+        expect(linkBox!.y + linkBox!.height).toBeLessThan(photoBox!.y)
 
-      expect(valueBox!.y).toBeLessThan(statusBox!.y)
-      expect(statusBox!.y).toBeLessThan(linkBox!.y)
-      expect(linkBox!.y + linkBox!.height).toBeLessThan(photoBox!.y)
-      expect(linkBox!.y + linkBox!.height).toBeLessThanOrEqual(1180)
-      expect(marqueeBox!.y + marqueeBox!.height).toBeLessThanOrEqual(1180 + 8)
-      expect(marqueeBox!.y).toBeGreaterThanOrEqual(photoBox!.y + photoBox!.height * HANDS_LINE - 4)
-
-      await page.screenshot({
-        path: `${SCREENSHOT_DIR}/hero-820x1180-${testInfo.project.name}.png`,
-        fullPage: false,
+        expect(wrapBox!.x).toBeGreaterThan(gridBox!.x + 16)
+        expect(Math.abs(photoBox!.x + photoBox!.width - (gridBox!.x + gridBox!.width))).toBeLessThanOrEqual(10)
       })
-    })
+    }
   })
 
-  test.describe('Tablet Landscape (1024x768)', () => {
+  test.describe('900–1199 status clearance', () => {
     test.use({ viewport: { width: 1024, height: 768 } })
 
-    test('marquee clears hands and keeps 32px below status', async ({ page }, testInfo) => {
+    test('Disponível stays ≥32px above the n and header is Menu only', async ({
+      page,
+    }, testInfo) => {
       skipNoJs(testInfo)
       await loadHome(page)
 
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
-
-      expect(statusBox).not.toBeNull()
-      expect(photoBox).not.toBeNull()
-      expect(marqueeBox).not.toBeNull()
-      expect(marqueeBox!.y - (statusBox!.y + statusBox!.height)).toBeGreaterThanOrEqual(32)
-      expect(marqueeBox!.y).toBeGreaterThanOrEqual(photoBox!.y + photoBox!.height * HANDS_LINE - 4)
-
-      const headerCta = page.locator('.header__cta')
-      await expect(headerCta).not.toBeVisible()
-
-      await page.screenshot({
-        path: `${SCREENSHOT_DIR}/hero-1024x768-${testInfo.project.name}.png`,
-        fullPage: false,
+      const statusBottom = await page.locator('.hero__status').evaluate((el) => {
+        return el.getBoundingClientRect().bottom
       })
-    })
-  })
-
-  test.describe('Small Desktop (1280x800)', () => {
-    test.use({ viewport: { width: 1280, height: 800 } })
-
-    test('desktop layout with marquee below hands', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
-
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
-      const contactLink = page.locator('.hero__contact-link')
-
-      expect(marqueeBox!.y - (statusBox!.y + statusBox!.height)).toBeGreaterThanOrEqual(32)
-      expect(marqueeBox!.y).toBeGreaterThanOrEqual(photoBox!.y + photoBox!.height * HANDS_LINE - 4)
-      await expect(contactLink).not.toBeVisible()
-
-      await page.screenshot({
-        path: `${SCREENSHOT_DIR}/hero-1280x800-${testInfo.project.name}.png`,
-        fullPage: false,
+      const nTop = await page.evaluate(() => {
+        const name = document.querySelector('.hero__name')
+        if (!name?.firstChild) return 0
+        const range = document.createRange()
+        range.setStart(name.firstChild, 0)
+        range.setEnd(name.firstChild, 1)
+        return range.getBoundingClientRect().top
       })
-    })
-  })
 
-  test.describe('Desktop (1440x900)', () => {
-    test.use({ viewport: { width: 1440, height: 900 } })
-
-    test('desktop layout with marquee below hands', async ({ page }, testInfo) => {
-      skipNoJs(testInfo)
-      await loadHome(page)
-
-      const statusBox = await page.locator('.hero__status').boundingBox()
-      const photoBox = await page.locator('.hero__portrait').boundingBox()
-      const marqueeBox = await page.locator('.hero__marquee').boundingBox()
-
-      expect(marqueeBox!.y - (statusBox!.y + statusBox!.height)).toBeGreaterThanOrEqual(32)
-      expect(marqueeBox!.y).toBeGreaterThanOrEqual(photoBox!.y + photoBox!.height * HANDS_LINE - 4)
-
-      await page.screenshot({
-        path: `${SCREENSHOT_DIR}/hero-1440x900-${testInfo.project.name}.png`,
-        fullPage: false,
-      })
+      expect(nTop - statusBottom).toBeGreaterThanOrEqual(32)
+      await expect(page.locator('.header__cta')).not.toBeVisible()
+      await expect(page.locator('.header__menu')).toBeVisible()
     })
   })
 })

@@ -78,7 +78,8 @@ test.describe('Tablet/Touch Layout Tests', () => {
     if (box) {
       const widthPercent = (box.width / viewport.width) * 100
       expect(widthPercent).toBeLessThan(95)
-      expect(box.x + box.width).toBeGreaterThan(viewport.width * 0.7)
+      expect(box.x).toBeGreaterThan(viewport.width * 0.08)
+      expect(box.x + box.width).toBeGreaterThan(viewport.width * 0.85)
     }
 
     await page.screenshot({
