@@ -123,7 +123,7 @@ export function Header() {
               aria-controls="mobile-menu"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? 'Close' : 'Index'}
+              {menuOpen ? 'Fechar' : 'Índice'}
             </button>
           </div>
         </div>
@@ -135,7 +135,7 @@ export function Header() {
           ref={overlayRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Menu"
+          aria-label="Índice"
         >
           <nav aria-label="Seções">
             {navigation.map((item) => (

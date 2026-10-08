@@ -95,7 +95,7 @@ export function Hero() {
             priority
           />
           <span className="hero__shade" aria-hidden="true" />
-          <figcaption className="hero__caption mono">Portrait / 01</figcaption>
+          <figcaption className="hero__caption mono">Retrato / 01</figcaption>
         </figure>
       </div>
       <div className="hero__bottom hero__meta">

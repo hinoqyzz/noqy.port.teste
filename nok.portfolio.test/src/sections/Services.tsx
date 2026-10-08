@@ -8,13 +8,12 @@ export function Services() {
     <section className="section services" id="services" aria-labelledby="services-title">
       <div className="shell">
         <div className="section__head">
-          <SectionLabel index="02" name="Services" />
-          <p className="draft">[PLACEHOLDER]</p>
+          <SectionLabel index="02" name="Serviços" />
         </div>
         <TextReveal
           as="h2"
           id="services-title"
-          text={'What\nI do'}
+          text={'O que\nfaço'}
           className="section__title"
           mode="lines"
           drift

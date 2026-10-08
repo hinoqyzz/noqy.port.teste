@@ -50,18 +50,17 @@ export function Process() {
     <section className="section process" id="process" ref={root} aria-labelledby="process-title">
       <div className="shell">
         <div className="section__head">
-          <SectionLabel index="04" name="Process" />
-          <p className="process__label mono">STEP_{step}</p>
+          <SectionLabel index="04" name="Processo" />
+          <p className="process__label mono">ETAPA_{step}</p>
         </div>
         <TextReveal
           as="h2"
           id="process-title"
-          text={'How I\nwork'}
+          text={'Como\ntrabalho'}
           className="section__title"
           mode="lines"
           drift
         />
-        <p className="draft">[PLACEHOLDER]</p>
         <div className="process__list">
           <div className="process__line" aria-hidden="true">
             <span className="process__line-bar" />

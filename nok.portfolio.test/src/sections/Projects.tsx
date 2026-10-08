@@ -71,12 +71,12 @@ export function Projects() {
         <div className="work__layout">
           <div className="work__intro-col">
             <div className="work__intro">
-              <SectionLabel index="03" name="Work" drift={false} />
-              <p className="work__code mono">INDEX_03</p>
+              <SectionLabel index="03" name="Trabalhos" drift={false} />
+              <p className="work__code mono">ÍNDICE_03</p>
               <TextReveal
                 as="h2"
                 id="work-title"
-                text={'Selected\nwork'}
+                text={'Trabalhos\nselecionados'}
                 className="section__title work__title"
                 mode="lines"
               />

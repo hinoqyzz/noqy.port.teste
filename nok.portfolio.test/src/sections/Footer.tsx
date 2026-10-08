@@ -31,21 +31,21 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="shell">
-        <p className="footer__index mono">06 / End</p>
+        <p className="footer__index mono">06 / Fim</p>
         <div className="footer__row">
           <p className="footer__name">{profile.name}</p>
-          <p className="footer__center mono">Front-end / Design</p>
+          <p className="footer__center mono">{profile.marks.practice}</p>
           <div className="footer__right">
             <a ref={topRef} className="totop" href="#intro" onClick={onTop}>
               <span className="press">
-                Back to top
+                Voltar ao topo
                 <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path d="M12 19V5M7 10l5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.25" />
                 </svg>
               </span>
             </a>
             <p className="mono">© {profile.year}</p>
-            <p className="mono">{time ? `Local ${time}` : 'Local'}</p>
+            <p className="mono">{time ? `Hora ${time}` : 'Hora'}</p>
           </div>
         </div>
       </div>

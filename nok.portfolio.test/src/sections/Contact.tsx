@@ -49,18 +49,18 @@ export function Contact() {
     <section className="contact" id="contact" ref={root} aria-labelledby="cta-title">
       <div className="cta">
         <div className="shell">
-          <SectionLabel index="06" name="Contact" />
+          <SectionLabel index="06" name="Contato" />
           <h2 className="cta__title" id="cta-title" data-drift-root>
             <span className="drift" data-drift>
               <span className="mask">
-                <span className="mask__in">Have a project</span>
+                <span className="mask__in">Tem um</span>
               </span>
               <span className="mask">
-                <span className="mask__in">in mind?</span>
+                <span className="mask__in">projeto?</span>
               </span>
               <span className="mask cta__shift">
                 <span className="mask__in">
-                  Let&apos;s <strong>build</strong> it.
+                  Vamos <strong>fazer</strong>.
                 </span>
               </span>
             </span>
@@ -76,8 +76,7 @@ export function Contact() {
       <div className="sheet" id="contact-list">
         <div className="shell">
           <div className="sheet__intro">
-            <p className="mono">Direct</p>
-            <p className="draft">[PLACEHOLDER]</p>
+            <p className="mono">Direto</p>
           </div>
           <ul className="sheet__list">
             {contact.map((item) => (
@@ -114,7 +113,13 @@ function ContactRow({ item }: { item: ContactItem }) {
 
   if (real) {
     return (
-      <a ref={linkRef} className="sheet__row" href={item.href}>
+      <a
+        ref={linkRef}
+        className="sheet__row"
+        href={item.href}
+        target={item.external ? '_blank' : undefined}
+        rel={item.external ? 'noopener noreferrer' : undefined}
+      >
         {inner}
       </a>
     )

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { Media, Project } from '../../data/content'
+import { isRealHref, projectSeal, type Media, type Project } from '../../data/content'
 import { useMagnetic } from '../../hooks/useMagnetic'
 import { Picture } from '../Picture/Picture'
 
@@ -41,8 +41,9 @@ export function ProjectItem({ project }: Props) {
           <span>{project.year}</span>
           <span className="project__extra">{project.id}</span>
         </div>
+        <p className="project__seal mono">{projectSeal}</p>
         <p className="project__desc">{project.description}</p>
-        <p className="project__url">{project.url}</p>
+        {isRealHref(project.url) ? <p className="project__url">{project.url}</p> : null}
         <span className="project__line" aria-hidden="true" />
       </div>
     </article>

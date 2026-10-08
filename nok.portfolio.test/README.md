@@ -43,17 +43,17 @@ Edite somente `src/data/content.ts`.
 | Nome | `profile.name`, `profile.given`, `profile.family` |
 | Bio curta do hero | `profile.shortBio` |
 | Texto sobre | `profile.about` |
-| Ano de início | `profile.since` (hoje `[PLACEHOLDER]`) |
-| E-mail, WhatsApp, Instagram, LinkedIn, GitHub | `contact[]` — preencha `value` e `href` |
-| Link do botão “Start a project” | `cta.href` |
+| Linha abaixo do sobre | `profile.since` |
+| E-mail, WhatsApp e Instagram | `contact[]`, `whatsappNumber`, `instagramHandle` |
+| Botão “Começar um projeto” | `cta.href` e `cta.note` |
 | Serviços | `services` |
 | Processo | `processSteps` |
 | Competências | `skills` |
 | Projetos | `projects` — nome, categoria, ano, descrição, URL e imagens |
 
-Enquanto `href` estiver vazio ou contiver `PLACEHOLDER`, o item não vira link. O botão principal leva à ficha de contato até existir um destino real.
+Enquanto `href` estiver vazio, for só `https://wa.me/55` ou `https://instagram.com/` sem usuário, ou contiver `PLACEHOLDER`, o item não vira link. WhatsApp e Instagram reais abrem em nova aba. O botão principal usa o mailto de `cta.href`.
 
-Não invente clientes, métricas ou depoimentos. O que ainda não existe deve continuar marcado como `[PLACEHOLDER]`.
+Os quatro projetos são conceituais e não têm URL. As capas ainda são placas temporárias, com os nomes `project-0N-cover.webp`, `project-0N-detail.webp` e `project-03-mobile.webp`.
 
 ## Asset Generation Guide
 
@@ -125,7 +125,7 @@ O accent não leva glow. Não há preto puro como fundo.
 
 ## Performance Notes
 
-- GSAP + ScrollTrigger para timelines, pin da coluna “Selected work”, scrub do processo e parallax. O deslocamento é de 8% do elemento (`yPercent` / `xPercent`), no teto do intervalo de 3–8% do briefing, só no desktop e só com `transform`.
+- GSAP + ScrollTrigger para timelines, pin da coluna “Trabalhos selecionados”, scrub do processo e parallax. O deslocamento é de 8% do elemento (`yPercent` / `xPercent`), no teto do intervalo de 3–8% do briefing, só no desktop e só com `transform`.
 - Lenis só quando `prefers-reduced-motion` não está ativo. Com movimento reduzido, a rolagem é nativa, o cursor customizado some, o véu de entrada não aparece e os reveals pesados não rodam.
 - Animações usam `transform` e `opacity`. O cursor, o hover de imagem e o parallax também.
 - Hero sem lazy-load, com `preload` do AVIF em `srcset`. Demais imagens usam `loading="lazy"`, `width`/`height` e `<picture>` (AVIF + WebP).

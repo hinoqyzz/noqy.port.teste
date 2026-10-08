@@ -1,7 +1,7 @@
 /**
  * Único arquivo de conteúdo.
  * Edite bio, contato, projetos, serviços e textos aqui.
- * Tudo que ainda não foi definido fica marcado como [PLACEHOLDER].
+ * Imagens de projeto ainda são placas temporárias; os textos já são os finais.
  */
 
 export type Media = {
@@ -45,34 +45,37 @@ export type ContactItem = {
   label: string
   value: string
   href: string
+  external?: boolean
 }
 
 export const profile = {
   name: 'Adryan Miguel',
   given: 'Adryan',
   family: 'Miguel',
-  role: 'Front-End Developer & Designer',
-  location: 'Based in Minas Gerais, Brazil',
-  availability: 'Available for select projects',
+  role: 'Designer e desenvolvedor front-end',
+  location: 'Minas Gerais, Brasil',
+  availability: 'Disponível para projetos selecionados',
   year: '2026',
-  disciplines: 'Design / Code / Motion',
-  shortBio: '[PLACEHOLDER — BIO CURTA]',
-  about: '[PLACEHOLDER — TEXTO SOBRE ADRYAN]',
-  since: '[PLACEHOLDER]',
+  disciplines: 'Design / Código / Movimento',
+  shortBio:
+    'Designer e desenvolvedor front-end. Crio landing pages e interfaces com movimento, do primeiro rascunho ao código no ar.',
+  about:
+    'Sou o Adryan, de Minas Gerais. Trabalho onde o design encontra o código: desenho a interface, escrevo o front-end e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
+  since: 'Design, código e movimento.',
   marks: {
-    portfolio: 'Portfolio / 2026',
-    intro: '01 — Intro',
+    portfolio: 'Portfólio / 2026',
+    intro: '01 — Início',
     practice: 'Front-end / Design',
     code: 'AM_001',
-    archive: 'Portfolio_Index',
+    archive: 'Indice_Portfolio',
   },
 }
 
 export const navigation = [
-  { id: 'work', label: 'Work', index: '01' },
-  { id: 'services', label: 'Services', index: '02' },
-  { id: 'about', label: 'About', index: '03' },
-  { id: 'contact', label: 'Contact', index: '04' },
+  { id: 'work', label: 'Trabalhos', index: '01' },
+  { id: 'services', label: 'Serviços', index: '02' },
+  { id: 'about', label: 'Sobre', index: '03' },
+  { id: 'contact', label: 'Contato', index: '04' },
 ] as const
 
 export const sectionIndex: Record<string, string> = {
@@ -84,41 +87,40 @@ export const sectionIndex: Record<string, string> = {
   contact: '06',
 }
 
+export const projectSeal = 'Projeto conceitual'
+
 export const services: Service[] = [
   {
     index: '01',
-    title: 'Landing Pages',
-    description:
-      '[PLACEHOLDER] High-conversion pages combining strategy, interface design and front-end development.',
+    title: 'Landing pages',
+    description: 'Uma página, uma história. Do rascunho ao ar, com o ritmo da marca.',
     image: {
       src: '/assets/images/project-01-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER] Imagem contextual do serviço de landing pages.',
+      alt: 'Referência de landing page a partir do projeto conceitual Caldo Café.',
     },
   },
   {
     index: '02',
-    title: 'Front-end Development',
-    description:
-      '[PLACEHOLDER] Responsive interfaces built with attention to performance, motion and visual precision.',
+    title: 'Desenvolvimento front-end',
+    description: 'A interface vira código: responsivo, preciso e com movimento no lugar certo.',
     image: {
       src: '/assets/images/project-02-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER] Imagem contextual do serviço de front-end.',
+      alt: 'Referência de front-end a partir do projeto conceitual Serra Bikes.',
     },
   },
   {
     index: '03',
-    title: 'Digital Design',
-    description:
-      '[PLACEHOLDER] Visual direction and interface systems designed to give digital products a distinct identity.',
+    title: 'Design digital',
+    description: 'Direção visual com personalidade, longe do template e perto da marca.',
     image: {
       src: '/assets/images/project-03-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER] Imagem contextual do serviço de design digital.',
+      alt: 'Referência de design digital a partir do projeto conceitual Atlas Arquitetura.',
     },
   },
 ]
@@ -127,93 +129,97 @@ export const projects: Project[] = [
   {
     id: 'P_01',
     index: '01',
-    cursor: 'VIEW_01',
-    name: '[PLACEHOLDER — NOME DO PROJETO]',
-    category: '[PLACEHOLDER — CATEGORIA]',
+    cursor: 'VER_01',
+    name: 'Caldo Café',
+    category: 'Landing page · Identidade visual',
     year: '2026',
-    description: '[PLACEHOLDER — DESCRIÇÃO CURTA DO CASE]',
-    url: '[PLACEHOLDER — URL DO PROJETO]',
+    description:
+      'Site para uma cafeteria de especialidade em Belo Horizonte, com cardápio que se monta na rolagem e fotos que respiram no ritmo da página.',
+    url: '',
     layout: 'left',
     cover: {
       src: '/assets/images/project-01-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 01] Capa temporária. Substituir project-01-cover.webp.',
+      alt: 'Capa conceitual do site Caldo Café, cafeteria de especialidade em Belo Horizonte.',
     },
     secondary: {
       src: '/assets/images/project-01-detail.webp',
       width: 1600,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 01] Detalhe temporário. Substituir project-01-detail.webp.',
+      alt: 'Detalhe conceitual do Caldo Café, com o cardápio se montando na rolagem.',
     },
   },
   {
     id: 'P_02',
     index: '02',
-    cursor: 'VIEW_02',
-    name: '[PLACEHOLDER — NOME DO PROJETO]',
-    category: '[PLACEHOLDER — CATEGORIA]',
+    cursor: 'VER_02',
+    name: 'Serra Bikes',
+    category: 'Landing page de lançamento',
     year: '2026',
-    description: '[PLACEHOLDER — DESCRIÇÃO CURTA DO CASE]',
-    url: '[PLACEHOLDER — URL DO PROJETO]',
+    description:
+      'Lançamento de uma bike elétrica feita para as ladeiras mineiras. A bike gira e se desmonta conforme a rolagem, peça por peça.',
+    url: '',
     layout: 'right',
     cover: {
       src: '/assets/images/project-02-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 02] Capa temporária. Substituir project-02-cover.webp.',
+      alt: 'Capa conceitual do lançamento Serra Bikes, bike elétrica para as ladeiras mineiras.',
     },
     secondary: {
       src: '/assets/images/project-02-detail.webp',
       width: 1600,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 02] Detalhe temporário. Substituir project-02-detail.webp.',
+      alt: 'Detalhe conceitual da Serra Bikes, com a bike se desmontando peça por peça.',
     },
   },
   {
     id: 'P_03',
     index: '03',
-    cursor: 'VIEW_03',
-    name: '[PLACEHOLDER — NOME DO PROJETO]',
-    category: '[PLACEHOLDER — CATEGORIA]',
-    year: '2026',
-    description: '[PLACEHOLDER — DESCRIÇÃO CURTA DO CASE]',
-    url: '[PLACEHOLDER — URL DO PROJETO]',
+    cursor: 'VER_03',
+    name: 'Atlas Arquitetura',
+    category: 'Portfólio · Front-end',
+    year: '2025',
+    description:
+      'Portfólio para um estúdio de arquitetura, com grid editorial, transições entre obras e plantas que se desenham na tela.',
+    url: '',
     layout: 'full',
     cover: {
       src: '/assets/images/project-03-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 03] Capa temporária. Substituir project-03-cover.webp.',
+      alt: 'Capa conceitual do portfólio Atlas Arquitetura, com grid editorial de obras.',
     },
     secondary: {
       src: '/assets/images/project-03-mobile.webp',
       width: 1000,
       height: 1600,
-      alt: '[PLACEHOLDER — PROJETO 03] Versão vertical temporária. Substituir project-03-mobile.webp.',
+      alt: 'Versão vertical conceitual do portfólio Atlas Arquitetura.',
     },
   },
   {
     id: 'P_04',
     index: '04',
-    cursor: 'VIEW_04',
-    name: '[PLACEHOLDER — NOME DO PROJETO]',
-    category: '[PLACEHOLDER — CATEGORIA]',
-    year: '2026',
-    description: '[PLACEHOLDER — DESCRIÇÃO CURTA DO CASE]',
-    url: '[PLACEHOLDER — URL DO PROJETO]',
+    cursor: 'VER_04',
+    name: 'Pulso',
+    category: 'Landing page de app · UI design',
+    year: '2025',
+    description:
+      'Pré-lançamento de um app de treino, com microinterações que imitam o ritmo cardíaco e uma lista de espera em um clique.',
+    url: '',
     layout: 'split',
     cover: {
       src: '/assets/images/project-04-cover.webp',
       width: 1920,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 04] Capa temporária. Substituir project-04-cover.webp.',
+      alt: 'Capa conceitual da landing Pulso, pré-lançamento de um app de treino.',
     },
     secondary: {
       src: '/assets/images/project-04-detail.webp',
       width: 1600,
       height: 1200,
-      alt: '[PLACEHOLDER — PROJETO 04] Imagem complementar temporária. Substituir project-04-detail.webp.',
+      alt: 'Detalhe conceitual da landing Pulso, com microinterações no ritmo cardíaco.',
     },
   },
 ]
@@ -221,52 +227,72 @@ export const projects: Project[] = [
 export const processSteps: ProcessStep[] = [
   {
     index: '01',
-    title: 'Discover',
-    description: '[PLACEHOLDER] Understanding the business, audience and objective.',
+    title: 'Descoberta',
+    description: 'Entendo o negócio, quem chega e o que a página precisa fazer.',
   },
   {
     index: '02',
-    title: 'Direction',
-    description: '[PLACEHOLDER] Defining visual hierarchy, references and interaction.',
+    title: 'Direção',
+    description: 'Defino hierarquia, referências e como a interface se move.',
   },
   {
     index: '03',
     title: 'Design',
-    description: '[PLACEHOLDER] Building the interface and visual system.',
+    description: 'Desenho a interface e o sistema visual, do tipo à cor.',
   },
   {
     index: '04',
-    title: 'Develop',
-    description: '[PLACEHOLDER] Turning the design into a responsive, performant experience.',
+    title: 'Desenvolvimento',
+    description: 'Escrevo o front-end responsivo e deixo o site no ar.',
   },
   {
     index: '05',
-    title: 'Refine',
-    description: '[PLACEHOLDER] Testing, polishing motion, responsiveness and details.',
+    title: 'Refinamento',
+    description: 'Ajusto movimento, detalhes e o que só aparece no uso.',
   },
 ]
 
 export const skills = [
   'Design',
-  'UI Design',
-  'Landing Pages',
+  'Landing pages',
   'Front-end',
-  'Motion',
-  'Responsive Design',
+  'Movimento',
+  'Design de interface',
+  'Design responsivo',
 ]
 
+export const whatsappNumber = '37998684391'
+export const instagramHandle = 'hinoqyzz'
+
+const whatsappText = 'Oi Adryan, vi seu portfólio e queria conversar sobre um projeto'
+
 export const contact: ContactItem[] = [
-  { id: 'email', label: 'Email', value: '[PLACEHOLDER — EMAIL]', href: '' },
-  { id: 'whatsapp', label: 'WhatsApp', value: '[PLACEHOLDER — WHATSAPP]', href: '' },
-  { id: 'instagram', label: 'Instagram', value: '[PLACEHOLDER — INSTAGRAM]', href: '' },
-  { id: 'linkedin', label: 'LinkedIn', value: '[PLACEHOLDER — LINKEDIN]', href: '' },
-  { id: 'github', label: 'GitHub', value: '[PLACEHOLDER — GITHUB]', href: '' },
+  {
+    id: 'email',
+    label: 'E-mail',
+    value: 'contato@noqyzz.com.br',
+    href: 'mailto:contato@noqyzz.com.br',
+  },
+  {
+    id: 'whatsapp',
+    label: 'WhatsApp',
+    value: '(37) 99868-4391',
+    href: `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`,
+    external: true,
+  },
+  {
+    id: 'instagram',
+    label: 'Instagram',
+    value: `@${instagramHandle}`,
+    href: `https://www.instagram.com/${instagramHandle}/`,
+    external: true,
+  },
 ]
 
 export const cta = {
-  href: '',
-  label: 'Start a project',
-  note: '[PLACEHOLDER — LINK DE CONTATO]',
+  href: 'mailto:contato@noqyzz.com.br',
+  label: 'Começar um projeto',
+  note: 'contato@noqyzz.com.br',
 }
 
 export const portraits = {
@@ -285,5 +311,9 @@ export const portraits = {
 }
 
 export function isRealHref(href: string) {
-  return href.trim().length > 0 && !href.includes('PLACEHOLDER') && href !== '#'
+  const value = href.trim()
+  if (value.length === 0 || value === '#' || value.includes('PLACEHOLDER')) return false
+  if (/^https:\/\/wa\.me\/55(?:\?|$)/.test(value)) return false
+  if (/^https:\/\/(?:www\.)?instagram\.com\/?$/.test(value)) return false
+  return true
 }

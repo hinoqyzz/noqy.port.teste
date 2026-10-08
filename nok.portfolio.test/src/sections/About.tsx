@@ -35,7 +35,7 @@ export function About() {
       <div className="shell">
         <div className="about__grid">
           <figure className="about__figure">
-            <p className="about__vert mono">AM / Profile / 05</p>
+            <p className="about__vert mono">AM / Perfil / 05</p>
             <div className="frame about__photo" data-drift-root>
               <div className="frame__parallax" data-drift>
                 <Picture
@@ -47,13 +47,13 @@ export function About() {
                 />
               </div>
             </div>
-            <figcaption className="about__caption mono">Portrait / 05</figcaption>
+            <figcaption className="about__caption mono">Retrato / 05</figcaption>
           </figure>
           <div className="about__copy">
-            <SectionLabel index="05" name="About" />
-            <TextReveal as="h2" id="about-title" text="About" className="section__title" mode="mask" drift />
+            <SectionLabel index="05" name="Sobre" />
+            <TextReveal as="h2" id="about-title" text="Sobre" className="section__title" mode="mask" drift />
             <p className="about__text">{profile.about}</p>
-            <p className="about__since mono">Building digital experiences since {profile.since}</p>
+            <p className="about__since mono">{profile.since}</p>
             <ul className="skills">
               {skills.map((skill) => (
                 <li key={skill}>{skill}</li>

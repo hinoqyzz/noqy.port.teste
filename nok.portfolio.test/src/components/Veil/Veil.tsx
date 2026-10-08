@@ -116,7 +116,7 @@ export function Veil({ api }: Props) {
         <span className="veil__edge veil__edge--trail" ref={edge} />
         <p className="veil__mark mono" ref={mark}>
           <span>AM</span>
-          <span>Portfolio / {profile.year}</span>
+          <span>{profile.marks.portfolio}</span>
         </p>
       </div>
     </div>
