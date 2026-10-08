@@ -13,7 +13,7 @@ test.describe('Progressive Enhancement Verification', () => {
     const html = await response?.text()
 
     expect(html).toContain('<noscript>')
-    expect(html).toContain('.hero__photo')
+    expect(html).toContain('.hero__portrait')
     expect(html).toContain('clip-path')
 
     await page.screenshot({
