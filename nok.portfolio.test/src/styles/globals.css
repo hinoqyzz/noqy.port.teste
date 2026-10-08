@@ -140,7 +140,7 @@ html.is-booting::before {
   overflow: hidden;
 }
 
-.veil.is-active {
+.veil.is-active .veil__sheet {
   pointer-events: auto;
 }
 
@@ -167,10 +167,17 @@ html.is-booting::before {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
   height: 3px;
   background: var(--accent);
   transform-origin: left center;
+}
+
+.veil__edge--lead {
+  top: 0;
+}
+
+.veil__edge--trail {
+  bottom: 0;
 }
 
 .veil__mark {
@@ -196,7 +203,7 @@ html.reduced-motion .veil {
 }
 
 .header.is-scrolled {
-  background: rgba(23, 20, 17, 0.92);
+  background: #171411;
   border-bottom-color: var(--line);
 }
 

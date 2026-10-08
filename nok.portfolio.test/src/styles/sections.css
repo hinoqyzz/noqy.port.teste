@@ -486,6 +486,10 @@ main {
   color: var(--accent);
 }
 
+.process .draft {
+  margin-top: 18px;
+}
+
 .process__list {
   position: relative;
   margin-top: 48px;
@@ -934,7 +938,7 @@ html:not(.reduced-motion) .step.is-active {
 
   .hero__miguel {
     margin-left: 12vw;
-    margin-top: -0.06em;
+    margin-top: 0.04em;
   }
 
   .hero__photo {
