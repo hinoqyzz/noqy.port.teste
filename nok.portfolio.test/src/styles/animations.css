@@ -24,25 +24,8 @@
   display: block;
 }
 
-html:not(.reduced-motion) .mask__in {
-  transform: translate3d(0, 110%, 0);
-}
-
-html:not(.reduced-motion) .hero__rule {
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
 html:not(.reduced-motion) .hero__photo {
   clip-path: inset(100% 0 0 0);
-}
-
-html:not(.reduced-motion) .hero__meta > * {
-  opacity: 0;
-}
-
-html:not(.reduced-motion) .header {
-  transform: translateY(-110%);
 }
 
 .status__dot {

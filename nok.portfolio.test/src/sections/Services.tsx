@@ -13,7 +13,7 @@ export function Services() {
         <TextReveal
           as="h2"
           id="services-title"
-          text={'What I\ndo'}
+          text={'What\nI do'}
           className="section__title"
           mode="lines"
         />

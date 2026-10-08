@@ -11,8 +11,9 @@ main {
 .hero {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(320px, 1fr) auto;
-  min-height: 100svh;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100svh;
+  min-height: 640px;
   padding: calc(var(--header-h) + 12px) var(--gutter) 28px;
   overflow: hidden;
 }
@@ -94,7 +95,7 @@ main {
   pointer-events: none;
   background:
     linear-gradient(180deg, rgba(23, 20, 17, 0.82) 0%, rgba(23, 20, 17, 0.34) 14%, transparent 28%),
-    linear-gradient(90deg, rgba(23, 20, 17, 0.78) 0%, rgba(23, 20, 17, 0.5) 20%, rgba(23, 20, 17, 0.16) 40%, transparent 58%);
+    linear-gradient(90deg, rgba(23, 20, 17, 0.72) 0%, rgba(23, 20, 17, 0.38) 18%, rgba(23, 20, 17, 0.1) 36%, transparent 52%);
 }
 
 .hero__caption {
@@ -770,6 +771,18 @@ html:not(.reduced-motion) .step.is-active {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-primary);
+}
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  .hero__miguel {
+    top: 14%;
+    left: 12%;
+  }
+
+  .hero__photo {
+    top: 50%;
+    height: 42%;
+  }
 }
 
 @media (max-width: 1100px) {

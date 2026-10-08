@@ -69,14 +69,16 @@ export function Hero() {
 
   return (
     <section className="hero" id="intro" ref={root} aria-labelledby="hero-title">
-      <div className="hero__kicker mono">
-        <div className="hero__kicker-group">
-          <span>{profile.marks.portfolio}</span>
-          <span>{profile.marks.intro}</span>
+      <div className="hero__top">
+        <div className="hero__kicker mono">
+          <div className="hero__kicker-group">
+            <span>{profile.marks.portfolio}</span>
+            <span>{profile.marks.intro}</span>
+          </div>
+          <span>{profile.marks.practice}</span>
         </div>
-        <span>{profile.marks.practice}</span>
+        <div className="hero__rule" aria-hidden="true" />
       </div>
-      <div className="hero__rule" aria-hidden="true" />
       <div className="hero__stage">
         <h1 className="hero__title" id="hero-title">
           <span className="hero__adryan">
