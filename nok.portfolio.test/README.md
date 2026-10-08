@@ -1,0 +1,135 @@
+# Adryan Miguel — Oxide Studio
+
+Portfólio pessoal de Adryan Miguel (landing pages, front-end e design digital). Direção de arte **Oxide Studio**: editorial industrial, tátil, escura e quente.
+
+## Setup
+
+```bash
+cd nok.portfolio.test
+npm install
+```
+
+## Commands
+
+```bash
+npm run dev       # servidor local
+npm run build     # TypeScript + build de produção
+npm run preview   # pré-visualiza o build
+npm run lint      # oxlint
+```
+
+## Project structure
+
+```
+nok.portfolio.test/
+├── public/assets/images/     # fotografias, capas e noise.webp
+├── src/components/           # header, cursor, botão, reveals, scroll
+├── src/sections/             # hero, services, work, process, about, contact, footer
+├── src/data/content.ts       # ÚNICO arquivo de conteúdo editável
+├── src/hooks/                # reduced motion, mobile, GSAP, estado do site
+├── src/styles/               # tokens, tipo, movimento, seções
+├── index.html                # SEO, Open Graph, JSON-LD
+└── README.md
+```
+
+`src/data/projects.ts`, `services.ts` e `social.ts` apenas reexportam `content.ts`.
+
+## Customization
+
+Edite somente `src/data/content.ts`.
+
+| O que mudar | Onde |
+| --- | --- |
+| Nome | `profile.name`, `profile.given`, `profile.family` |
+| Bio curta do hero | `profile.shortBio` |
+| Texto sobre | `profile.about` |
+| Linha abaixo do sobre | `profile.since` |
+| E-mail, WhatsApp e Instagram | `contact[]`, `whatsappNumber`, `instagramHandle` |
+| Botão “Começar um projeto” | `cta.href` e `cta.note` |
+| Serviços | `services` |
+| Processo | `processSteps` |
+| Competências | `skills` |
+| Projetos | `projects` — nome, categoria, ano, descrição, URL e imagens |
+
+Enquanto `href` estiver vazio, for só `https://wa.me/55` ou `https://instagram.com/` sem usuário, ou contiver `PLACEHOLDER`, o item não vira link. WhatsApp e Instagram reais abrem em nova aba. O botão principal usa o mailto de `cta.href`.
+
+Os quatro projetos são conceituais e não têm URL. As imagens são os mockups finais, nos mesmos nomes: `project-0N-cover.webp`, `project-0N-detail.webp` e `project-03-mobile.webp`.
+
+## Asset Generation Guide
+
+Coloque os arquivos em `public/assets/images/`, com estes nomes exatos. O site já aponta para eles.
+
+### Retratos — arquivos finais
+
+Estes dois arquivos já são as fotografias de Adryan. Só substitua se houver uma nova versão, mantendo o nome e o tamanho.
+
+| Arquivo | Tamanho | Uso |
+| --- | --- | --- |
+| `hero-adryan.webp` | 2000×1200 (5:3) | Hero. O rosto fica à direita; os monitores claros ficam à esquerda. |
+| `about-adryan.webp` | 1600×2000 (4:5) | Seção About. |
+
+### Mockups de projeto — arquivos finais
+
+Navegador ou celular sobre fundo carvão `#171411`, o mesmo do site. Sem borda, sem legenda de placa e sem texto `REPLACE`.
+
+| Arquivo | Tamanho | Uso |
+| --- | --- | --- |
+| `project-01-cover.webp` | 1920×1200 | Capa do projeto 01 (imagem à esquerda) |
+| `project-01-detail.webp` | 1600×1200 | Detalhe do projeto 01, abaixo da capa |
+| `project-02-cover.webp` | 1920×1200 | Capa do projeto 02 |
+| `project-02-detail.webp` | 1600×1200 | Detalhe complementar do projeto 02 |
+| `project-03-cover.webp` | 1920×1200 | Capa do projeto 03 (quase full-width) |
+| `project-03-mobile.webp` | 1000×1600 | Mockup vertical do projeto 03, ao lado da capa no desktop e acima dela no mobile |
+| `project-04-cover.webp` | 1920×1200 | Capa do projeto 04 |
+| `project-04-detail.webp` | 1600×1200 | Segunda imagem do projeto 04 (layout dividido). Arquivo extra em relação à lista original, necessário para o par de imagens. |
+
+Direção das capas: a interface é a protagonista. O carvão da imagem encontra o fundo da página, então o mockup fica sem moldura.
+
+### Textura
+
+| Arquivo | Tamanho | Uso |
+| --- | --- | --- |
+| `noise.webp` | 512×512 | Overlay global de grão. Opacidade CSS `0.045`. Não substituir por ruído pesado. |
+
+### Como gerar ou fotografar, se precisar refazer
+
+**Hero.** Retrato editorial horizontal no setup escuro. Roupa neutra, luz indireta quente, brilho discreto dos monitores, sem RGB azul/roxo. Deixar espaço negativo. Não usar pessoa fictícia.
+
+**About.** Retrato vertical documental, Adryan fora do centro, ambiente real visível, luz quente e baixa saturação.
+
+**Projetos.** Screenshot ou recorte editorial da interface real. Cada projeto com enquadramento diferente.
+
+**Open Graph.** `index.html` usa `hero-adryan.webp` como `og:image`. Troque o meta quando existir uma imagem de compartilhamento própria.
+
+**Srcset e AVIF.** `npm run images` gera `public/assets/images/opt/` (WebP + AVIF nas larguras de exibição) e reescreve `src/data/imageSets.ts`. O componente `Picture` usa `<picture>` com `srcset` e `sizes`. Rode o script de novo depois de trocar uma fotografia ou capa. O `src` original continua sendo o fallback.
+
+## Design Direction
+
+Oxide Studio — industrial editorial / tactile digital system.
+
+Paleta:
+
+- `#171411` fundo
+- `#24201B` superfície
+- `#EFE7D8` texto
+- `#9D9488` texto secundário
+- `#625B53` texto discreto
+- `#C85B3C` accent (terracota), em torno de 5–12% da composição
+
+Fontes (Google Fonts):
+
+- Familjen Grotesk — títulos, navegação, corpo
+- DM Mono — índices, labels, metadados
+
+O accent não leva glow. Não há preto puro como fundo.
+
+## Performance Notes
+
+- GSAP + ScrollTrigger para timelines, pin da coluna “Trabalhos selecionados”, scrub do processo e parallax. O deslocamento é de 8% do elemento (`yPercent` / `xPercent`), no teto do intervalo de 3–8% do briefing, só no desktop e só com `transform`.
+- Lenis só quando `prefers-reduced-motion` não está ativo. Com movimento reduzido, a rolagem é nativa, o cursor customizado some, o véu de entrada não aparece e os reveals pesados não rodam.
+- Animações usam `transform` e `opacity`. O cursor, o hover de imagem e o parallax também.
+- Hero sem lazy-load, com `preload` do AVIF em `srcset`. Demais imagens usam `loading="lazy"`, `width`/`height` e `<picture>` (AVIF + WebP).
+- Abertura: um véu carvão com fio terracota, cerca de 1s (`0.4s` de traço + `0.62s` de wipe), dentro do teto de 1,5s. A tipografia do hero entra junto com o wipe.
+- Navegação por âncoras (header e menu INDEX) cobre a tela com o mesmo wipe, troca a seção por baixo e revela. Sem rotas internas. `prefers-reduced-motion` pula o wipe e salta direto.
+- Horário do rodapé é o relógio local do navegador, sem API.
+- JSON-LD traz só o que é conhecido: nome, função e Minas Gerais / BR. Sem telefone, cidade, empresa ou redes inventadas.
