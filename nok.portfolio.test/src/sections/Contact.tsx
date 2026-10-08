@@ -5,7 +5,6 @@ import type { MouseEvent } from 'react'
 import { contact, cta } from '../data/content'
 import { isRealHref } from '../data/content'
 import type { ContactItem } from '../data/content'
-import { Button } from '../components/Button/Button'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
 import { PROFILE, DURATION, EASE, TRIGGER } from '../motion'
@@ -14,9 +13,11 @@ gsap.registerPlugin(useGSAP)
 
 export function Contact() {
   const root = useRef<HTMLElement>(null)
-  const marqueeRef = useRef<HTMLDivElement>(null)
+  const btnRef = useRef<HTMLAnchorElement>(null)
   const { scrollTo } = useSite()
   const destination = isRealHref(cta.href) ? cta.href : '#contact-list'
+
+  useMagnetic(btnRef, { max: 24, pull: 0.16, radius: 140 })
 
   useGSAP(
     () => {
@@ -27,7 +28,6 @@ export function Contact() {
 
       mm.add(PROFILE.reduced, () => {
         gsap.set('.cta__title .mask__in', { yPercent: 0 })
-        gsap.set('.marquee__track', { x: 0 })
       })
 
       mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
@@ -47,16 +47,6 @@ export function Contact() {
             },
           },
         )
-
-        const marqueeTrack = section.querySelector<HTMLElement>('.marquee__track')
-        if (marqueeTrack) {
-          gsap.to(marqueeTrack, {
-            x: '-50%',
-            duration: 20,
-            ease: 'none',
-            repeat: -1,
-          })
-        }
       })
     },
     { scope: root },
@@ -70,30 +60,9 @@ export function Contact() {
 
   return (
     <section className="contact" id="contato" ref={root} aria-labelledby="cta-title">
-      <div className="marquee" aria-hidden="true" ref={marqueeRef}>
-        <div className="marquee__track">
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
-          <span className="marquee__dot">·</span>
-        </div>
-      </div>
-
       <div className="cta">
         <div className="shell">
-          <p className="mono">06</p>
+          <p className="slabel">06</p>
           <h2 className="cta__title" id="cta-title">
             <span className="mask">
               <span className="mask__in">Tem um</span>
@@ -103,22 +72,28 @@ export function Contact() {
             </span>
             <span className="mask cta__shift">
               <span className="mask__in">
-                Vamos <em className="serif-accent">tirar do papel</em>.
+                Vamos <em className="text-secondary">tirar do papel</em>.
               </span>
             </span>
           </h2>
           <div className="cta__actions">
-            <Button href={destination} variant="round" magnetic onClick={onCta}>
-              Vamos conversar
-            </Button>
-            <p className="cta__note mono">{cta.note}</p>
+            <a
+              ref={btnRef}
+              className="btn-round-cta"
+              href={destination}
+              onClick={onCta}
+            >
+              <span className="btn-round-cta__fill" aria-hidden="true" />
+              <span className="btn-round-cta__text">Vamos conversar</span>
+            </a>
+            <p className="cta__note">{cta.note}</p>
           </div>
         </div>
       </div>
       <div className="sheet" id="contact-list">
         <div className="shell">
           <div className="sheet__intro">
-            <p className="mono">Direto</p>
+            <p className="slabel">Direto</p>
           </div>
           <ul className="sheet__list">
             {contact.map((item) => (

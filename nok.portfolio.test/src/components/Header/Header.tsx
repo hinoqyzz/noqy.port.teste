@@ -12,8 +12,10 @@ gsap.registerPlugin(useGSAP)
 export function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const floatBtnRef = useRef<HTMLButtonElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showFloatBtn, setShowFloatBtn] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -24,6 +26,11 @@ export function Header() {
 
       const onScroll = () => {
         header.classList.toggle('is-scrolled', window.scrollY > 20)
+        const hero = document.getElementById('intro')
+        if (hero) {
+          const heroBottom = hero.getBoundingClientRect().bottom
+          setShowFloatBtn(heroBottom < 100)
+        }
       }
       onScroll()
       window.addEventListener('scroll', onScroll, { passive: true })
@@ -169,6 +176,18 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      <button
+        ref={floatBtnRef}
+        className={`menu-float ${showFloatBtn && !menuOpen ? 'is-visible' : ''}`}
+        type="button"
+        aria-expanded={menuOpen}
+        aria-controls="mobile-menu"
+        aria-label="Abrir menu"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        Menu
+      </button>
 
       {menuOpen && (
         <div
