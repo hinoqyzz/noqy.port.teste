@@ -1,13 +1,21 @@
 :root {
+  /* Colors - Oxide Editorial Palette */
   --bg: #171411;
   --bg-secondary: #24201b;
   --text-primary: #efe7d8;
   --text-secondary: #9d9488;
-  --text-muted: #625b53;
+  --text-muted: #8a8176;
   --accent: #c85b3c;
+  --accent-text: #d9734f;
   --line: rgba(98, 91, 83, 0.55);
+
+  /* Container & Spacing */
   --container: 1440px;
   --gutter: clamp(24px, 5vw, 80px);
+  --grid-gap: 24px;
+  --grid-gap-mobile: 16px;
+
+  /* Spacing Scale */
   --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
@@ -20,20 +28,35 @@
   --space-128: 128px;
   --space-160: 160px;
   --space-220: 220px;
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 3rem;
-  --space-xl: 6rem;
-  --space-2xl: 10rem;
+
+  /* Section Rhythm */
+  --section-gap: clamp(96px, 12vw, 160px);
+
+  /* Animation */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Typography - Fonts */
   --font-sans: "Familjen Grotesk", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
   --font-mono: "DM Mono", ui-monospace, "Courier New", monospace;
+
+  /* Layout */
   --header-h: 76px;
+
+  /* Z-Index Scale */
   --z-menu: 90;
   --z-header: 100;
+  --z-preview: 120;
   --z-grain: 140;
   --z-progress: 160;
   --z-cursor: 200;
   --z-skip: 300;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --header-h: 64px;
+    --grid-gap: var(--grid-gap-mobile);
+  }
 }

@@ -1,43 +1,66 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useRef } from 'react'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import type { MouseEvent } from 'react'
-import { contact, cta } from '../data/social'
+import { contact, cta } from '../data/content'
 import { isRealHref } from '../data/content'
 import type { ContactItem } from '../data/content'
 import { Button } from '../components/Button/Button'
-import { SectionLabel } from '../components/SectionLabel/SectionLabel'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
+import { PROFILE, DURATION, EASE, TRIGGER } from '../motion'
+
+gsap.registerPlugin(useGSAP)
 
 export function Contact() {
   const root = useRef<HTMLElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
   const { scrollTo } = useSite()
   const destination = isRealHref(cta.href) ? cta.href : '#contact-list'
 
-  useLayoutEffect(() => {
-    const section = root.current
-    if (!section) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const targets = section.querySelectorAll<HTMLElement>('.cta__title .mask__in')
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        targets,
-        { yPercent: 110 },
-        {
-          yPercent: 0,
-          duration: 0.95,
-          ease: 'power4.out',
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: '.cta__title',
-            start: 'top 84%',
-            toggleActions: 'play none none none',
+  useGSAP(
+    () => {
+      const section = root.current
+      if (!section) return
+
+      const mm = gsap.matchMedia()
+
+      mm.add(PROFILE.reduced, () => {
+        gsap.set('.cta__title .mask__in', { yPercent: 0 })
+        gsap.set('.marquee__track', { x: 0 })
+      })
+
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        const targets = section.querySelectorAll<HTMLElement>('.cta__title .mask__in')
+        gsap.fromTo(
+          targets,
+          { yPercent: 110 },
+          {
+            yPercent: 0,
+            duration: DURATION.reveal.mask,
+            ease: EASE.out,
+            stagger: 0.08,
+            scrollTrigger: {
+              trigger: '.cta__title',
+              start: TRIGGER.reveal.start,
+              toggleActions: TRIGGER.reveal.toggleActions,
+            },
           },
-        },
-      )
-    }, section)
-    return () => context.revert()
-  }, [])
+        )
+
+        const marqueeTrack = section.querySelector<HTMLElement>('.marquee__track')
+        if (marqueeTrack) {
+          gsap.to(marqueeTrack, {
+            x: '-50%',
+            duration: 20,
+            ease: 'none',
+            repeat: -1,
+          })
+        }
+      })
+    },
+    { scope: root },
+  )
 
   const onCta = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isRealHref(cta.href)) return
@@ -46,22 +69,41 @@ export function Contact() {
   }
 
   return (
-    <section className="contact" id="contact" ref={root} aria-labelledby="cta-title">
+    <section className="contact" id="contato" ref={root} aria-labelledby="cta-title">
+      <div className="marquee" aria-hidden="true" ref={marqueeRef}>
+        <div className="marquee__track">
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+          <span className="marquee__text display-l">VAMOS CONVERSAR</span>
+          <span className="marquee__dot">·</span>
+        </div>
+      </div>
+
       <div className="cta">
         <div className="shell">
-          <SectionLabel index="06" name="Contato" />
-          <h2 className="cta__title" id="cta-title" data-drift-root>
-            <span className="drift" data-drift>
-              <span className="mask">
-                <span className="mask__in">Tem um</span>
-              </span>
-              <span className="mask">
-                <span className="mask__in">projeto?</span>
-              </span>
-              <span className="mask cta__shift">
-                <span className="mask__in">
-                  Vamos <strong>tirar do papel</strong>.
-                </span>
+          <p className="mono">06</p>
+          <h2 className="cta__title" id="cta-title">
+            <span className="mask">
+              <span className="mask__in">Tem um</span>
+            </span>
+            <span className="mask">
+              <span className="mask__in">projeto?</span>
+            </span>
+            <span className="mask cta__shift">
+              <span className="mask__in">
+                Vamos <em className="serif-accent">tirar do papel</em>.
               </span>
             </span>
           </h2>

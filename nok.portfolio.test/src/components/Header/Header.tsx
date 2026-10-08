@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { navigation, profile, sectionIndex } from '../../data/content'
+import { profile, cta, navigation } from '../../data/content'
 import { useMagnetic } from '../../hooks/useMagnetic'
-import { useSite } from '../../hooks/useSite'
-import { DURATION, EASE, DISTANCE, STAGGER, PROFILE, HERO_OFFSET } from '../../motion'
+import { DURATION, EASE, PROFILE } from '../../motion'
 
 gsap.registerPlugin(useGSAP)
 
@@ -13,8 +13,9 @@ export function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
-  const { scrollTo, active, menuOpen, setMenuOpen } = useSite()
-  const index = sectionIndex[active] ?? '01'
+  const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useGSAP(
     () => {
@@ -30,22 +31,17 @@ export function Header() {
       const mm = gsap.matchMedia()
 
       mm.add(PROFILE.reduced, () => {
-        gsap.set(header, { yPercent: 0 })
-        gsap.fromTo(
-          header,
-          { opacity: 0 },
-          { opacity: 1, duration: DURATION.reduced.fade, ease: EASE.reduced, delay: 0.15 },
-        )
+        gsap.set(header, { yPercent: 0, opacity: 1 })
       })
 
       mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
         gsap.fromTo(
           header,
-          { yPercent: -DISTANCE.headerSlide },
+          { yPercent: -110 },
           {
             yPercent: 0,
             duration: DURATION.header,
-            delay: HERO_OFFSET.rule,
+            delay: 0.5,
             ease: EASE.out,
             immediateRender: true,
           },
@@ -73,12 +69,12 @@ export function Header() {
       mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
         gsap.fromTo(
           '.overlay__link',
-          { yPercent: DISTANCE.overlaySlide, opacity: 0 },
+          { yPercent: 36, opacity: 0 },
           {
             yPercent: 0,
             opacity: 1,
-            duration: DURATION.overlay,
-            stagger: STAGGER.overlay,
+            duration: 0.45,
+            stagger: 0.05,
             ease: EASE.out,
           },
         )
@@ -116,40 +112,49 @@ export function Header() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [menuOpen, setMenuOpen])
+  }, [menuOpen])
 
-  const onNavigate = (event: MouseEvent<HTMLAnchorElement>, target: string) => {
+  useEffect(() => {
+    document.documentElement.classList.toggle('menu-open', menuOpen)
+  }, [menuOpen])
+
+  const onNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     event.preventDefault()
-    scrollTo(target)
+    setMenuOpen(false)
+
+    if (href.startsWith('/#')) {
+      const hash = href.replace('/#', '#')
+      if (location.pathname !== '/') {
+        navigate('/' + hash)
+      } else {
+        const el = document.querySelector(hash)
+        el?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
   }
 
   return (
     <>
       <header className="header" ref={headerRef}>
-        <div className="header__inner">
-          <div className="brand">
-            <BrandLink onClick={(event) => onNavigate(event, '#intro')}>
-              {profile.name}
-            </BrandLink>
-            <span className="brand__index">{index}/06</span>
-          </div>
-          <nav className="header__nav" aria-label="Seções">
+        <div className="header__inner shell">
+          <Link to="/" className="header__brand">
+            {profile.name}
+          </Link>
+
+          <nav className="header__nav" aria-label="Navegação principal">
             {navigation.map((item) => (
               <NavLink
                 key={item.id}
-                href={`#${item.id}`}
-                active={active === item.id}
-                onClick={(event) => onNavigate(event, `#${item.id}`)}
+                href={item.href}
+                onClick={(event) => onNavigate(event, item.href)}
               >
                 {item.label}
               </NavLink>
             ))}
           </nav>
+
           <div className="header__end">
-            <div className="header__status">
-              <span className="status__dot" aria-hidden="true" />
-              <span className="status__label">{profile.availability}</span>
-            </div>
+            <CtaButton href={cta.href}>{cta.label}</CtaButton>
             <button
               ref={buttonRef}
               className="header__menu"
@@ -158,78 +163,66 @@ export function Header() {
               aria-controls="mobile-menu"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? 'Fechar' : 'Índice'}
+              {menuOpen ? 'Fechar' : 'Menu'}
             </button>
           </div>
         </div>
       </header>
-      {menuOpen ? (
+
+      {menuOpen && (
         <div
           className="overlay"
           id="mobile-menu"
           ref={overlayRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Índice"
+          aria-label="Menu"
         >
-          <nav aria-label="Seções">
+          <nav aria-label="Navegação principal">
             {navigation.map((item) => (
               <a
                 key={item.id}
                 className="overlay__link"
-                href={`#${item.id}`}
-                onClick={(event) => onNavigate(event, `#${item.id}`)}
+                href={item.href}
+                onClick={(event) => onNavigate(event, item.href)}
               >
-                <span className="press">{item.label}</span>
-                <span className="overlay__index">{item.index}</span>
+                {item.label}
               </a>
             ))}
           </nav>
-          <p className="overlay__note mono">{profile.availability}</p>
+          <a href={cta.href} className="overlay__cta">
+            {cta.label}
+          </a>
         </div>
-      ) : null}
+      )}
     </>
-  )
-}
-
-function BrandLink({
-  children,
-  onClick,
-}: {
-  children: ReactNode
-  onClick: (event: MouseEvent<HTMLAnchorElement>) => void
-}) {
-  const ref = useRef<HTMLAnchorElement>(null)
-  useMagnetic(ref, { max: 6, pull: 0.22, radius: 80 })
-  return (
-    <a ref={ref} className="brand__name" href="#intro" onClick={onClick}>
-      <span className="press">{children}</span>
-    </a>
   )
 }
 
 function NavLink({
   href,
-  active,
   children,
   onClick,
 }: {
   href: string
-  active: boolean
   children: ReactNode
   onClick: (event: MouseEvent<HTMLAnchorElement>) => void
 }) {
   const ref = useRef<HTMLAnchorElement>(null)
   useMagnetic(ref, { max: 6, pull: 0.28, radius: 72 })
   return (
-    <a
-      ref={ref}
-      className={active ? 'header__link is-active' : 'header__link'}
-      href={href}
-      aria-current={active ? 'true' : undefined}
-      onClick={onClick}
-    >
-      <span className="press">{children}</span>
+    <a ref={ref} className="header__link" href={href} onClick={onClick}>
+      {children}
+    </a>
+  )
+}
+
+function CtaButton({ href, children }: { href: string; children: ReactNode }) {
+  const ref = useRef<HTMLAnchorElement>(null)
+  useMagnetic(ref, { max: 6, pull: 0.22, radius: 80 })
+  return (
+    <a ref={ref} className="header__cta" href={href}>
+      {children}
     </a>
   )
 }

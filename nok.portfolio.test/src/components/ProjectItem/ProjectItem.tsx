@@ -43,7 +43,7 @@ export function ProjectItem({ project }: Props) {
         </div>
         <p className="project__seal mono">{projectSeal}</p>
         <p className="project__desc">{project.description}</p>
-        {isRealHref(project.url) ? <p className="project__url">{project.url}</p> : null}
+        {project.url && isRealHref(project.url) ? <p className="project__url">{project.url}</p> : null}
         <span className="project__line" aria-hidden="true" />
       </div>
     </article>
