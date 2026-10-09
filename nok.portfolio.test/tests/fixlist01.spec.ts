@@ -135,15 +135,13 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
     }
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
     await page.setViewportSize({ width: 768, height: 1024 })
 
     const headerMenu = page.locator('.header__menu')
 
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
-
-    const hasHiddenClass = await headerMenu.evaluate((el) => el.classList.contains('is-hidden'))
-    expect(hasHiddenClass).toBe(true)
+    await page.locator('#servicos').scrollIntoViewIfNeeded()
+    await expect(headerMenu).toHaveClass(/is-hidden/, { timeout: 4000 })
 
     const tabIndex = await headerMenu.getAttribute('tabindex')
     expect(tabIndex).toBe('-1')
