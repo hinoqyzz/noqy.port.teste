@@ -16,6 +16,7 @@ export function Header() {
   const overlayRef = useRef<HTMLDivElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [showFloatBtn, setShowFloatBtn] = useState(false)
+  const [floatReady, setFloatReady] = useState(false)
   const openedBy = useRef<'header' | 'float'>('header')
   const restoreFocus = useRef(false)
   const headerAwayTweenReady = useRef(false)
@@ -76,6 +77,24 @@ export function Header() {
   )
 
   const headerAway = showFloatBtn || menuOpen
+  const floatOn = floatReady || menuOpen
+
+  useEffect(() => {
+    if (menuOpen) {
+      setFloatReady(true)
+      return
+    }
+    if (!showFloatBtn) {
+      setFloatReady(false)
+      return
+    }
+    const reduced =
+      window.matchMedia(PROFILE.reduced).matches ||
+      document.documentElement.classList.contains('reduced-motion')
+    const delay = reduced ? 0 : DURATION.header * 1000
+    const id = window.setTimeout(() => setFloatReady(true), delay)
+    return () => window.clearTimeout(id)
+  }, [showFloatBtn, menuOpen])
 
   useGSAP(
     () => {
@@ -168,13 +187,13 @@ export function Header() {
     const headerMenu = buttonRef.current
     const headerCta = headerRef.current?.querySelector<HTMLElement>('.header__cta')
     const menuVisible = Boolean(headerMenu && headerMenu.getClientRects().length > 0)
-    const target = preferFloat && showFloatBtn
+    const target = preferFloat && floatOn
       ? floatBtnRef.current
       : menuVisible
         ? headerMenu
         : headerCta
     target?.focus()
-  }, [showFloatBtn])
+  }, [floatOn])
 
   useEffect(() => {
     if (menuOpen || !restoreFocus.current) return
@@ -185,12 +204,12 @@ export function Header() {
   }, [menuOpen, showFloatBtn, focusMenuOpener])
 
   useEffect(() => {
-    if (!headerAway || menuOpen) return
+    if (!headerAway || menuOpen || !floatOn) return
     const header = headerRef.current
     if (header && header.contains(document.activeElement)) {
       requestAnimationFrame(() => floatBtnRef.current?.focus())
     }
-  }, [headerAway, menuOpen])
+  }, [headerAway, menuOpen, floatOn])
 
   useEffect(() => {
     if (showFloatBtn || menuOpen) return
@@ -264,14 +283,14 @@ export function Header() {
 
       <button
         ref={floatBtnRef}
-        className={`menu-float ${showFloatBtn || menuOpen ? 'is-visible' : ''}`}
+        className={`menu-float ${floatOn ? 'is-visible' : ''}`}
         type="button"
         aria-expanded={menuOpen}
         aria-controls="mobile-menu"
         aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
-        tabIndex={showFloatBtn || menuOpen ? 0 : -1}
+        tabIndex={floatOn ? 0 : -1}
         onClick={() => (menuOpen ? closeMenu() : openMenu('float'))}
-        {...(!showFloatBtn && !menuOpen
+        {...(!floatOn
           ? { inert: true as const, 'aria-hidden': true as const }
           : {})}
       >

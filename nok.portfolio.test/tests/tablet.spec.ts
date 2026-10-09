@@ -258,7 +258,7 @@ test.describe('Floating Menu Button', () => {
     expect(initiallyHidden).toBe(true)
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     const isVisibleAfterScroll = await floatBtn.evaluate((el) => {
       return el.classList.contains('is-visible')
@@ -277,7 +277,7 @@ test.describe('Floating Menu Button', () => {
     await page.waitForTimeout(3000)
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     const floatBtn = page.locator('.menu-float')
     const box = await floatBtn.boundingBox()

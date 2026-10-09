@@ -27,7 +27,7 @@ test.describe('Float menu does not cover Contact at the page end', () => {
       await page.waitForTimeout(400)
 
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
-      await page.waitForTimeout(900)
+      await page.waitForTimeout(1100)
 
       const overlap = await page.evaluate(() => {
         const float = document.querySelector('.menu-float') as HTMLElement | null

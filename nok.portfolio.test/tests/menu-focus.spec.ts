@@ -49,7 +49,7 @@ test.describe('Menu focus restore', () => {
         await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
 
         await page.evaluate(() => window.scrollTo(0, window.innerHeight + 240))
-        await page.waitForTimeout(400)
+        await page.waitForTimeout(1100)
 
         const floatBtn = page.locator('.menu-float')
         await expect(floatBtn).toBeVisible()
@@ -67,7 +67,7 @@ test.describe('Menu focus restore', () => {
         await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
 
         await page.evaluate(() => window.scrollTo(0, window.innerHeight + 240))
-        await page.waitForTimeout(400)
+        await page.waitForTimeout(1100)
 
         const floatBtn = page.locator('.menu-float')
         await floatBtn.click()

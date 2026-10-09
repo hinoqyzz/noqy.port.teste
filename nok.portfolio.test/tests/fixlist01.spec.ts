@@ -160,7 +160,7 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
     const floatMenu = page.locator('.menu-float')
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     const isVisible = await floatMenu.evaluate((el) => el.classList.contains('is-visible'))
     expect(isVisible).toBe(true)
@@ -184,7 +184,7 @@ test.describe('DS-01/DS-03/GIT-06: Menu Button Crossfade', () => {
     expect(floatTabIndex).toBe('-1')
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     headerTabIndex = await headerMenu.getAttribute('tabindex')
     floatTabIndex = await floatMenu.getAttribute('tabindex')
@@ -204,7 +204,7 @@ test.describe('DS-02: Close Control on Desktop', () => {
     await page.setViewportSize({ width: 1440, height: 900 })
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     const floatMenu = page.locator('.menu-float')
     await floatMenu.click()
@@ -232,7 +232,7 @@ test.describe('DS-02: Close Control on Desktop', () => {
     await page.setViewportSize({ width: 1440, height: 900 })
 
     await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1100)
 
     const floatMenu = page.locator('.menu-float')
     await floatMenu.click()

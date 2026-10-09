@@ -75,7 +75,7 @@ test.describe('One menu at a time', () => {
 
       for (const y of scrolls) {
         await page.evaluate((top) => window.scrollTo(0, top), y)
-        await page.waitForTimeout(900)
+        await page.waitForTimeout(1100)
         const state = await chromeState(page)
         expect(state.headerVisible && state.floatVisible, `both visible at ${vp.width} scroll ${y}`).toBe(
           false,
@@ -96,11 +96,11 @@ test.describe('One menu at a time', () => {
       if (vp.width === 1440 && testInfo.project.name === 'desktop-no-preference') {
         for (const [y, name] of [
           [0, 'top'],
-          [800, 'mid'],
-          [1600, 'deep'],
+          [1200, 'mid'],
+          [2400, 'deep'],
         ] as const) {
           await page.evaluate((top) => window.scrollTo(0, top), y)
-          await page.waitForTimeout(900)
+          await page.waitForTimeout(1100)
           await page.screenshot({
             path: `${SCREENSHOT_DIR}/header-float-1440-${name}.png`,
             fullPage: false,

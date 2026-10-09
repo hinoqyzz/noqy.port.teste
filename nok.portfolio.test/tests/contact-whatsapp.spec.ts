@@ -204,7 +204,7 @@ test.describe('RED-07 WhatsApp primary contact', () => {
           if (!title) return
           title.scrollIntoView({ block: 'start', behavior: 'instant' })
         })
-        await page.waitForTimeout(400)
+        await page.waitForTimeout(1100)
       }
       const suffix = isNoJs(testInfo) ? 'nojs' : 'js'
       await page.locator('#contato').screenshot({
