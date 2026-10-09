@@ -1,12 +1,10 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import type { MouseEvent } from 'react'
-import { contact, cta } from '../data/content'
+import { contact, cta, whatsapp } from '../data/content'
 import { isRealHref } from '../data/content'
 import type { ContactItem } from '../data/content'
 import { useMagnetic } from '../hooks/useMagnetic'
-import { useSite } from '../hooks/useSite'
 import { PROFILE, DURATION, EASE, TRIGGER } from '../motion'
 
 gsap.registerPlugin(useGSAP)
@@ -14,8 +12,6 @@ gsap.registerPlugin(useGSAP)
 export function Contact() {
   const root = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLAnchorElement>(null)
-  const { scrollTo } = useSite()
-  const destination = isRealHref(cta.href) ? cta.href : '#contact-list'
 
   useMagnetic(btnRef, { max: 24, pull: 0.16, radius: 140 })
 
@@ -52,12 +48,6 @@ export function Contact() {
     { scope: root },
   )
 
-  const onCta = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isRealHref(cta.href)) return
-    event.preventDefault()
-    scrollTo('#contact-list')
-  }
-
   return (
     <section className="contact" id="contato" ref={root} aria-labelledby="cta-title">
       <div className="cta">
@@ -80,11 +70,16 @@ export function Contact() {
             <a
               ref={btnRef}
               className="btn-round-cta"
-              href={destination}
-              onClick={onCta}
+              href={whatsapp.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={whatsapp.ariaLabel}
             >
               <span className="btn-round-cta__fill" aria-hidden="true" />
-              <span className="btn-round-cta__text">Vamos conversar</span>
+              <span className="btn-round-cta__text">
+                <span>{whatsapp.line1}</span>
+                <span>{whatsapp.line2}</span>
+              </span>
             </a>
             <p className="cta__note">{cta.note}</p>
           </div>

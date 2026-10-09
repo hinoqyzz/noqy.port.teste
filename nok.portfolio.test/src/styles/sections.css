@@ -927,6 +927,14 @@ html.reduced-motion .process__progress {
   letter-spacing: 0.04em;
 }
 
+@media (max-width: 760px) {
+  .cta__actions {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+}
+
 
 .sheet {
   padding-bottom: clamp(48px, 8vw, 96px);

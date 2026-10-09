@@ -324,7 +324,14 @@ export const skills = [
 export const whatsappNumber = '37998684391'
 export const instagramHandle = 'hinoqyzz'
 
-const whatsappText = 'Oi! Vi seu portfólio e queria conversar sobre um projeto.'
+export const whatsappText = 'Oi! Vi seu portfólio e queria conversar sobre um projeto.'
+
+export const whatsapp = {
+  href: `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`,
+  line1: 'Chamar no',
+  line2: 'WhatsApp',
+  ariaLabel: 'Chamar no WhatsApp (abre em nova aba)',
+}
 
 export const contact: ContactItem[] = [
   {
@@ -332,13 +339,6 @@ export const contact: ContactItem[] = [
     label: 'E-mail',
     value: 'contato@noqyzz.com.br',
     href: 'mailto:contato@noqyzz.com.br',
-  },
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    value: '(37) 99868-4391',
-    href: `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`,
-    external: true,
   },
   {
     id: 'instagram',
@@ -352,7 +352,7 @@ export const contact: ContactItem[] = [
 export const cta = {
   href: 'mailto:contato@noqyzz.com.br',
   label: 'Começar um projeto',
-  note: 'contato@noqyzz.com.br',
+  note: 'Ou, se preferir, por e-mail ou Instagram:',
 }
 
 export const portraits = {
