@@ -53,34 +53,104 @@ test.describe('RED-07 WhatsApp primary contact', () => {
   })
 
   for (const vp of VIEWPORTS) {
-    test(`${vp.width}: WhatsApp label is exactly two rendered lines`, async ({
+    test(`${vp.width}: WhatsApp label is two lines, sized, and inside the circle`, async ({
       page,
     }, testInfo) => {
       await page.setViewportSize(vp)
       await loadContact(page, testInfo)
 
-      const text = page.locator('.btn-round-cta__text')
+      const btn = page.locator('.btn-round-cta')
+      const text = btn.locator('.btn-round-cta__text')
       await expect(text.locator('span')).toHaveCount(2)
       await expect(text.locator('span').nth(0)).toHaveText('Chamar no')
       await expect(text.locator('span').nth(1)).toHaveText('WhatsApp')
 
-      const lines = await text.evaluate((el) => {
-        let count = 0
-        for (const span of el.querySelectorAll('span')) {
+      const metrics = await btn.evaluate((el) => {
+        const textEl = el.querySelector('.btn-round-cta__text')
+        if (!textEl) return null
+        const btnBox = el.getBoundingClientRect()
+        const cx = btnBox.left + btnBox.width / 2
+        const cy = btnBox.top + btnBox.height / 2
+        const radius = btnBox.width / 2
+        let lines = 0
+        const corners: { x: number; y: number; dist: number }[] = []
+        for (const span of textEl.querySelectorAll('span')) {
           const range = document.createRange()
           range.selectNodeContents(span)
-          count += [...range.getClientRects()].filter((rect) => rect.width > 1 && rect.height > 1).length
+          const rects = [...range.getClientRects()].filter((rect) => rect.width > 1 && rect.height > 1)
+          lines += rects.length
+          for (const rect of rects) {
+            for (const [x, y] of [
+              [rect.left, rect.top],
+              [rect.right, rect.top],
+              [rect.left, rect.bottom],
+              [rect.right, rect.bottom],
+            ] as const) {
+              const dist = Math.hypot(x - cx, y - cy)
+              corners.push({ x, y, dist })
+            }
+          }
         }
-        return count
+        return {
+          lines,
+          fontSize: parseFloat(getComputedStyle(el).fontSize),
+          width: btnBox.width,
+          height: btnBox.height,
+          radius,
+          maxCornerDist: corners.reduce((max, corner) => Math.max(max, corner.dist), 0),
+        }
       })
-      expect(lines, `rendered lines at ${vp.width}`).toBe(2)
 
-      const btnBox = await page.locator('.btn-round-cta').boundingBox()
-      const textBox = await text.boundingBox()
-      expect(btnBox).not.toBeNull()
-      expect(textBox).not.toBeNull()
-      expect(textBox!.x + textBox!.width).toBeLessThanOrEqual(btnBox!.x + btnBox!.width + 1)
-      expect(textBox!.y + textBox!.height).toBeLessThanOrEqual(btnBox!.y + btnBox!.height + 1)
+      expect(metrics, `metrics at ${vp.width}`).not.toBeNull()
+      expect(metrics!.lines, `rendered lines at ${vp.width}`).toBe(2)
+      expect(metrics!.width).toBe(metrics!.height)
+
+      if (vp.width <= 760) {
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeGreaterThanOrEqual(12.5)
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeLessThanOrEqual(13.5)
+      } else if (vp.width >= 1025) {
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeGreaterThanOrEqual(14.5)
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeLessThanOrEqual(15.5)
+      } else {
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeGreaterThanOrEqual(12.5)
+        expect(metrics!.fontSize, `font-size at ${vp.width}`).toBeLessThanOrEqual(15.5)
+      }
+
+      expect(
+        metrics!.maxCornerDist,
+        `text overflows circle at ${vp.width}: dist ${metrics!.maxCornerDist} radius ${metrics!.radius}`,
+      ).toBeLessThanOrEqual(metrics!.radius + 1)
+    })
+  }
+
+  for (const vp of VIEWPORTS) {
+    test(`${vp.width}: contact note sits left-aligned above the pills`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize(vp)
+      await loadContact(page, testInfo)
+
+      const title = await page.locator('.cta__title').boundingBox()
+      const btn = await page.locator('.btn-round-cta').boundingBox()
+      const note = await page.locator('.cta__note').boundingBox()
+      const pills = await page.locator('.sheet__list').boundingBox()
+
+      expect(title).not.toBeNull()
+      expect(btn).not.toBeNull()
+      expect(note).not.toBeNull()
+      expect(pills).not.toBeNull()
+
+      expect(title!.y).toBeLessThan(btn!.y)
+      expect(btn!.y + btn!.height).toBeLessThanOrEqual(note!.y + 1)
+      expect(note!.y).toBeLessThan(pills!.y)
+
+      expect(Math.abs(note!.x - pills!.x), `note x ${note!.x} vs pills x ${pills!.x}`).toBeLessThanOrEqual(
+        1,
+      )
+
+      const gap = pills!.y - (note!.y + note!.height)
+      expect(gap, `gap between note and pills at ${vp.width}`).toBeGreaterThanOrEqual(-1)
+      expect(gap, `gap between note and pills at ${vp.width}`).toBeLessThanOrEqual(24)
     })
   }
 
@@ -116,7 +186,11 @@ test.describe('RED-07 WhatsApp primary contact', () => {
     expect(note!.y).toBeLessThan(pills!.y)
   })
 
-  for (const vp of VIEWPORTS) {
+  for (const vp of [
+    { width: 390, height: 844 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+  ]) {
     test(`contact screenshot ${vp.width}x${vp.height}`, async ({ page }, testInfo) => {
       const project = testInfo.project.name
       if (project !== 'desktop-no-preference' && project !== 'no-js') {
@@ -133,7 +207,7 @@ test.describe('RED-07 WhatsApp primary contact', () => {
         await page.waitForTimeout(400)
       }
       const suffix = isNoJs(testInfo) ? 'nojs' : 'js'
-      await page.locator('.cta').screenshot({
+      await page.locator('#contato').screenshot({
         path: `${SCREENSHOT_DIR}/contact-${vp.width}x${vp.height}-${suffix}.png`,
       })
     })

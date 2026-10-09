@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test'
 
+const SCREENSHOT_DIR = '/opt/cursor/artifacts/screenshots'
+
 const VIEWPORTS = [
   { width: 1025, height: 768 },
   { width: 1280, height: 800 },
@@ -17,7 +19,7 @@ test.describe('Float menu does not cover Contact at the page end', () => {
   for (const vp of VIEWPORTS) {
     test(`${vp.width}x${vp.height}: float misses contact copy, button and pills`, async ({
       page,
-    }) => {
+    }, testInfo) => {
       await page.setViewportSize(vp)
       await page.goto('/')
       await page.waitForLoadState('networkidle')
@@ -25,7 +27,7 @@ test.describe('Float menu does not cover Contact at the page end', () => {
       await page.waitForTimeout(400)
 
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
-      await page.waitForTimeout(300)
+      await page.waitForTimeout(900)
 
       const overlap = await page.evaluate(() => {
         const float = document.querySelector('.menu-float') as HTMLElement | null
@@ -72,6 +74,13 @@ test.describe('Float menu does not cover Contact at the page end', () => {
       expect(overlap.pointHits, `elementFromPoint hit float at ${vp.width}x${vp.height}`).toBe(
         false,
       )
+
+      if (vp.width === 1025 && vp.height === 768 && testInfo.project.name === 'desktop-no-preference') {
+        await page.screenshot({
+          path: `${SCREENSHOT_DIR}/contact-end-1025x768.png`,
+          fullPage: false,
+        })
+      }
     })
   }
 })

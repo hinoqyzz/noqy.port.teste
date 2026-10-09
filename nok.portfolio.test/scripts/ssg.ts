@@ -161,12 +161,12 @@ function generateHomeContent() {
             <h2 class="cta__title">Tem um projeto? Vamos tirar do papel.</h2>
             <div class="cta__actions">
               <a href="${whatsapp.href}" class="btn-round-cta" target="_blank" rel="noopener noreferrer" aria-label="${whatsapp.ariaLabel}"><span class="btn-round-cta__text"><span>${whatsapp.line1}</span><span>${whatsapp.line2}</span></span></a>
-              <p class="cta__note">${cta.note}</p>
             </div>
           </div>
         </div>
         <div class="sheet" id="contact-list">
           <div class="shell">
+            <p class="cta__note">${cta.note}</p>
             <ul class="sheet__list">
               ${contact
                 .map(

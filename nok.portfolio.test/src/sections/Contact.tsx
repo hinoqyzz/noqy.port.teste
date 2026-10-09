@@ -81,15 +81,12 @@ export function Contact() {
                 <span>{whatsapp.line2}</span>
               </span>
             </a>
-            <p className="cta__note">{cta.note}</p>
           </div>
         </div>
       </div>
       <div className="sheet" id="contact-list">
         <div className="shell">
-          <div className="sheet__intro">
-            <p className="slabel">Direto</p>
-          </div>
+          <p className="cta__note">{cta.note}</p>
           <ul className="sheet__list">
             {contact.map((item) => (
               <li key={item.id}>

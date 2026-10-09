@@ -18,6 +18,7 @@ export function Header() {
   const [showFloatBtn, setShowFloatBtn] = useState(false)
   const openedBy = useRef<'header' | 'float'>('header')
   const restoreFocus = useRef(false)
+  const headerAwayTweenReady = useRef(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -39,13 +40,8 @@ export function Header() {
       const onScroll = () => {
         header.classList.toggle('is-scrolled', window.scrollY > 20)
         const hero = document.getElementById('intro')
-        const contact = document.getElementById('contato')
         const pastHero = hero ? hero.getBoundingClientRect().bottom < 100 : window.scrollY > 80
-        const contactBox = contact?.getBoundingClientRect()
-        const contactInView = Boolean(
-          contactBox && contactBox.top < window.innerHeight && contactBox.bottom > 0,
-        )
-        setShowFloatBtn(pastHero && !contactInView)
+        setShowFloatBtn(pastHero)
       }
       onScroll()
       window.addEventListener('scroll', onScroll, { passive: true })
@@ -77,6 +73,32 @@ export function Header() {
       }
     },
     { scope: headerRef },
+  )
+
+  const headerAway = showFloatBtn || menuOpen
+
+  useGSAP(
+    () => {
+      const header = headerRef.current
+      if (!header) return
+      if (!headerAwayTweenReady.current) {
+        headerAwayTweenReady.current = true
+        if (!headerAway) return
+      }
+      const mm = gsap.matchMedia()
+      mm.add(PROFILE.reduced, () => {
+        gsap.set(header, { yPercent: headerAway ? -110 : 0 })
+      })
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        gsap.to(header, {
+          yPercent: headerAway ? -110 : 0,
+          duration: DURATION.header,
+          ease: EASE.out,
+          overwrite: 'auto',
+        })
+      })
+    },
+    { scope: headerRef, dependencies: [headerAway] },
   )
 
   useGSAP(
@@ -163,6 +185,14 @@ export function Header() {
   }, [menuOpen, showFloatBtn, focusMenuOpener])
 
   useEffect(() => {
+    if (!headerAway || menuOpen) return
+    const header = headerRef.current
+    if (header && header.contains(document.activeElement)) {
+      requestAnimationFrame(() => floatBtnRef.current?.focus())
+    }
+  }, [headerAway, menuOpen])
+
+  useEffect(() => {
     if (showFloatBtn || menuOpen) return
     if (document.activeElement !== floatBtnRef.current) return
     requestAnimationFrame(() => {
@@ -187,7 +217,11 @@ export function Header() {
 
   return (
     <>
-      <header className="header" ref={headerRef}>
+      <header
+        className={`header${headerAway ? ' is-away' : ''}`}
+        ref={headerRef}
+        {...(headerAway ? { inert: true as const, 'aria-hidden': true as const } : {})}
+      >
         <div className="header__inner shell">
           <Link to="/" className="header__brand" aria-label="Ir para o topo">
             <KothLogo className="header__logo" />

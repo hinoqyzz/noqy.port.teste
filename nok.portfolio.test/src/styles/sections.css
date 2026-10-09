@@ -914,10 +914,8 @@ html.reduced-motion .process__progress {
 
 .cta__actions {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column;
+  align-items: flex-start;
   margin-top: 48px;
 }
 
@@ -925,14 +923,8 @@ html.reduced-motion .process__progress {
   color: var(--text-secondary);
   text-transform: none;
   letter-spacing: 0.04em;
-}
-
-@media (max-width: 760px) {
-  .cta__actions {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
+  margin: 0 0 16px;
+  text-align: left;
 }
 
 
