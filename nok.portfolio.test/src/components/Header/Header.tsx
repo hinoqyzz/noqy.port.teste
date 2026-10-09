@@ -16,8 +16,20 @@ export function Header() {
   const overlayRef = useRef<HTMLDivElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [showFloatBtn, setShowFloatBtn] = useState(false)
+  const openedBy = useRef<'header' | 'float'>('header')
+  const restoreFocus = useRef(false)
   const location = useLocation()
   const navigate = useNavigate()
+
+  const openMenu = (source: 'header' | 'float') => {
+    openedBy.current = source
+    setMenuOpen(true)
+  }
+
+  const closeMenu = () => {
+    restoreFocus.current = true
+    setMenuOpen(false)
+  }
 
   useGSAP(
     () => {
@@ -95,9 +107,7 @@ export function Header() {
     if (!menuOpen) return
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setMenuOpen(false)
-        const activeButton = showFloatBtn ? floatBtnRef.current : buttonRef.current
-        activeButton?.focus()
+        closeMenu()
         return
       }
       if (event.key !== 'Tab') return
@@ -121,10 +131,19 @@ export function Header() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [menuOpen, showFloatBtn])
+  }, [menuOpen])
 
   useEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)
+  }, [menuOpen])
+
+  useEffect(() => {
+    if (menuOpen || !restoreFocus.current) return
+    restoreFocus.current = false
+    const target = openedBy.current === 'float' ? floatBtnRef.current : buttonRef.current
+    requestAnimationFrame(() => {
+      target?.focus()
+    })
   }, [menuOpen])
 
   const onNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -172,7 +191,7 @@ export function Header() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               tabIndex={showFloatBtn || menuOpen ? -1 : 0}
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => (menuOpen ? closeMenu() : openMenu('header'))}
               {...(showFloatBtn || menuOpen
                 ? { inert: true as const, 'aria-hidden': true as const }
                 : {})}
@@ -191,7 +210,7 @@ export function Header() {
         aria-controls="mobile-menu"
         aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
         tabIndex={showFloatBtn || menuOpen ? 0 : -1}
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => (menuOpen ? closeMenu() : openMenu('float'))}
         {...(!showFloatBtn && !menuOpen
           ? { inert: true as const, 'aria-hidden': true as const }
           : {})}
