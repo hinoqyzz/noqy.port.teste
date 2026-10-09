@@ -201,10 +201,9 @@ test.describe('DS-02: Close Control on Desktop', () => {
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 1440, height: 900 })
 
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(1100)
-
+    await page.locator('#servicos').scrollIntoViewIfNeeded()
     const floatMenu = page.locator('.menu-float')
+    await expect(floatMenu).toBeVisible({ timeout: 4000 })
     await floatMenu.click()
     await page.waitForTimeout(300)
 
@@ -229,10 +228,9 @@ test.describe('DS-02: Close Control on Desktop', () => {
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 1440, height: 900 })
 
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight + 200))
-    await page.waitForTimeout(1100)
-
+    await page.locator('#servicos').scrollIntoViewIfNeeded()
     const floatMenu = page.locator('.menu-float')
+    await expect(floatMenu).toBeVisible({ timeout: 4000 })
     await floatMenu.click()
     await page.waitForTimeout(400)
 
