@@ -40,6 +40,7 @@
   /* Container & Spacing */
   --container: 1440px;
   --gutter: clamp(24px, 5vw, 80px);
+  --shell-inline: max(var(--gutter), calc((100vw - var(--container)) / 2));
   --grid-gap: 24px;
   --grid-gap-mobile: 16px;
 

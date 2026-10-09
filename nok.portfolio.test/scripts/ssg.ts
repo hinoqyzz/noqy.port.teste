@@ -20,6 +20,7 @@ import {
   contact,
   cta,
   skills,
+  navigation,
   getHomeMeta,
   getCaseMeta,
   type Project,
@@ -45,6 +46,7 @@ function generateHomeContent() {
         </nav>
         <div class="header__end">
           <a class="header__cta" href="${cta.href}">${cta.label}</a>
+          <a class="header__menu" href="#footer-nav">Menu</a>
         </div>
       </div>
     </header>
@@ -182,6 +184,9 @@ function generateHomeContent() {
     </main>
     <footer class="footer">
       <div class="shell">
+        <nav class="footer__nav" id="footer-nav" aria-label="Navegação">
+          ${navigation.map((item) => `<a href="${item.href}">${item.label}</a>`).join('')}
+        </nav>
         <div class="footer__row">
           <p class="footer__name">${profile.name}</p>
           <p class="footer__center">${profile.quote}</p>
@@ -208,6 +213,10 @@ function generateCaseContent(project: Project) {
           <a class="header__link" href="/#sobre">Sobre</a>
           <a class="header__link" href="/#contato">Contato</a>
         </nav>
+        <div class="header__end">
+          <a class="header__cta" href="${cta.href}">${cta.label}</a>
+          <a class="header__menu" href="#footer-nav">Menu</a>
+        </div>
       </div>
     </header>
     <main id="main" tabindex="-1">
@@ -239,6 +248,9 @@ function generateCaseContent(project: Project) {
     </main>
     <footer class="footer">
       <div class="shell">
+        <nav class="footer__nav" id="footer-nav" aria-label="Navegação">
+          ${navigation.map((item) => `<a href="${item.href}">${item.label}</a>`).join('')}
+        </nav>
         <div class="footer__row">
           <p class="footer__name">${profile.name}</p>
           <p class="footer__center">${profile.quote}</p>

@@ -56,6 +56,7 @@ main {
 .hero__value {
   max-width: 32ch;
   margin-bottom: 24px;
+  color: var(--text-secondary);
 }
 
 .hero__status {
@@ -1008,6 +1009,14 @@ html.reduced-motion .process__progress {
 .footer {
   padding: 48px 0 36px;
   border-top: 1px solid var(--line);
+}
+
+.footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 28px;
+  color: var(--text-secondary);
 }
 
 .footer__brand {

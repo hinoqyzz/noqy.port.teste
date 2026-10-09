@@ -210,7 +210,6 @@ html.reduced-motion .veil {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   min-height: var(--header-h);
-  padding-inline: var(--gutter);
   gap: 16px;
 }
 
@@ -513,7 +512,7 @@ html.has-cursor * {
 .menu-float {
   position: fixed;
   top: 20px;
-  right: var(--gutter);
+  right: var(--shell-inline);
   z-index: calc(var(--z-header) + 10);
   width: 56px;
   height: 56px;
