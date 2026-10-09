@@ -183,7 +183,9 @@ export function Header() {
           </nav>
 
           <div className="header__end">
-            <CtaButton href={cta.href}>{cta.label}</CtaButton>
+            <CtaButton href={cta.href} onClick={(event) => onNavigate(event, cta.href)}>
+              {cta.label}
+            </CtaButton>
             <button
               ref={buttonRef}
               className={`header__menu ${showFloatBtn || menuOpen ? 'is-hidden' : ''}`}
@@ -239,7 +241,11 @@ export function Header() {
               </a>
             ))}
           </nav>
-          <a href={cta.href} className="overlay__cta">
+          <a
+            href={cta.href}
+            className="overlay__cta"
+            onClick={(event) => onNavigate(event, cta.href)}
+          >
             {cta.label}
           </a>
         </div>
@@ -266,11 +272,19 @@ function NavLink({
   )
 }
 
-function CtaButton({ href, children }: { href: string; children: ReactNode }) {
+function CtaButton({
+  href,
+  children,
+  onClick,
+}: {
+  href: string
+  children: ReactNode
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void
+}) {
   const ref = useRef<HTMLAnchorElement>(null)
   useMagnetic(ref, { max: 6, pull: 0.22, radius: 80 })
   return (
-    <a ref={ref} className="header__cta" href={href}>
+    <a ref={ref} className="header__cta" href={href} onClick={onClick}>
       {children}
     </a>
   )

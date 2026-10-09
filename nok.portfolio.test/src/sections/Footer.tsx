@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
-import { navigation, profile } from '../data/content'
+import { profile } from '../data/content'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useSite } from '../hooks/useSite'
 
@@ -42,13 +42,6 @@ export function Footer() {
           <KothOutline className="footer__logo" />
           <span className="footer__brand-label">KOTH GROUP</span>
         </div>
-        <nav className="footer__nav" id="footer-nav" aria-label="Navegação">
-          {navigation.map((item) => (
-            <a key={item.id} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
         <div className="footer__row">
           <p className="footer__name">{profile.name}</p>
           <p className="footer__center mono">{profile.marks.practice}</p>

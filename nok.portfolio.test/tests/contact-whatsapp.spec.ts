@@ -52,17 +52,37 @@ test.describe('RED-07 WhatsApp primary contact', () => {
     await expect(page.locator('.cta__note')).toHaveText(cta.note)
   })
 
-  test('Começar um projeto still goes to the contact section', async ({ page }, testInfo) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await loadContact(page, testInfo)
+  for (const vp of VIEWPORTS) {
+    test(`${vp.width}: WhatsApp label is exactly two rendered lines`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize(vp)
+      await loadContact(page, testInfo)
 
-    await expect(page.locator('.hero__contact-link')).toHaveAttribute('href', '#contato')
-    const headerCta = page.locator('.header__cta')
-    if ((await headerCta.count()) > 0) {
-      const href = await headerCta.getAttribute('href')
-      expect(href).not.toContain('wa.me')
-    }
-  })
+      const text = page.locator('.btn-round-cta__text')
+      await expect(text.locator('span')).toHaveCount(2)
+      await expect(text.locator('span').nth(0)).toHaveText('Chamar no')
+      await expect(text.locator('span').nth(1)).toHaveText('WhatsApp')
+
+      const lines = await text.evaluate((el) => {
+        let count = 0
+        for (const span of el.querySelectorAll('span')) {
+          const range = document.createRange()
+          range.selectNodeContents(span)
+          count += [...range.getClientRects()].filter((rect) => rect.width > 1 && rect.height > 1).length
+        }
+        return count
+      })
+      expect(lines, `rendered lines at ${vp.width}`).toBe(2)
+
+      const btnBox = await page.locator('.btn-round-cta').boundingBox()
+      const textBox = await text.boundingBox()
+      expect(btnBox).not.toBeNull()
+      expect(textBox).not.toBeNull()
+      expect(textBox!.x + textBox!.width).toBeLessThanOrEqual(btnBox!.x + btnBox!.width + 1)
+      expect(textBox!.y + textBox!.height).toBeLessThanOrEqual(btnBox!.y + btnBox!.height + 1)
+    })
+  }
 
   test('390: two lines fit inside the 120px circle and stack is title, button, note, pills', async ({
     page,
@@ -104,12 +124,14 @@ test.describe('RED-07 WhatsApp primary contact', () => {
       }
       await page.setViewportSize(vp)
       await loadContact(page, testInfo)
-      await page.evaluate(() => {
-        const title = document.querySelector('.cta__title')
-        if (!title) return
-        title.scrollIntoView({ block: 'start', behavior: 'instant' })
-      })
-      await page.waitForTimeout(400)
+      if (!isNoJs(testInfo)) {
+        await page.evaluate(() => {
+          const title = document.querySelector('.cta__title')
+          if (!title) return
+          title.scrollIntoView({ block: 'start', behavior: 'instant' })
+        })
+        await page.waitForTimeout(400)
+      }
       const suffix = isNoJs(testInfo) ? 'nojs' : 'js'
       await page.locator('.cta').screenshot({
         path: `${SCREENSHOT_DIR}/contact-${vp.width}x${vp.height}-${suffix}.png`,

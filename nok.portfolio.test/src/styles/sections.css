@@ -1027,6 +1027,11 @@ html.reduced-motion .process__progress {
   color: var(--text-secondary);
 }
 
+html.motion-ready .footer__nav,
+html.reduced-motion .footer__nav {
+  display: none;
+}
+
 .footer__brand {
   display: flex;
   align-items: center;

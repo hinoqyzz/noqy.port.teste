@@ -350,7 +350,7 @@ export const contact: ContactItem[] = [
 ]
 
 export const cta = {
-  href: 'mailto:contato@noqyzz.com.br',
+  href: '/#contato',
   label: 'Começar um projeto',
   note: 'Ou, se preferir, por e-mail ou Instagram:',
 }
