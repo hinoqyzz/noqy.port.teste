@@ -110,3 +110,80 @@ test.describe('One menu at a time', () => {
     })
   }
 })
+
+test.describe('Scroll-up exclusive chrome', () => {
+  test.beforeEach(({}, testInfo) => {
+    if (testInfo.project.name !== 'desktop-no-preference') {
+      test.skip()
+    }
+  })
+
+  for (const vp of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 800 },
+    { width: 1920, height: 1080 },
+  ]) {
+    test(`${vp.width}: wheel back to the hero never shares a frame`, async ({ page }) => {
+      await page.setViewportSize(vp)
+      await page.goto('/')
+      await page.waitForLoadState('networkidle')
+      await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
+      await page.locator('.veil.is-active').waitFor({ state: 'hidden', timeout: 8000 }).catch(() => {})
+      await page.waitForTimeout(200)
+
+      await page.evaluate(() => {
+        const hero = document.getElementById('intro')
+        if (!hero) {
+          window.scrollTo(0, window.innerHeight + 200)
+          return
+        }
+        const top = hero.getBoundingClientRect().top + window.scrollY
+        window.scrollTo(0, top + hero.offsetHeight - 40)
+      })
+      await page.waitForTimeout(1200)
+
+      await page.evaluate(() => {
+        const world = window as Window & { __chromeOverlaps?: number; __chromeSampling?: boolean }
+        world.__chromeOverlaps = 0
+        world.__chromeSampling = true
+        const header = document.querySelector('.header') as HTMLElement | null
+        const float = document.querySelector('.menu-float') as HTMLElement | null
+        const tick = () => {
+          if (!world.__chromeSampling) return
+          if (header && float) {
+            const box = header.getBoundingClientRect()
+            const headerInView =
+              getComputedStyle(header).visibility !== 'hidden' &&
+              box.bottom > 0 &&
+              box.top < window.innerHeight &&
+              box.width > 0
+            const floatOn = Number(getComputedStyle(float).opacity) > 0
+            if (headerInView && floatOn) world.__chromeOverlaps = (world.__chromeOverlaps ?? 0) + 1
+          }
+          requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      })
+
+      for (let i = 0; i < 60; i++) {
+        await page.mouse.wheel(0, -220)
+      }
+
+      await page.waitForFunction(
+        () => {
+          const header = document.querySelector('.header')
+          return Boolean(header && !header.classList.contains('is-away') && window.scrollY < 120)
+        },
+        { timeout: 8000 },
+      ).catch(() => {})
+      await page.waitForTimeout(200)
+
+      const overlaps = await page.evaluate(() => {
+        const world = window as Window & { __chromeOverlaps?: number; __chromeSampling?: boolean }
+        world.__chromeSampling = false
+        return world.__chromeOverlaps ?? 0
+      })
+      expect(overlaps, `overlap frames at ${vp.width}`).toBe(0)
+    })
+  }
+})

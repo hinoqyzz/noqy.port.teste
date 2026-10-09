@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
@@ -17,9 +17,14 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showFloatBtn, setShowFloatBtn] = useState(false)
   const [floatReady, setFloatReady] = useState(false)
+  const [headerParked, setHeaderParked] = useState(false)
   const openedBy = useRef<'header' | 'float'>('header')
   const restoreFocus = useRef(false)
   const headerAwayTweenReady = useRef(false)
+  const pastHeroRef = useRef(false)
+  const pendingFocus = useRef<'float' | 'header' | null>(null)
+  const lastHeaderControl = useRef<'cta' | 'menu' | 'brand' | null>(null)
+  const chromeTimers = useRef({ float: 0, header: 0 })
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -38,11 +43,58 @@ export function Header() {
       const header = headerRef.current
       if (!header) return
 
+      const reducedMotion = () =>
+        window.matchMedia(PROFILE.reduced).matches ||
+        document.documentElement.classList.contains('reduced-motion')
+
+      const noteHeaderControl = (node: Element | null) => {
+        if (!(node instanceof Element)) return
+        if (node.closest('.header__cta')) lastHeaderControl.current = 'cta'
+        else if (node.closest('.header__menu')) lastHeaderControl.current = 'menu'
+        else if (header.contains(node)) lastHeaderControl.current = 'brand'
+      }
+
+      const onFocusIn = (event: FocusEvent) => {
+        noteHeaderControl(event.target as Element | null)
+      }
+      header.addEventListener('focusin', onFocusIn)
+
       const onScroll = () => {
         header.classList.toggle('is-scrolled', window.scrollY > 20)
         const hero = document.getElementById('intro')
         const pastHero = hero ? hero.getBoundingClientRect().bottom < 100 : window.scrollY > 80
-        setShowFloatBtn(pastHero)
+        if (pastHero === pastHeroRef.current) return
+        pastHeroRef.current = pastHero
+
+        window.clearTimeout(chromeTimers.current.float)
+        window.cancelAnimationFrame(chromeTimers.current.header)
+
+        if (pastHero) {
+          if (header.contains(document.activeElement)) {
+            noteHeaderControl(document.activeElement)
+            pendingFocus.current = 'float'
+          }
+          setShowFloatBtn(true)
+          setHeaderParked(true)
+          const delay = reducedMotion() ? 0 : DURATION.header * 1000
+          chromeTimers.current.float = window.setTimeout(() => {
+            if (pastHeroRef.current) setFloatReady(true)
+          }, delay)
+        } else {
+          if (document.activeElement === floatBtnRef.current) {
+            pendingFocus.current = 'header'
+          }
+          setShowFloatBtn(false)
+          setFloatReady(false)
+          const unpark = () => setHeaderParked(false)
+          if (reducedMotion()) {
+            unpark()
+          } else {
+            chromeTimers.current.header = requestAnimationFrame(() => {
+              chromeTimers.current.header = requestAnimationFrame(unpark)
+            })
+          }
+        }
       }
       onScroll()
       window.addEventListener('scroll', onScroll, { passive: true })
@@ -69,32 +121,18 @@ export function Header() {
       })
 
       return () => {
+        header.removeEventListener('focusin', onFocusIn)
         window.removeEventListener('scroll', onScroll)
         window.removeEventListener('resize', onScroll)
+        window.clearTimeout(chromeTimers.current.float)
+        window.cancelAnimationFrame(chromeTimers.current.header)
       }
     },
     { scope: headerRef },
   )
 
-  const headerAway = showFloatBtn || menuOpen
+  const headerAway = headerParked || menuOpen
   const floatOn = floatReady || menuOpen
-
-  useEffect(() => {
-    if (menuOpen) {
-      setFloatReady(true)
-      return
-    }
-    if (!showFloatBtn) {
-      setFloatReady(false)
-      return
-    }
-    const reduced =
-      window.matchMedia(PROFILE.reduced).matches ||
-      document.documentElement.classList.contains('reduced-motion')
-    const delay = reduced ? 0 : DURATION.header * 1000
-    const id = window.setTimeout(() => setFloatReady(true), delay)
-    return () => window.clearTimeout(id)
-  }, [showFloatBtn, menuOpen])
 
   useGSAP(
     () => {
@@ -187,11 +225,18 @@ export function Header() {
     const headerMenu = buttonRef.current
     const headerCta = headerRef.current?.querySelector<HTMLElement>('.header__cta')
     const menuVisible = Boolean(headerMenu && headerMenu.getClientRects().length > 0)
+    const ctaVisible = Boolean(
+      headerCta && headerCta.getClientRects().length > 0 && getComputedStyle(headerCta).display !== 'none',
+    )
     const target = preferFloat && floatOn
       ? floatBtnRef.current
-      : menuVisible
-        ? headerMenu
-        : headerCta
+      : lastHeaderControl.current === 'cta' && ctaVisible
+        ? headerCta
+        : lastHeaderControl.current === 'menu' && menuVisible
+          ? headerMenu
+          : menuVisible
+            ? headerMenu
+            : headerCta
     target?.focus()
   }, [floatOn])
 
@@ -203,21 +248,18 @@ export function Header() {
     })
   }, [menuOpen, showFloatBtn, focusMenuOpener])
 
-  useEffect(() => {
-    if (!headerAway || menuOpen || !floatOn) return
-    const header = headerRef.current
-    if (header && header.contains(document.activeElement)) {
-      requestAnimationFrame(() => floatBtnRef.current?.focus())
+  useLayoutEffect(() => {
+    if (menuOpen) return
+    if (floatOn && pendingFocus.current === 'float') {
+      pendingFocus.current = null
+      floatBtnRef.current?.focus()
+      return
     }
-  }, [headerAway, menuOpen, floatOn])
-
-  useEffect(() => {
-    if (showFloatBtn || menuOpen) return
-    if (document.activeElement !== floatBtnRef.current) return
-    requestAnimationFrame(() => {
+    if (!headerAway && pendingFocus.current === 'header') {
+      pendingFocus.current = null
       focusMenuOpener(false)
-    })
-  }, [showFloatBtn, menuOpen, focusMenuOpener])
+    }
+  }, [floatOn, headerAway, menuOpen, focusMenuOpener])
 
   const onNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     event.preventDefault()
@@ -265,13 +307,13 @@ export function Header() {
             </CtaButton>
             <button
               ref={buttonRef}
-              className={`header__menu ${showFloatBtn || menuOpen ? 'is-hidden' : ''}`}
+              className={`header__menu ${headerAway ? 'is-hidden' : ''}`}
               type="button"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              tabIndex={showFloatBtn || menuOpen ? -1 : 0}
+              tabIndex={headerAway ? -1 : 0}
               onClick={() => (menuOpen ? closeMenu() : openMenu('header'))}
-              {...(showFloatBtn || menuOpen
+              {...(headerAway
                 ? { inert: true as const, 'aria-hidden': true as const }
                 : {})}
             >
