@@ -3,78 +3,112 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Adryan Miguel — Designer e desenvolvedor front-end</title>
+    <title>noqyzz — Sites, landing pages e sistemas</title>
     <meta
       name="description"
-      content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar."
+      content="noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar."
     />
-    <meta name="theme-color" content="#171411" />
-    <meta name="author" content="Adryan Miguel" />
-    <meta property="og:title" content="Adryan Miguel — Designer e desenvolvedor front-end" />
+    <meta name="theme-color" content="#090A0B" />
+    <meta name="author" content="noqyzz" />
+    <link rel="canonical" href="https://adryanmiguel.vercel.app" />
+    <meta property="og:title" content="noqyzz — Sites, landing pages e sistemas" />
     <meta
       property="og:description"
-      content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar."
+      content="noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar."
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:image" content="/assets/images/hero-adryan.webp" />
-    <meta property="og:image:width" content="2000" />
-    <meta property="og:image:height" content="1200" />
+    <meta property="og:url" content="https://adryanmiguel.vercel.app" />
+    <meta property="og:image" content="https://adryanmiguel.vercel.app/assets/images/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="noqyzz — sites, landing pages e sistemas" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Adryan Miguel — Designer e desenvolvedor front-end" />
+    <meta name="twitter:title" content="noqyzz — Sites, landing pages e sistemas" />
     <meta
       name="twitter:description"
-      content="Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar."
+      content="noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar."
     />
-    <meta name="twitter:image" content="/assets/images/hero-adryan.webp" />
+    <meta name="twitter:image" content="https://adryanmiguel.vercel.app/assets/images/og-image.jpg" />
+    <meta name="twitter:image:alt" content="noqyzz — sites, landing pages e sistemas" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link
+      rel="preload"
+      as="font"
+      href="/assets/fonts/bricolage-grotesque-latin.woff2"
+      type="font/woff2"
+      crossorigin
+    />
     <link
       rel="preload"
       as="image"
-      href="/assets/images/opt/hero-adryan-1280.avif"
-      type="image/avif"
-      imagesrcset="/assets/images/opt/hero-adryan-640.avif 640w, /assets/images/opt/hero-adryan-960.avif 960w, /assets/images/opt/hero-adryan-1280.avif 1280w, /assets/images/opt/hero-adryan-1600.avif 1600w, /assets/images/opt/hero-adryan-2000.avif 2000w"
-      imagesizes="(max-width: 760px) 100vw, 68vw"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap"
-      rel="stylesheet"
+      href="/assets/images/hero-portrait.webp"
+      type="image/webp"
     />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Adryan Miguel",
-        "jobTitle": "Designer e desenvolvedor front-end",
-        "description": "Portfólio de Adryan Miguel, designer e desenvolvedor front-end. Landing pages e interfaces com movimento, do primeiro rascunho ao código no ar.",
+        "name": "noqyzz",
+        "jobTitle": "Designer e desenvolvedor",
+        "description": "noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.",
         "knowsAbout": [
           "Landing pages",
-          "Desenvolvimento front-end",
+          "Sites completos",
           "Design digital",
-          "Interfaces com movimento"
-        ],
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "Minas Gerais",
-          "addressCountry": "BR"
-        }
+          "Sistemas sob medida"
+        ]
       }
     </script>
     <script>
       ;(function () {
+        var html = document.documentElement
+        var SAFETY_TIMEOUT = 3500
+
         try {
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.classList.add('reduced-motion')
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (reduced) {
+            html.classList.add('reduced-motion')
           } else {
-            document.documentElement.classList.add('is-booting')
+            html.classList.add('is-booting')
           }
+
+          html.classList.add('js')
+
+          setTimeout(function () {
+            if (!html.classList.contains('motion-ready')) {
+              html.classList.add('motion-ready')
+              html.classList.remove('is-booting')
+            }
+          }, SAFETY_TIMEOUT)
         } catch (error) {
-          /* motion preference unavailable */
+          html.classList.add('motion-ready')
         }
       })()
     </script>
+    <noscript>
+      <style>
+        .veil,
+        .progress,
+        .cursor {
+          display: none !important;
+        }
+        .hero__portrait {
+          clip-path: inset(0% 0% 0% 0%) !important;
+        }
+        .hero__marquee {
+          animation: none !important;
+        }
+        .mask__in {
+          transform: none !important;
+        }
+        .header {
+          transform: none !important;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

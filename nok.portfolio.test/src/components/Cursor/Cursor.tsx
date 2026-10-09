@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { MEDIA, BREAKPOINT } from '../../motion'
 
 export function Cursor() {
   const ref = useRef<HTMLDivElement>(null)
@@ -8,8 +9,8 @@ export function Cursor() {
     const root = ref.current
     if (!root) return
 
-    const desktop = window.matchMedia('(pointer: fine) and (min-width: 981px)')
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktop = window.matchMedia(`(pointer: fine) and (min-width: ${BREAKPOINT.desktop}px)`)
+    const reduced = window.matchMedia(MEDIA.reducedMotion)
     if (!desktop.matches || reduced.matches) return
 
     document.documentElement.classList.add('has-cursor')

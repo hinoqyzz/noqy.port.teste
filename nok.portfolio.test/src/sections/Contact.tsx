@@ -1,83 +1,92 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useRef } from 'react'
 import gsap from 'gsap'
-import type { MouseEvent } from 'react'
-import { contact, cta } from '../data/social'
+import { useGSAP } from '@gsap/react'
+import { contact, cta, whatsapp } from '../data/content'
 import { isRealHref } from '../data/content'
 import type { ContactItem } from '../data/content'
-import { Button } from '../components/Button/Button'
-import { SectionLabel } from '../components/SectionLabel/SectionLabel'
 import { useMagnetic } from '../hooks/useMagnetic'
-import { useSite } from '../hooks/useSite'
+import { PROFILE, DURATION, EASE, TRIGGER } from '../motion'
+
+gsap.registerPlugin(useGSAP)
 
 export function Contact() {
   const root = useRef<HTMLElement>(null)
-  const { scrollTo } = useSite()
-  const destination = isRealHref(cta.href) ? cta.href : '#contact-list'
+  const btnRef = useRef<HTMLAnchorElement>(null)
 
-  useLayoutEffect(() => {
-    const section = root.current
-    if (!section) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const targets = section.querySelectorAll<HTMLElement>('.cta__title .mask__in')
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        targets,
-        { yPercent: 110 },
-        {
-          yPercent: 0,
-          duration: 0.95,
-          ease: 'power4.out',
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: '.cta__title',
-            start: 'top 84%',
-            toggleActions: 'play none none none',
+  useMagnetic(btnRef, { max: 24, pull: 0.16, radius: 140 })
+
+  useGSAP(
+    () => {
+      const section = root.current
+      if (!section) return
+
+      const mm = gsap.matchMedia()
+
+      mm.add(PROFILE.reduced, () => {
+        gsap.set('.cta__title .mask__in', { yPercent: 0 })
+      })
+
+      mm.add(`${PROFILE.mobile}, ${PROFILE.desktop}`, () => {
+        const targets = section.querySelectorAll<HTMLElement>('.cta__title .mask__in')
+        gsap.fromTo(
+          targets,
+          { yPercent: 110 },
+          {
+            yPercent: 0,
+            duration: DURATION.reveal.mask,
+            ease: EASE.out,
+            stagger: 0.08,
+            scrollTrigger: {
+              trigger: '.cta__title',
+              start: TRIGGER.reveal.start,
+              toggleActions: TRIGGER.reveal.toggleActions,
+            },
           },
-        },
-      )
-    }, section)
-    return () => context.revert()
-  }, [])
-
-  const onCta = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isRealHref(cta.href)) return
-    event.preventDefault()
-    scrollTo('#contact-list')
-  }
+        )
+      })
+    },
+    { scope: root },
+  )
 
   return (
-    <section className="contact" id="contact" ref={root} aria-labelledby="cta-title">
+    <section className="contact" id="contato" ref={root} aria-labelledby="cta-title">
       <div className="cta">
         <div className="shell">
-          <SectionLabel index="06" name="Contato" />
-          <h2 className="cta__title" id="cta-title" data-drift-root>
-            <span className="drift" data-drift>
-              <span className="mask">
-                <span className="mask__in">Tem um</span>
-              </span>
-              <span className="mask">
-                <span className="mask__in">projeto?</span>
-              </span>
-              <span className="mask cta__shift">
-                <span className="mask__in">
-                  Vamos <strong>tirar do papel</strong>.
-                </span>
+          <p className="slabel">06</p>
+          <h2 className="cta__title" id="cta-title">
+            <span className="mask">
+              <span className="mask__in">Tem um</span>
+            </span>
+            <span className="mask">
+              <span className="mask__in">projeto?</span>
+            </span>
+            <span className="mask cta__shift">
+              <span className="mask__in">
+                Vamos <em className="text-secondary">tirar do papel</em>.
               </span>
             </span>
           </h2>
           <div className="cta__actions">
-            <Button href={destination} magnetic onClick={onCta}>
-              {cta.label}
-            </Button>
-            <p className="cta__note mono">{cta.note}</p>
+            <a
+              ref={btnRef}
+              className="btn-round-cta"
+              href={whatsapp.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={whatsapp.ariaLabel}
+            >
+              <span className="btn-round-cta__fill" aria-hidden="true" />
+              <span className="btn-round-cta__text">
+                <span>{whatsapp.line1}</span>
+                <span>{whatsapp.line2}</span>
+              </span>
+            </a>
           </div>
         </div>
       </div>
       <div className="sheet" id="contact-list">
         <div className="shell">
-          <div className="sheet__intro">
-            <p className="mono">Direto</p>
-          </div>
+          <p className="cta__note">{cta.note}</p>
           <ul className="sheet__list">
             {contact.map((item) => (
               <li key={item.id}>

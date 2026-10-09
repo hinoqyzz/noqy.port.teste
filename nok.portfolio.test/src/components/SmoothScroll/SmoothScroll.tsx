@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SiteContext } from '../../hooks/useSite'
 import { Veil } from '../Veil/Veil'
 import type { VeilHandle } from '../Veil/Veil'
+import { useMotion, initRefreshStrategy, SCROLL } from '../../motion'
 
-const SECTION_IDS = ['intro', 'services', 'work', 'process', 'about', 'contact']
+const SECTION_IDS = ['intro', 'servicos', 'trabalhos', 'processo', 'sobre', 'contato']
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const [active, setActive] = useState('intro')
@@ -16,63 +18,77 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const veilRef = useRef<VeilHandle | null>(null)
   const activeRef = useRef(active)
   const transitioning = useRef(false)
+  const { isReduced } = useMotion()
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     activeRef.current = active
   }, [active])
 
   useLayoutEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let instance: Lenis | null = null
     const onTick = (time: number) => {
       instance?.raf(time * 1000)
     }
 
-    if (!reduced) {
+    if (!isReduced) {
       instance = new Lenis({
-        lerp: 0.11,
+        lerp: SCROLL.lenis.lerp,
         smoothWheel: true,
-        wheelMultiplier: 0.9,
+        wheelMultiplier: SCROLL.lenis.wheelMultiplier,
         syncTouch: false,
       })
       instance.on('scroll', ScrollTrigger.update)
       gsap.ticker.add(onTick)
       gsap.ticker.lagSmoothing(0)
       lenisRef.current = instance
-
-      const hash = window.location.hash
-      if (hash) {
-        requestAnimationFrame(() => {
-          instance?.scrollTo(hash, { immediate: true, force: true })
-        })
-      }
     }
 
-    const triggers = SECTION_IDS.map((id) =>
-      ScrollTrigger.create({
-        trigger: `#${id}`,
-        start: 'top 50%',
-        end: 'bottom 50%',
-        onToggle: (self) => {
-          if (self.isActive) setActive(id)
-        },
-      }),
-    )
+    const triggers: ScrollTrigger[] = []
+    if (isHome) {
+      SECTION_IDS.forEach((id) => {
+        const element = document.getElementById(id)
+        if (element) {
+          triggers.push(
+            ScrollTrigger.create({
+              trigger: element,
+              start: 'top 50%',
+              end: 'bottom 50%',
+              onToggle: (self) => {
+                if (self.isActive) setActive(id)
+              },
+            }),
+          )
+        }
+      })
+    }
 
-    const refresh = () => ScrollTrigger.refresh()
-    window.addEventListener('load', refresh)
-    document.fonts.ready.then(refresh).catch(() => undefined)
+    initRefreshStrategy()
 
     return () => {
       triggers.forEach((trigger) => trigger.kill())
-      window.removeEventListener('load', refresh)
       if (instance) {
         gsap.ticker.remove(onTick)
         instance.destroy()
       }
       lenisRef.current = null
     }
-  }, [])
+  }, [isReduced, isHome])
+
+  useEffect(() => {
+    const hash = location.hash
+    if (hash && isHome) {
+      requestAnimationFrame(() => {
+        const instance = lenisRef.current
+        if (instance) {
+          instance.scrollTo(hash, { immediate: true, force: true })
+        } else {
+          document.querySelector(hash)?.scrollIntoView({ behavior: 'auto', block: 'start' })
+        }
+      })
+    }
+  }, [location.hash, isHome])
 
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('menu-open', menuOpen)
@@ -102,9 +118,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         return
       }
 
-      const reduced = document.documentElement.classList.contains('reduced-motion')
       const veil = veilRef.current
-      if (reduced || !veil || transitioning.current) {
+      if (isReduced || !veil || transitioning.current) {
         setMenuOpen(false)
         jump(target)
         return
@@ -130,7 +145,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
           focusSection(target)
         })
     },
-    [jump],
+    [jump, isReduced],
   )
 
   const value = useMemo(

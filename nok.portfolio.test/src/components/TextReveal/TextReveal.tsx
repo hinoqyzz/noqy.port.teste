@@ -1,10 +1,13 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useRef, createElement } from 'react'
+import type { ElementType, ReactNode } from 'react'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { DURATION, EASE, DISTANCE, STAGGER, PROFILE, TRIGGER } from '../../motion'
 
-type Tag = 'h2' | 'h3' | 'p' | 'span'
+gsap.registerPlugin(useGSAP)
 
-type Props = {
-  as?: Tag
+type Props<T extends ElementType> = {
+  as?: T
   text: string
   className?: string
   mode?: 'mask' | 'words' | 'lines'
@@ -12,35 +15,84 @@ type Props = {
   drift?: boolean
 }
 
-export function TextReveal({ as = 'p', text, className, mode = 'mask', id, drift = false }: Props) {
+export function TextReveal<T extends ElementType = 'p'>({
+  as,
+  text,
+  className,
+  mode = 'mask',
+  id,
+  drift = false,
+}: Props<T>) {
   const ref = useRef<HTMLElement | null>(null)
+  const Component = as || 'p'
 
-  useLayoutEffect(() => {
-    const element = ref.current
-    if (!element) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  useGSAP(
+    () => {
+      const element = ref.current
+      if (!element) return
 
-    const targets = element.querySelectorAll<HTMLElement>('.mask__in')
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        targets,
-        { yPercent: 110 },
-        {
-          yPercent: 0,
-          duration: 0.9,
-          ease: 'power4.out',
-          stagger: mode === 'words' ? 0.045 : 0.07,
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 88%',
-            toggleActions: 'play none none none',
+      const targets = element.querySelectorAll<HTMLElement>('.mask__in')
+      if (!targets.length) return
+
+      const mm = gsap.matchMedia()
+
+      mm.add(PROFILE.reduced, () => {
+        gsap.set(targets, { yPercent: 0 })
+        gsap.fromTo(
+          targets,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: DURATION.reduced.fade,
+            ease: EASE.reduced,
+            stagger: 0.03,
+            scrollTrigger: {
+              trigger: element,
+              start: TRIGGER.reveal.start,
+              toggleActions: TRIGGER.reveal.toggleActions,
+            },
           },
-        },
-      )
-    }, element)
+        )
+      })
 
-    return () => context.revert()
-  }, [mode, text])
+      mm.add(PROFILE.mobile, () => {
+        gsap.fromTo(
+          targets,
+          { yPercent: DISTANCE.maskSlide },
+          {
+            yPercent: 0,
+            duration: DURATION.reveal.mask * 0.9,
+            ease: EASE.reveal,
+            stagger: mode === 'words' ? STAGGER.word : STAGGER.line,
+            scrollTrigger: {
+              trigger: element,
+              start: TRIGGER.reveal.start,
+              toggleActions: TRIGGER.reveal.toggleActions,
+            },
+          },
+        )
+      })
+
+      mm.add(PROFILE.desktop, () => {
+        gsap.fromTo(
+          targets,
+          { yPercent: DISTANCE.maskSlide },
+          {
+            yPercent: 0,
+            duration: DURATION.reveal.mask,
+            ease: EASE.reveal,
+            stagger: mode === 'words' ? STAGGER.word : STAGGER.line,
+            scrollTrigger: {
+              trigger: element,
+              start: TRIGGER.reveal.start,
+              toggleActions: TRIGGER.reveal.toggleActions,
+            },
+          },
+        )
+      })
+    },
+    { scope: ref, dependencies: [mode, text] },
+  )
 
   const inner = renderInner(text, mode)
   const body = drift ? (
@@ -50,40 +102,14 @@ export function TextReveal({ as = 'p', text, className, mode = 'mask', id, drift
   ) : (
     inner
   )
-  const setRef = (node: HTMLElement | null) => {
-    ref.current = node
-  }
+
   const driftRoot = drift ? '' : undefined
 
-  if (as === 'h2') {
-    return (
-      <h2 ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
-        {body}
-      </h2>
-    )
-  }
-  if (as === 'h3') {
-    return (
-      <h3 ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
-        {body}
-      </h3>
-    )
-  }
-  if (as === 'span') {
-    return (
-      <span ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
-        {body}
-      </span>
-    )
-  }
-  return (
-    <p ref={setRef} id={id} className={className} data-drift-root={driftRoot}>
-      {body}
-    </p>
-  )
+  // oxlint-disable-next-line react/refs
+  return createElement(Component, { ref, id, className, 'data-drift-root': driftRoot }, body)
 }
 
-function renderInner(text: string, mode: 'mask' | 'words' | 'lines') {
+function renderInner(text: string, mode: 'mask' | 'words' | 'lines'): ReactNode {
   if (mode === 'words') {
     const words = text.split(' ')
     return words.map((word, index) => (

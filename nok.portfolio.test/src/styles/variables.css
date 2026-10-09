@@ -1,13 +1,50 @@
+/* Bricolage Grotesque - Variable font */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url('/assets/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url('/assets/fonts/bricolage-grotesque-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
-  --bg: #171411;
-  --bg-secondary: #24201b;
-  --text-primary: #efe7d8;
-  --text-secondary: #9d9488;
-  --text-muted: #625b53;
-  --accent: #c85b3c;
-  --line: rgba(98, 91, 83, 0.55);
+  /* Colors - Grafite A2 Palette */
+  --bg: #090A0B;
+  --bg-secondary: #16181B;
+  --line: #2A2E34;
+  --text-primary: #F6F7F9;
+  --text-secondary: #A3A9B2;
+  --text-muted: #8B919A;
+  
+  /* Accent - single token for easy switching */
+  --accent: #3D5AFE;
+  --accent-text: #7C95FF;
+  
+  /* Inverse (light section - Sobre) */
+  --bg-inverse: #F6F7F9;
+  --text-inverse: #090A0B;
+  --text-inverse-secondary: #5C636E;
+
+  /* Container & Spacing */
   --container: 1440px;
   --gutter: clamp(24px, 5vw, 80px);
+  --shell-inline: max(var(--gutter), calc((100vw - var(--container)) / 2));
+  --grid-gap: 24px;
+  --grid-gap-mobile: 16px;
+
+  /* Spacing Scale */
   --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
@@ -20,20 +57,33 @@
   --space-128: 128px;
   --space-160: 160px;
   --space-220: 220px;
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 3rem;
-  --space-xl: 6rem;
-  --space-2xl: 10rem;
+
+  /* Section Rhythm */
+  --section-gap: clamp(96px, 12vw, 160px);
+
+  /* Animation */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --font-sans: "Familjen Grotesk", "Arial Narrow", "Helvetica Neue", sans-serif;
-  --font-mono: "DM Mono", ui-monospace, "Courier New", monospace;
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Typography - Single font family */
+  --font-sans: "Bricolage Grotesque", system-ui, sans-serif;
+
+  /* Layout */
   --header-h: 76px;
+
+  /* Z-Index Scale */
   --z-menu: 90;
   --z-header: 100;
+  --z-preview: 120;
   --z-grain: 140;
   --z-progress: 160;
   --z-cursor: 200;
   --z-skip: 300;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --header-h: 64px;
+    --grid-gap: var(--grid-gap-mobile);
+  }
 }

@@ -1,84 +1,99 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { processSteps } from '../data/services'
-import { SectionLabel } from '../components/SectionLabel/SectionLabel'
-import { TextReveal } from '../components/TextReveal/TextReveal'
-import { useGsapContext } from '../hooks/useGsapContext'
+import { useGSAP } from '@gsap/react'
+import { processSteps } from '../data/content'
+import { PROFILE, SCROLL } from '../motion'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export function Process() {
   const root = useRef<HTMLElement>(null)
-  const [step, setStep] = useState(processSteps[0]?.index ?? '01')
 
-  useGsapContext(root, () => {
-    const scope = root.current
-    if (!scope) return
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const bar = scope.querySelector<HTMLElement>('.process__line-bar')
+  useGSAP(
+    () => {
+      const scope = root.current
+      if (!scope) return
 
-    if (bar && !reduced) {
-      gsap.fromTo(
-        bar,
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.process__list',
-            start: 'top 70%',
-            end: 'bottom 65%',
-            scrub: 0.45,
-          },
-        },
-      )
-    }
+      const mm = gsap.matchMedia()
 
-    scope.querySelectorAll<HTMLElement>('.step').forEach((item) => {
-      ScrollTrigger.create({
-        trigger: item,
-        start: 'top 62%',
-        end: 'bottom 38%',
-        onToggle: (self) => {
-          item.classList.toggle('is-active', self.isActive)
-          if (self.isActive && item.dataset.step) setStep(item.dataset.step)
-        },
+      mm.add(PROFILE.reduced, () => {
+        gsap.set('.process__progress', { scaleX: 1 })
+        gsap.set('.process__step', { opacity: 1, y: 0 })
       })
-    })
-  })
+
+      mm.add(PROFILE.desktop, () => {
+        const progressLine = scope.querySelector<HTMLElement>('.process__progress')
+        if (progressLine) {
+          gsap.fromTo(
+            progressLine,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '.process__grid',
+                start: 'top 75%',
+                end: 'bottom 60%',
+                scrub: SCROLL.scrub,
+              },
+            },
+          )
+        }
+      })
+
+      mm.add(PROFILE.mobile, () => {
+        const progressLine = scope.querySelector<HTMLElement>('.process__progress')
+        if (progressLine) {
+          gsap.fromTo(
+            progressLine,
+            { scaleY: 0 },
+            {
+              scaleY: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '.process__grid',
+                start: 'top 80%',
+                end: 'bottom 40%',
+                scrub: SCROLL.scrub,
+              },
+            },
+          )
+        }
+      })
+    },
+    { scope: root },
+  )
 
   return (
-    <section className="section process" id="process" ref={root} aria-labelledby="process-title">
+    <section
+      className="section process"
+      id="processo"
+      ref={root}
+      aria-labelledby="process-title"
+    >
       <div className="shell">
-        <div className="section__head">
-          <SectionLabel index="04" name="Processo" />
-          <p className="process__label mono">ETAPA_{step}</p>
+        <header className="process__header">
+          <p className="mono">04</p>
+          <h2 className="process__title display-l" id="process-title">
+            COMO <em className="serif-accent serif-accent--primary">trabalho</em>
+          </h2>
+        </header>
+
+        <div className="process__track" aria-hidden="true">
+          <span className="process__line" />
+          <span className="process__progress" />
         </div>
-        <TextReveal
-          as="h2"
-          id="process-title"
-          text={'Como\ntrabalho'}
-          className="section__title"
-          mode="lines"
-          drift
-        />
-        <div className="process__list">
-          <div className="process__line" aria-hidden="true">
-            <span className="process__line-bar" />
-          </div>
-          <ol>
-            {processSteps.map((item) => (
-              <li className="step" key={item.index} data-step={item.index}>
-                <span className="step__no">{item.index}</span>
-                <h3 className="step__title" data-drift-root>
-                  <span className="drift" data-drift>
-                    {item.title}
-                  </span>
-                </h3>
-                <p className="step__desc">{item.description}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+
+        <ol className="process__grid" role="list">
+          {processSteps.map((step) => (
+            <li key={step.index} className="process__step">
+              <span className="process__index mono">{step.index}</span>
+              <h3 className="process__name h3">{step.title}</h3>
+              <p className="process__desc">{step.description}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )

@@ -1,5 +1,3 @@
-import { imageSets } from '../../data/imageSets'
-
 type Props = {
   src: string
   width: number
@@ -7,22 +5,26 @@ type Props = {
   alt: string
   sizes: string
   priority?: boolean
+  className?: string
 }
 
-export function Picture({ src, width, height, alt, sizes, priority = false }: Props) {
-  const set = imageSets[src]
-
+export function Picture({
+  src,
+  width,
+  height,
+  alt,
+  sizes,
+  priority = false,
+  className,
+}: Props) {
   return (
-    <picture>
-      {set ? <source type="image/avif" srcSet={set.avif} sizes={sizes} /> : null}
-      {set ? <source type="image/webp" srcSet={set.webp} sizes={sizes} /> : null}
+    <picture className={className}>
       <img
         src={src}
-        srcSet={set?.webp}
-        sizes={set ? sizes : undefined}
         width={width}
         height={height}
         alt={alt}
+        sizes={sizes}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
         fetchPriority={priority ? 'high' : 'auto'}

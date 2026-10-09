@@ -1,7 +1,6 @@
 /**
- * Único arquivo de conteúdo.
- * Edite bio, contato, projetos, serviços e textos aqui.
- * Textos e mockups dos projetos são os finais.
+ * Conteúdo central - Grafite A2
+ * Todos os textos, projetos, serviços e metadados.
  */
 
 export type Media = {
@@ -15,23 +14,33 @@ export type ProjectLayout = 'left' | 'right' | 'full' | 'split'
 
 export type Project = {
   id: string
+  slug: string
   index: string
-  cursor: string
   name: string
   category: string
   year: string
   description: string
-  url: string
+  challenge: string
+  direction: {
+    colors: string[]
+    fonts: string[]
+  }
+  role: string
+  stack: string[]
   cover: Media
+  thumb: Media
+  detail: Media
+  brand: Media
   secondary?: Media
   layout: ProjectLayout
+  cursor?: string
+  url?: string
 }
 
 export type Service = {
   index: string
   title: string
   description: string
-  image: Media
 }
 
 export type ProcessStep = {
@@ -49,177 +58,228 @@ export type ContactItem = {
 }
 
 export const profile = {
-  name: 'Adryan Miguel',
+  name: 'noqyzz',
   given: 'Adryan',
-  family: 'Miguel',
-  role: 'Designer e desenvolvedor front-end',
-  location: 'Minas Gerais, Brasil',
-  availability: 'Aberto a novos projetos',
+  family: '',
+  role: 'Designer e desenvolvedor',
+  location: '',
+  availability: 'Disponível para projetos',
   year: '2026',
-  disciplines: 'Design / Código / Movimento',
   shortBio:
-    'Designer e desenvolvedor front-end. Crio landing pages e interfaces com movimento, do primeiro rascunho ao código no ar.',
+    'Designer e desenvolvedor. Crio landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
   about:
-    'Sou o Adryan, de Minas Gerais. Trabalho onde o design encontra o código: desenho a interface, escrevo o front-end e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
-  since: 'Design, código e movimento.',
+    'Sou o Adryan. Trabalho onde o design encontra o código: desenho a interface, escrevo o código e cuido de cada transição, hover e rolagem até o site parecer vivo. Gosto de projetos com personalidade, que fogem do template e contam a história de uma marca em poucos segundos.',
+  quote: 'Design, código e movimento.',
+  since: 'Desde 2021',
   marks: {
-    portfolio: 'Portfólio / 2026',
-    intro: '01 — Início',
-    practice: 'Front-end / Design',
-    code: 'AM_001',
-    archive: 'Indice_Portfolio',
+    portfolio: '© 2026',
+    practice: 'Design, código e movimento.',
   },
 }
 
+export const projectSeal = 'Estudo conceitual'
+
 export const navigation = [
-  { id: 'work', label: 'Trabalhos', index: '01' },
-  { id: 'services', label: 'Serviços', index: '02' },
-  { id: 'about', label: 'Sobre', index: '03' },
-  { id: 'contact', label: 'Contato', index: '04' },
+  { id: 'trabalhos', label: 'Trabalhos', href: '/#trabalhos' },
+  { id: 'sobre', label: 'Sobre', href: '/#sobre' },
+  { id: 'contato', label: 'Contato', href: '/#contato' },
 ] as const
-
-export const sectionIndex: Record<string, string> = {
-  intro: '01',
-  services: '02',
-  work: '03',
-  process: '04',
-  about: '05',
-  contact: '06',
-}
-
-export const projectSeal = 'Projeto conceitual'
 
 export const services: Service[] = [
   {
     index: '01',
     title: 'Landing pages',
     description: 'Uma página, uma história. Do rascunho ao ar, com o ritmo da marca.',
-    image: {
-      src: '/assets/images/project-01-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador da landing Caldo Café, com a xícara de café especial e o botão Ver cardápio.',
-    },
   },
   {
     index: '02',
-    title: 'Desenvolvimento front-end',
-    description: 'A interface vira código: responsivo, preciso e com movimento no lugar certo.',
-    image: {
-      src: '/assets/images/project-02-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador da Serra Bikes, com a bike elétrica e as anotações de motor e autonomia.',
-    },
+    title: 'Sites completos',
+    description: 'Site institucional com várias páginas, rápido no celular e fácil de achar no Google.',
   },
   {
     index: '03',
     title: 'Design digital',
     description: 'Direção visual com personalidade, longe do template e perto da marca.',
-    image: {
-      src: '/assets/images/project-03-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador do site Atlas Arquitetura, com a casa na serra e a planta da Casa das Serras.',
-    },
+  },
+  {
+    index: '04',
+    title: 'Sistemas sob medida',
+    description: 'Agendamentos, cardápios, painéis e o que o seu negócio precisar, feito sob medida.',
   },
 ]
 
+// Slugs para as URLs: caldo-cafe, serra-bikes, atlas-arquitetura, pulso
 export const projects: Project[] = [
   {
-    id: 'P_01',
+    id: 'caldo-cafe',
+    slug: 'caldo-cafe',
     index: '01',
-    cursor: 'VER_01',
     name: 'Caldo Café',
     category: 'Landing page · Identidade visual',
     year: '2026',
     description:
       'Site para uma cafeteria de especialidade em Belo Horizonte, com cardápio que se monta na rolagem e fotos que respiram no ritmo da página.',
-    url: '',
+    challenge:
+      'Criar uma experiência digital que traduzisse o cuidado artesanal do café especial em cada detalhe da interface.',
+    direction: {
+      colors: ['#2C1810', '#D4A574', '#F5F0E8', '#8B4513'],
+      fonts: ['Playfair Display', 'Inter'],
+    },
+    role: 'Design e desenvolvimento front-end',
+    stack: ['React', 'GSAP', 'Vite'],
     layout: 'left',
     cover: {
-      src: '/assets/images/project-01-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador do site Caldo Café: xícara sobre a mesa de madeira, título e botão Ver cardápio.',
+      src: '/assets/images/caldo-cafe-cover.webp',
+      width: 2400,
+      height: 1350,
+      alt: 'Mockup do site Caldo Café: xícara sobre a mesa de madeira, título e botão Ver cardápio.',
     },
-    secondary: {
-      src: '/assets/images/project-01-detail.webp',
+    thumb: {
+      src: '/assets/images/caldo-cafe-thumb.webp',
+      width: 960,
+      height: 600,
+      alt: 'Preview do site Caldo Café.',
+    },
+    detail: {
+      src: '/assets/images/caldo-cafe-detail.webp',
       width: 1600,
-      height: 1200,
-      alt: 'Mockup do cardápio do Caldo Café, com espresso, coado V60 e pão de queijo.',
+      height: 1600,
+      alt: 'Detalhe do cardápio do Caldo Café, com espresso, coado V60 e pão de queijo.',
+    },
+    brand: {
+      src: '/assets/images/caldo-cafe-brand.webp',
+      width: 1600,
+      height: 2000,
+      alt: 'Peça de marca do Caldo Café: embalagem de café especial.',
     },
   },
   {
-    id: 'P_02',
+    id: 'serra-bikes',
+    slug: 'serra-bikes',
     index: '02',
-    cursor: 'VER_02',
     name: 'Serra Bikes',
     category: 'Landing page de lançamento',
     year: '2026',
     description:
-      'Lançamento de uma bike elétrica feita para as ladeiras mineiras. A bike gira e se desmonta conforme a rolagem, peça por peça.',
-    url: '',
+      'Lançamento de uma bike elétrica feita para as ladeiras mineiras, com apresentação dinâmica das especificações técnicas.',
+    challenge:
+      'Apresentar um produto técnico de forma envolvente, destacando inovação sem perder a clareza das informações.',
+    direction: {
+      colors: ['#0A0A0A', '#00D4AA', '#FFFFFF', '#1A1A1A'],
+      fonts: ['Space Grotesk', 'Inter'],
+    },
+    role: 'Design e desenvolvimento front-end',
+    stack: ['React', 'Three.js', 'GSAP'],
     layout: 'right',
     cover: {
-      src: '/assets/images/project-02-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador da Serra Bikes: bike elétrica preta com anotações de motor 250W e 80 km de autonomia.',
+      src: '/assets/images/serra-bikes-cover.webp',
+      width: 2400,
+      height: 1350,
+      alt: 'Mockup da Serra Bikes: bike elétrica preta com especificações de motor 250W e 80 km de autonomia.',
     },
-    secondary: {
-      src: '/assets/images/project-02-detail.webp',
+    thumb: {
+      src: '/assets/images/serra-bikes-thumb.webp',
+      width: 960,
+      height: 600,
+      alt: 'Preview do site Serra Bikes.',
+    },
+    detail: {
+      src: '/assets/images/serra-bikes-detail.webp',
       width: 1600,
-      height: 1200,
-      alt: 'Mockup da visão técnica da Serra Bikes, com a bike desmontada em quadro, bateria, motor e freios.',
+      height: 1600,
+      alt: 'Detalhe técnico da Serra Bikes: painel de especificações.',
+    },
+    brand: {
+      src: '/assets/images/serra-bikes-brand.webp',
+      width: 1600,
+      height: 2000,
+      alt: 'Peça de marca Serra Bikes: cartaz de lançamento.',
     },
   },
   {
-    id: 'P_03',
+    id: 'atlas-arquitetura',
+    slug: 'atlas-arquitetura',
     index: '03',
-    cursor: 'VER_03',
     name: 'Atlas Arquitetura',
     category: 'Portfólio · Front-end',
     year: '2025',
     description:
       'Portfólio para um estúdio de arquitetura, com grid editorial, transições entre obras e plantas que se desenham na tela.',
-    url: '',
+    challenge:
+      'Construir uma navegação fluida entre projetos arquitetônicos, respeitando a estética minimalista do estúdio.',
+    direction: {
+      colors: ['#FAFAFA', '#1A1A1A', '#D4D4D4', '#737373'],
+      fonts: ['Neue Haas Grotesk', 'Cormorant'],
+    },
+    role: 'Desenvolvimento front-end',
+    stack: ['Next.js', 'Framer Motion', 'Sanity'],
     layout: 'full',
     cover: {
-      src: '/assets/images/project-03-cover.webp',
-      width: 1920,
-      height: 1200,
-      alt: 'Mockup de navegador do portfólio Atlas Arquitetura, com a casa na serra e a planta sobreposta.',
+      src: '/assets/images/atlas-arquitetura-cover.webp',
+      width: 2400,
+      height: 1350,
+      alt: 'Mockup do portfólio Atlas Arquitetura, com a casa na serra e a planta sobreposta.',
     },
-    secondary: {
-      src: '/assets/images/project-03-mobile.webp',
-      width: 1000,
+    thumb: {
+      src: '/assets/images/atlas-arquitetura-thumb.webp',
+      width: 960,
+      height: 600,
+      alt: 'Preview do site Atlas Arquitetura.',
+    },
+    detail: {
+      src: '/assets/images/atlas-arquitetura-detail.webp',
+      width: 1600,
       height: 1600,
-      alt: 'Mockup de celular da obra Casa Serra, no site Atlas Arquitetura.',
+      alt: 'Detalhe da obra Casa Serra no site Atlas Arquitetura.',
+    },
+    brand: {
+      src: '/assets/images/atlas-arquitetura-brand.webp',
+      width: 1600,
+      height: 2000,
+      alt: 'Peça de marca Atlas Arquitetura: cartão de visita e papelaria.',
     },
   },
   {
-    id: 'P_04',
+    id: 'pulso',
+    slug: 'pulso',
     index: '04',
-    cursor: 'VER_04',
     name: 'Pulso',
     category: 'Landing page de app · UI design',
     year: '2025',
     description:
       'Pré-lançamento de um app de treino, com microinterações que imitam o ritmo cardíaco e uma lista de espera em um clique.',
-    url: '',
+    challenge:
+      'Transmitir energia e movimento em uma página estática, criando urgência para o pré-lançamento.',
+    direction: {
+      colors: ['#FF3366', '#1A1A2E', '#FFFFFF', '#FF6B6B'],
+      fonts: ['Satoshi', 'Inter'],
+    },
+    role: 'Design e desenvolvimento front-end',
+    stack: ['React', 'GSAP', 'Tailwind'],
     layout: 'split',
     cover: {
-      src: '/assets/images/project-04-cover.webp',
-      width: 1920,
-      height: 1200,
+      src: '/assets/images/pulso-cover.webp',
+      width: 2400,
+      height: 1350,
       alt: 'Mockup da landing Pulso: o site no navegador e o app no celular, com o pulso em 128 bpm.',
     },
-    secondary: {
-      src: '/assets/images/project-04-detail.webp',
+    thumb: {
+      src: '/assets/images/pulso-thumb.webp',
+      width: 960,
+      height: 600,
+      alt: 'Preview do site Pulso.',
+    },
+    detail: {
+      src: '/assets/images/pulso-detail.webp',
       width: 1600,
-      height: 1200,
-      alt: 'Três cartões do app Pulso: ritmo cardíaco, progresso semanal e treinos guiados.',
+      height: 1600,
+      alt: 'Detalhe do app Pulso: tela de treino com ritmo cardíaco.',
+    },
+    brand: {
+      src: '/assets/images/pulso-brand.webp',
+      width: 1600,
+      height: 2000,
+      alt: 'Peça de marca Pulso: cartões do app com ritmo cardíaco e progresso.',
     },
   },
 ]
@@ -264,7 +324,14 @@ export const skills = [
 export const whatsappNumber = '37998684391'
 export const instagramHandle = 'hinoqyzz'
 
-const whatsappText = 'Oi Adryan, vi seu portfólio e queria conversar sobre um projeto'
+export const whatsappText = 'Oi! Vi seu portfólio e queria conversar sobre um projeto.'
+
+export const whatsapp = {
+  href: `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`,
+  line1: 'Chamar no',
+  line2: 'WhatsApp',
+  ariaLabel: 'Chamar no WhatsApp (abre em nova aba)',
+}
 
 export const contact: ContactItem[] = [
   {
@@ -272,13 +339,6 @@ export const contact: ContactItem[] = [
     label: 'E-mail',
     value: 'contato@noqyzz.com.br',
     href: 'mailto:contato@noqyzz.com.br',
-  },
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    value: '(37) 99868-4391',
-    href: `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`,
-    external: true,
   },
   {
     id: 'instagram',
@@ -290,23 +350,23 @@ export const contact: ContactItem[] = [
 ]
 
 export const cta = {
-  href: 'mailto:contato@noqyzz.com.br',
+  href: '/#contato',
   label: 'Começar um projeto',
-  note: 'contato@noqyzz.com.br',
+  note: 'Ou, se preferir, por e-mail ou Instagram:',
 }
 
 export const portraits = {
   hero: {
-    src: '/assets/images/hero-adryan.webp',
-    width: 2000,
-    height: 1200,
-    alt: 'Adryan Miguel no setup, retrato editorial horizontal. Monitores à esquerda, rosto à direita.',
-  } satisfies Media,
-  about: {
-    src: '/assets/images/about-adryan.webp',
+    src: '/assets/images/hero-portrait.webp',
     width: 1600,
     height: 2000,
-    alt: 'Adryan Miguel trabalhando no setup, retrato editorial vertical.',
+    alt: 'Retrato em preto e branco no setup de trabalho, com monitores e microfone.',
+  } satisfies Media,
+  about: {
+    src: '/assets/images/about-portrait.webp',
+    width: 1600,
+    height: 2000,
+    alt: 'Adryan, de moletom preto, faz um enquadramento de câmera com as mãos. Foto em preto e branco.',
   } satisfies Media,
 }
 
@@ -316,4 +376,64 @@ export function isRealHref(href: string) {
   if (/^https:\/\/wa\.me\/55(?:\?|$)/.test(value)) return false
   if (/^https:\/\/(?:www\.)?instagram\.com\/?$/.test(value)) return false
   return true
+}
+
+export function getProjectBySlug(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug)
+}
+
+export function getNextProject(currentSlug: string): Project {
+  const index = projects.findIndex((p) => p.slug === currentSlug)
+  const nextIndex = (index + 1) % projects.length
+  return projects[nextIndex]
+}
+
+export const meta = {
+  title: 'noqyzz — Sites, landing pages e sistemas',
+  description:
+    'noqyzz: design e desenvolvimento de landing pages, sites completos e sistemas sob medida, do primeiro rascunho ao código no ar.',
+  ogImageAlt: 'noqyzz — sites, landing pages e sistemas',
+  baseUrl: 'https://adryanmiguel.vercel.app',
+}
+
+export type PageMeta = {
+  title: string
+  description: string
+  canonical: string
+  ogImage: string
+  ogImageAlt: string
+}
+
+function ogImageUrl() {
+  return `${meta.baseUrl}/assets/images/og-image.jpg`
+}
+
+export function getHomeMeta(): PageMeta {
+  return {
+    title: meta.title,
+    description: meta.description,
+    canonical: meta.baseUrl,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
+}
+
+export function getCaseMeta(project: Project): PageMeta {
+  return {
+    title: `${project.name} — noqyzz`,
+    description: `${project.description} Projeto de ${project.category}.`,
+    canonical: `${meta.baseUrl}/trabalhos/${project.slug}`,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
+}
+
+export function getNotFoundMeta(): PageMeta {
+  return {
+    title: 'Página não encontrada — noqyzz',
+    description: 'O endereço que você tentou acessar não existe ou foi movido.',
+    canonical: meta.baseUrl,
+    ogImage: ogImageUrl(),
+    ogImageAlt: meta.ogImageAlt,
+  }
 }

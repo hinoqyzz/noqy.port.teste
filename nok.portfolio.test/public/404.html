@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página não encontrada — noqyzz</title>
+    <meta name="description" content="O endereço que você tentou acessar não existe ou foi movido." />
+    <meta name="theme-color" content="#090A0B" />
+    <meta name="robots" content="noindex" />
+    <meta property="og:title" content="Página não encontrada — noqyzz" />
+    <meta property="og:description" content="O endereço que você tentou acessar não existe ou foi movido." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://adryanmiguel.vercel.app/assets/images/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Página não encontrada — noqyzz" />
+    <meta name="twitter:description" content="O endereço que você tentou acessar não existe ou foi movido." />
+    <meta name="twitter:image" content="https://adryanmiguel.vercel.app/assets/images/og-image.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link
+      rel="preload"
+      as="font"
+      href="/assets/fonts/bricolage-grotesque-latin.woff2"
+      type="font/woff2"
+      crossorigin
+    />
+    <style>
+      :root {
+        --bg: #090A0B;
+        --text-primary: #F6F7F9;
+        --text-secondary: #9CA3AF;
+        --accent: #38BDF8;
+        --gutter: clamp(20px, 5vw, 40px);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      @font-face {
+        font-family: 'Bricolage Grotesque';
+        src: url('/assets/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+        font-weight: 200 800;
+        font-style: normal;
+        font-display: swap;
+      }
+      html, body {
+        height: 100%;
+        font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text-primary);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .shell {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 var(--gutter);
+      }
+      .not-found {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 80px 0;
+        text-align: center;
+      }
+      .not-found__code {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+      }
+      .not-found__title {
+        font-size: clamp(40px, 10vw, 96px);
+        font-weight: 500;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        margin-bottom: 24px;
+      }
+      .not-found__text {
+        font-size: clamp(18px, 3vw, 22px);
+        color: var(--text-secondary);
+        max-width: 480px;
+        margin: 0 auto 40px;
+      }
+      .not-found__link {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--accent);
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+      }
+      .not-found__link:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="not-found">
+      <div class="shell">
+        <p class="not-found__code">404</p>
+        <h1 class="not-found__title">Página não encontrada</h1>
+        <p class="not-found__text">
+          O endereço que você tentou acessar não existe ou foi movido.
+        </p>
+        <a href="/" class="not-found__link">← Voltar para noqyzz</a>
+      </div>
+    </main>
+  </body>
+</html>
