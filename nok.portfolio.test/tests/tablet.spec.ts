@@ -156,6 +156,17 @@ test.describe('Touch Targets (44x44px minimum)', () => {
 
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    await page.waitForSelector('html.motion-ready', { timeout: 5000 }).catch(() => {})
+    await page.locator('.veil.is-active').waitFor({ state: 'hidden', timeout: 8000 }).catch(() => {})
+    await page.waitForFunction(
+      () => {
+        const header = document.querySelector('.header')
+        if (!header) return false
+        const transform = getComputedStyle(header).transform
+        return transform === 'none'
+      },
+      { timeout: 4000 },
+    ).catch(() => {})
 
     const brand = page.locator('.header__brand')
     const box = await brand.boundingBox()
@@ -163,6 +174,7 @@ test.describe('Touch Targets (44x44px minimum)', () => {
     expect(box).not.toBeNull()
     if (box) {
       expect(box.height).toBeGreaterThanOrEqual(44)
+      expect(box.width).toBeGreaterThanOrEqual(44)
     }
   })
 

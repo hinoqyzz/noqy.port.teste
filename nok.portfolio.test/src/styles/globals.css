@@ -201,11 +201,15 @@ html.reduced-motion .veil {
   border-bottom: 1px solid transparent;
 }
 
+.header.is-leaving {
+  pointer-events: none;
+}
+
 .header.is-away {
   pointer-events: none;
   visibility: hidden;
   transition: background-color 0.35s var(--ease-out), border-color 0.35s var(--ease-out),
-    visibility 0s linear 0.81s;
+    visibility 0s linear 0s;
 }
 
 html.reduced-motion .header,
@@ -233,9 +237,13 @@ html.reduced-motion .menu-float.is-visible {
   align-items: center;
   gap: 12px;
   justify-self: start;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
+  transform: none;
 }
 
 .header__logo {
@@ -632,10 +640,6 @@ html.menu-open .header__inner {
     min-width: 44px;
     min-height: 44px;
     transform: translate(-50%, -50%);
-  }
-
-  .header__brand {
-    min-height: 44px;
   }
 
   .header__link {
