@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
@@ -39,13 +39,17 @@ export function Header() {
       const onScroll = () => {
         header.classList.toggle('is-scrolled', window.scrollY > 20)
         const hero = document.getElementById('intro')
-        if (hero) {
-          const heroBottom = hero.getBoundingClientRect().bottom
-          setShowFloatBtn(heroBottom < 100)
-        }
+        const contact = document.getElementById('contato')
+        const pastHero = hero ? hero.getBoundingClientRect().bottom < 100 : window.scrollY > 80
+        const contactBox = contact?.getBoundingClientRect()
+        const contactInView = Boolean(
+          contactBox && contactBox.top < window.innerHeight && contactBox.bottom > 0,
+        )
+        setShowFloatBtn(pastHero && !contactInView)
       }
       onScroll()
       window.addEventListener('scroll', onScroll, { passive: true })
+      window.addEventListener('resize', onScroll)
 
       const mm = gsap.matchMedia()
 
@@ -69,6 +73,7 @@ export function Header() {
 
       return () => {
         window.removeEventListener('scroll', onScroll)
+        window.removeEventListener('resize', onScroll)
       }
     },
     { scope: headerRef },
@@ -137,14 +142,33 @@ export function Header() {
     document.documentElement.classList.toggle('menu-open', menuOpen)
   }, [menuOpen])
 
+  const focusMenuOpener = useCallback((preferFloat: boolean) => {
+    const headerMenu = buttonRef.current
+    const headerCta = headerRef.current?.querySelector<HTMLElement>('.header__cta')
+    const menuVisible = Boolean(headerMenu && headerMenu.getClientRects().length > 0)
+    const target = preferFloat && showFloatBtn
+      ? floatBtnRef.current
+      : menuVisible
+        ? headerMenu
+        : headerCta
+    target?.focus()
+  }, [showFloatBtn])
+
   useEffect(() => {
     if (menuOpen || !restoreFocus.current) return
     restoreFocus.current = false
-    const target = openedBy.current === 'float' ? floatBtnRef.current : buttonRef.current
     requestAnimationFrame(() => {
-      target?.focus()
+      focusMenuOpener(openedBy.current === 'float')
     })
-  }, [menuOpen])
+  }, [menuOpen, showFloatBtn, focusMenuOpener])
+
+  useEffect(() => {
+    if (showFloatBtn || menuOpen) return
+    if (document.activeElement !== floatBtnRef.current) return
+    requestAnimationFrame(() => {
+      focusMenuOpener(false)
+    })
+  }, [showFloatBtn, menuOpen, focusMenuOpener])
 
   const onNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     event.preventDefault()
