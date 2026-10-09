@@ -17,7 +17,18 @@ export async function measurePhotoToNInkGap(page: Page) {
   )
   if (width < 4 || height < 4) return null
 
-  const buffer = await page.screenshot({ clip: { x, y, width, height } })
+  let buffer: Buffer | undefined
+  let lastError: unknown
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      buffer = await page.screenshot({ clip: { x, y, width, height } })
+      lastError = undefined
+      break
+    } catch (error) {
+      lastError = error
+    }
+  }
+  if (!buffer) throw lastError
   const { data, info } = await sharp(buffer).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
 
   for (let row = 0; row < info.height; row++) {

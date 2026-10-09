@@ -38,11 +38,14 @@ test.describe('Hero geometry — RED-06 §12', () => {
         expect(gap!).toBeGreaterThanOrEqual(24)
         expect(gap!).toBeLessThanOrEqual(32)
 
-        const suffix = isNoJs(testInfo) ? 'nojs' : testInfo.project.name
-        await page.screenshot({
-          path: `${SCREENSHOT_DIR}/hero-${vp.width}x${vp.height}-${suffix}.png`,
-          fullPage: false,
-        })
+        const project = testInfo.project.name
+        if (project === 'desktop-no-preference' || project === 'no-js') {
+          const suffix = isNoJs(testInfo) ? 'nojs' : 'js'
+          await page.screenshot({
+            path: `${SCREENSHOT_DIR}/hero-${vp.width}x${vp.height}-${suffix}.png`,
+            fullPage: false,
+          })
+        }
       })
 
       test(`hero fits in 100svh, photo stays in the grid, marquee below photo`, async ({
