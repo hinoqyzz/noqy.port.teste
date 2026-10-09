@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import sharp from 'sharp'
 
 const SCREENSHOT_DIR = '/opt/cursor/artifacts/screenshots'
 
@@ -118,39 +117,6 @@ test.describe('No-JS header and tagline', () => {
   test('hero tagline uses spec gray without JS', async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await loadHome(page, testInfo)
-
-    const box = await page.locator('.hero__value').boundingBox()
-    expect(box).not.toBeNull()
-    const buffer = await page.screenshot({
-      clip: {
-        x: Math.floor(box!.x),
-        y: Math.floor(box!.y + 4),
-        width: Math.min(220, Math.floor(box!.width)),
-        height: Math.min(28, Math.floor(box!.height - 8)),
-      },
-    })
-    const { data, info } = await sharp(buffer).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
-    let r = 0
-    let g = 0
-    let b = 0
-    let n = 0
-    for (let i = 0; i < data.length; i += info.channels) {
-      if (data[i] + data[i + 1] + data[i + 2] < 40) continue
-      r += data[i]
-      g += data[i + 1]
-      b += data[i + 2]
-      n++
-    }
-    expect(n).toBeGreaterThan(20)
-    const avgR = r / n
-    const avgG = g / n
-    const avgB = b / n
-    // --text-secondary is #A3A9B2, not white
-    expect(avgR).toBeGreaterThan(130)
-    expect(avgR).toBeLessThan(200)
-    expect(avgG).toBeGreaterThan(130)
-    expect(avgG).toBeLessThan(200)
-    expect(avgB).toBeGreaterThan(140)
-    expect(Math.abs(avgR - avgG)).toBeLessThan(20)
+    await expect(page.locator('.hero__value')).toHaveCSS('color', 'rgb(163, 169, 178)')
   })
 })
