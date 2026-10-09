@@ -82,7 +82,7 @@ export function About() {
       <div className="shell">
         <div className="about__grid">
           <figure className="about__figure">
-            <p className="about__vert mono">{profile.given}</p>
+            <p className="about__vert mono" aria-hidden="true">{profile.given}</p>
             <div className="frame about__photo" data-drift-root>
               <div className="frame__parallax" data-drift>
                 <Picture
